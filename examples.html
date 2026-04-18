@@ -633,7 +633,7 @@
       <a href="examples.html" class="active">Examples</a>
       <a href="blog.html">Blog</a>
       <a href="changelog.html">Changelog</a>
-      <a href="#" class="nav-cta">↗ GitHub</a>
+      <a href="https://github.com/cleat-lang/cleat" target="_blank" rel="noopener" class="nav-cta">↗ GitHub</a>
     </div>
   </div>
 </nav>
@@ -644,7 +644,7 @@
     <div class="reveal">
       <div class="eyebrow">
         <span class="dot"></span>
-        23 example programs · all compile · all tested
+        29 example programs · all compile · all tested
       </div>
       <h1>Real Cleat, <em>read it.</em></h1>
       <p class="lede">
@@ -660,8 +660,11 @@
     <div class="toolbar-inner">
       <span class="filter-label">Filter</span>
       <div class="filter-row" id="filters">
-        <button class="chip active" data-filter="all">All <span class="count">23</span></button>
+        <button class="chip active" data-filter="all">All <span class="count">29</span></button>
+        <button class="chip" data-filter="agent"><span class="dot" style="width:5px;height:5px;background:#ff7a18;border-radius:50%"></span>Agent <span class="count">2</span></button>
+        <button class="chip" data-filter="guard"><span class="dot" style="width:5px;height:5px;background:#e06c75;border-radius:50%"></span>Guard <span class="count">2</span></button>
         <button class="chip tool" data-filter="tool"><span class="dot" style="width:5px;height:5px;background:var(--blue);border-radius:50%"></span>Tool <span class="count">9</span></button>
+        <button class="chip" data-filter="server"><span class="dot" style="width:5px;height:5px;background:#7aa6c7;border-radius:50%"></span>Server <span class="count">2</span></button>
         <button class="chip stream" data-filter="stream"><span class="dot" style="width:5px;height:5px;background:var(--green);border-radius:50%"></span>Stream <span class="count">5</span></button>
         <button class="chip state" data-filter="state"><span class="dot" style="width:5px;height:5px;background:var(--purple);border-radius:50%"></span>State <span class="count">4</span></button>
         <button class="chip chain" data-filter="chain"><span class="dot" style="width:5px;height:5px;background:var(--molten-2);border-radius:50%"></span>Chain <span class="count">3</span></button>
@@ -678,8 +681,80 @@
 <!-- GRID -->
 <section class="gallery">
   <div class="container">
-    <div class="gallery-meta reveal">Showing <span class="num" id="visible-count">12</span> of 23 examples</div>
+    <div class="gallery-meta reveal">Showing <span class="num" id="visible-count">15</span> of 29 examples</div>
     <div class="grid" id="grid">
+
+      <!-- NEW: Code review agent -->
+      <article class="card reveal" data-tags="agent" data-name="agent reviewer code review llm claude">
+        <div class="card-preview"><span class="ln">1</span><span class="kw">agent</span> <span class="typ">Reviewer</span> <span class="pun">{</span>
+<span class="ln">2</span>    model<span class="pun">:</span> <span class="str">"claude-sonnet-4-5"</span>
+<span class="ln">3</span>    tools<span class="pun">:</span> <span class="pun">[</span>read_file<span class="pun">,</span> list_files<span class="pun">]</span>
+<span class="ln">4</span>    max_turns<span class="pun">:</span> <span class="nm">8</span>
+<span class="ln">5</span>    system<span class="pun">:</span> <span class="str">"Code reviewer."</span>
+<span class="ln">6</span><span class="pun">}</span>
+<span class="ln">7</span>
+<span class="ln">8</span><span class="kw">let</span> r<span class="pun">:</span> <span class="typ">Review</span> <span class="pun">=</span> Reviewer.<span class="fn">run</span><span class="pun">(</span>diff<span class="pun">)?</span></div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="card-tag" style="color:#ff7a18;border-color:#4a2e1a;background:#1f1410"><span class="dot" style="background:#ff7a18"></span>Agent</span>
+            <span class="card-difficulty"><span class="pip on"></span><span class="pip on"></span><span class="pip"></span></span>
+          </div>
+          <h3>Code review agent</h3>
+          <p class="card-desc">An LLM-powered code reviewer that reads files with tool calls and returns a typed <code style="font-family:var(--mono);font-size:11px;color:var(--molten-2)">Review</code> struct. Ships with structured output and correlation tracing.</p>
+          <div class="card-foot">
+            <span class="lines"><span class="num">51</span> lines</span>
+            <span class="open">View source →</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- NEW: Content policy guard -->
+      <article class="card reveal" data-tags="guard" data-name="guard policy content safety injection">
+        <div class="card-preview"><span class="ln">1</span><span class="kw">guard</span> <span class="fn">no_secrets</span><span class="pun">(</span>s<span class="pun">:</span> <span class="typ">string</span><span class="pun">)</span>
+<span class="ln">2</span>    <span class="pun">-></span> <span class="typ">GuardResult</span>
+<span class="ln">3</span><span class="pun">{</span>
+<span class="ln">4</span>    <span class="kw">if</span> strings.<span class="fn">contains</span><span class="pun">(</span>s<span class="pun">,</span> <span class="str">"sk-"</span><span class="pun">)</span> <span class="pun">{</span>
+<span class="ln">5</span>        <span class="kw">return</span> <span class="fn">Deny</span><span class="pun">(</span><span class="str">"api key"</span><span class="pun">)</span>
+<span class="ln">6</span>    <span class="pun">}</span>
+<span class="ln">7</span>    <span class="kw">return</span> <span class="fn">Allow</span>
+<span class="ln">8</span><span class="pun">}</span></div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="card-tag" style="color:#e06c75;border-color:#4a1f22;background:#1f1113"><span class="dot" style="background:#e06c75"></span>Guard</span>
+            <span class="card-difficulty"><span class="pip on"></span><span class="pip"></span><span class="pip"></span></span>
+          </div>
+          <h3>Content policy guard</h3>
+          <p class="card-desc">Pre-flight policy check that blocks API key leaks and prompt injection attempts before a tool or agent runs. Composable with <code style="font-family:var(--mono);font-size:11px;color:var(--molten-2)">@attach</code>.</p>
+          <div class="card-foot">
+            <span class="lines"><span class="num">33</span> lines</span>
+            <span class="open">View source →</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- NEW: Typed HTTP server -->
+      <article class="card reveal" data-tags="server" data-name="server http api users rest">
+        <div class="card-preview"><span class="ln">1</span><span class="kw">server</span> <span class="typ">API</span> <span class="pun">{</span>
+<span class="ln">2</span>    port<span class="pun">:</span> <span class="nm">8080</span>
+<span class="ln">3</span>    GET <span class="str">"/users/:id"</span> <span class="pun">-></span> <span class="fn">get_user</span>
+<span class="ln">4</span>    POST <span class="str">"/users"</span>    <span class="pun">-></span> <span class="fn">create_user</span>
+<span class="ln">5</span>    middleware<span class="pun">:</span> <span class="pun">[</span>log<span class="pun">,</span> auth<span class="pun">]</span>
+<span class="ln">6</span><span class="pun">}</span>
+<span class="ln">7</span>
+<span class="ln">8</span><span class="kw">fn</span> <span class="fn">get_user</span><span class="pun">(</span>id<span class="pun">:</span> <span class="typ">string</span><span class="pun">)</span> <span class="pun">-></span> <span class="typ">User</span></div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="card-tag" style="color:#7aa6c7;border-color:#1a2a3a;background:#101820"><span class="dot" style="background:#7aa6c7"></span>Server</span>
+            <span class="card-difficulty"><span class="pip on"></span><span class="pip on"></span><span class="pip"></span></span>
+          </div>
+          <h3>Typed HTTP server</h3>
+          <p class="card-desc">A complete REST API with typed handlers, logging, and auth middleware. Routes are compile-checked against handler signatures — no runtime surprises.</p>
+          <div class="card-foot">
+            <span class="lines"><span class="num">68</span> lines</span>
+            <span class="open">View source →</span>
+          </div>
+        </div>
+      </article>
 
       <!-- 1: hello -->
       <article class="card reveal" data-tags="basics" data-name="hello world io">
@@ -1010,7 +1085,7 @@
     <div class="footer-inner">
       <div class="footer-brand">
         <svg><use href="#cleat-logo"/></svg>
-        <span>Cleat · v0.1.0-alpha</span>
+        <span>Cleat · v0.1.1-alpha</span>
       </div>
       <div>github.com/cleat-lang/cleat · MIT</div>
     </div>

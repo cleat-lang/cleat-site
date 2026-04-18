@@ -782,21 +782,32 @@
         <rect x="48" y="148" width="104" height="6"/>
       </g>
     </symbol>
+    <symbol id="icon-github" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.53-1.33-1.29-1.69-1.29-1.69-1.05-.72.08-.7.08-.7 1.17.08 1.78 1.2 1.78 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.18-3.08-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.17-1.18 3.17-1.18.63 1.58.23 2.75.11 3.04.74.8 1.18 1.82 1.18 3.08 0 4.41-2.69 5.39-5.25 5.67.41.35.78 1.05.78 2.12v3.14c0 .31.21.68.8.56A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/>
+    </symbol>
+    <symbol id="icon-discord" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M19.27 5.33A18.34 18.34 0 0 0 14.74 4l-.21.4a16.55 16.55 0 0 1 4.09 1.31 15.27 15.27 0 0 0-13.28 0A16.17 16.17 0 0 1 9.49 4.4L9.27 4a18.34 18.34 0 0 0-4.54 1.33C2.46 8.67 1.71 11.92 2.04 15.12a18.38 18.38 0 0 0 5.57 2.8 12.88 12.88 0 0 0 1.2-1.93 11.82 11.82 0 0 1-1.89-.9l.46-.34a13.26 13.26 0 0 0 11.25 0l.46.34a11.82 11.82 0 0 1-1.9.9c.34.68.74 1.33 1.2 1.93a18.3 18.3 0 0 0 5.58-2.8c.4-3.84-.68-7.06-2.7-9.79ZM9.42 13.28c-1.1 0-2-.99-2-2.22s.88-2.22 2-2.22 2.01.99 2 2.22c0 1.23-.88 2.22-2 2.22Zm5.16 0c-1.1 0-2-.99-2-2.22s.88-2.22 2-2.22c1.11 0 2.01.99 2 2.22 0 1.23-.88 2.22-2 2.22Z"/>
+    </symbol>
+    <symbol id="icon-x" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117Z"/>
+    </symbol>
   </defs>
 </svg>
 
 <!-- ────────────── NAV ────────────── -->
 <nav>
   <div class="nav-inner">
-    <a href="#" class="nav-brand" style="text-decoration:none;color:inherit">
+    <a href="index.html" class="nav-brand" style="text-decoration:none;color:inherit">
       <svg><use href="#cleat-logo"/></svg>
       <span class="word">Cleat</span>
     </a>
     <div class="nav-links">
       <a href="#primitives">Language</a>
       <a href="#stdlib">Stdlib</a>
+      <a href="docs.html">Docs</a>
+      <a href="examples.html">Examples</a>
       <a href="#install">Install</a>
-      <a href="#" class="nav-cta">↗ GitHub</a>
+      <a href="https://github.com/cleat-lang/cleat" target="_blank" rel="noopener" class="nav-cta">↗ GitHub</a>
     </div>
   </div>
 </nav>
@@ -807,15 +818,15 @@
     <div class="reveal">
       <div class="eyebrow">
         <span class="dot"></span>
-        v0.1 alpha · 626 tests passing
+        v0.1.1 alpha · 826 tests passing
       </div>
       <h1 class="headline">
-        Forge AI backends<br>
+        Forge AI agents<br>
         that <em>prove</em> what<br>
         they did.
       </h1>
       <p class="lede">
-        Cleat is a <strong>compiled, statically typed language</strong> for auditable, stateful AI orchestration. Tools, streams, state machines, and provenance chains are <strong>compiler-enforced primitives</strong>—not library abstractions you hope someone wired up correctly.
+        Cleat is a <strong>compiled, statically typed language</strong> for auditable, safe AI agents. Agents, guards, tools, streams, state machines, provenance chains, and HTTP servers are <strong>compiler-enforced primitives</strong>—not library abstractions you hope someone wired up correctly.
       </p>
       <div class="cta-row">
         <a href="#install" class="btn btn-primary">
@@ -828,20 +839,20 @@
       </div>
       <div class="stats">
         <div class="stat">
-          <div class="num">626</div>
+          <div class="num">826</div>
           <div class="label">Tests</div>
         </div>
         <div class="stat">
-          <div class="num">12</div>
+          <div class="num">15</div>
           <div class="label">Stdlib pkgs</div>
         </div>
         <div class="stat">
-          <div class="num">23</div>
+          <div class="num">29</div>
           <div class="label">Examples</div>
         </div>
         <div class="stat">
-          <div class="num">9</div>
-          <div class="label">Compiler pkgs</div>
+          <div class="num">8</div>
+          <div class="label">Primitives</div>
         </div>
       </div>
     </div>
@@ -885,8 +896,8 @@
     <div class="section-header reveal">
       <div class="section-num">[ 01 / PRIMITIVES ]</div>
       <div>
-        <h2 class="section-title">Four <em>first-class</em> primitives.<br>Enforced by the compiler.</h2>
-        <p class="section-sub">Most languages bolt orchestration on through frameworks. Cleat bakes it in. <code style="font-family:var(--mono);font-size:0.9em;color:var(--molten-2)">tool</code>, <code style="font-family:var(--mono);font-size:0.9em;color:var(--molten-2)">stream</code>, <code style="font-family:var(--mono);font-size:0.9em;color:var(--molten-2)">state</code>, and <code style="font-family:var(--mono);font-size:0.9em;color:var(--molten-2)">chain</code> are keywords—and the type-checker has opinions about all of them.</p>
+        <h2 class="section-title">Eight <em>first-class</em> primitives.<br>Enforced by the compiler.</h2>
+        <p class="section-sub">Most languages bolt orchestration on through frameworks. Cleat bakes it in. <code style="font-family:var(--mono);font-size:0.9em;color:var(--molten-2)">agent</code>, <code style="font-family:var(--mono);font-size:0.9em;color:var(--molten-2)">guard</code>, <code style="font-family:var(--mono);font-size:0.9em;color:var(--molten-2)">tool</code>, <code style="font-family:var(--mono);font-size:0.9em;color:var(--molten-2)">stream</code>, <code style="font-family:var(--mono);font-size:0.9em;color:var(--molten-2)">state</code>, <code style="font-family:var(--mono);font-size:0.9em;color:var(--molten-2)">chain</code>, <code style="font-family:var(--mono);font-size:0.9em;color:var(--molten-2)">server</code>, and <code style="font-family:var(--mono);font-size:0.9em;color:var(--molten-2)">fn</code> are keywords—and the type-checker has opinions about all of them.</p>
       </div>
     </div>
   </div>
@@ -945,6 +956,57 @@
   }
 }</pre>
       </div>
+
+      <div class="primitive reveal">
+        <span class="keyword">agent</span>
+        <h3>Tool-using LLM loops. Structurally typed.</h3>
+        <p>Agents declare their system prompt, model, tool set, and max turns inline. The compiler wires the tool-calling loop and extracts typed output from the final response — no prompt-engineering a JSON schema.</p>
+<pre><span class="kw" style="color:#b693c4">agent</span> <span class="typ" style="color:#ffb454">Reviewer</span> {
+  model: <span class="str" style="color:#8db580">"claude-sonnet-4-5"</span>
+  tools: [read_file, list_files]
+  max_turns: <span class="num" style="color:#8db580">8</span>
+  system: <span class="str" style="color:#8db580">"You are a code reviewer."</span>
+}</pre>
+      </div>
+
+      <div class="primitive reveal" style="transition-delay:0.05s">
+        <span class="keyword">guard</span>
+        <h3>Policy enforcement. Before the call runs.</h3>
+        <p>Guards run as a pre-flight check on tool calls, agent prompts, and HTTP handlers. Return <code style="font-family:var(--mono);color:var(--molten-2)">allow</code>, <code style="font-family:var(--mono);color:var(--molten-2)">deny</code>, or <code style="font-family:var(--mono);color:var(--molten-2)">transform</code>. Composable, testable, unskippable.</p>
+<pre><span class="kw" style="color:#b693c4">guard</span> <span class="fn" style="color:#7aa6c7">no_secrets</span>(input: <span class="typ" style="color:#ffb454">string</span>)
+  -> <span class="typ" style="color:#ffb454">GuardResult</span>
+{
+  <span class="kw" style="color:#b693c4">if</span> strings.<span class="fn" style="color:#7aa6c7">contains</span>(input, <span class="str" style="color:#8db580">"sk-"</span>) {
+    <span class="kw" style="color:#b693c4">return</span> <span class="fn" style="color:#7aa6c7">Deny</span>(<span class="str" style="color:#8db580">"api key leak"</span>)
+  }
+  <span class="kw" style="color:#b693c4">return</span> <span class="fn" style="color:#7aa6c7">Allow</span>
+}</pre>
+      </div>
+
+      <div class="primitive reveal" style="transition-delay:0.1s">
+        <span class="keyword">server</span>
+        <h3>Declarative HTTP. Typed handlers.</h3>
+        <p>Route declarations are part of the language. Handler signatures are type-checked against the route pattern. JSON in, JSON out — no framework, no codegen, no surprises.</p>
+<pre><span class="kw" style="color:#b693c4">server</span> <span class="typ" style="color:#ffb454">API</span> {
+  port: <span class="num" style="color:#8db580">8080</span>
+  GET <span class="str" style="color:#8db580">"/users/:id"</span> -> <span class="fn" style="color:#7aa6c7">get_user</span>
+  POST <span class="str" style="color:#8db580">"/users"</span>    -> <span class="fn" style="color:#7aa6c7">create_user</span>
+  middleware: [log, auth]
+}</pre>
+      </div>
+
+      <div class="primitive reveal" style="transition-delay:0.15s">
+        <span class="keyword">fn</span>
+        <h3>Pure functions. Effects by opt-in.</h3>
+        <p>Ordinary functions default to zero effects. Add <code style="font-family:var(--mono);color:var(--molten-2)">needs { }</code> to let them touch the world. A pure caller cannot silently invoke an effectful callee.</p>
+<pre><span class="kw" style="color:#b693c4">fn</span> <span class="fn" style="color:#7aa6c7">score</span>(review: <span class="typ" style="color:#ffb454">Review</span>) -> <span class="typ" style="color:#ffb454">int</span> {
+  <span class="kw" style="color:#b693c4">match</span> review.severity {
+    <span class="typ" style="color:#ffb454">High</span>   -> <span class="num" style="color:#8db580">3</span>,
+    <span class="typ" style="color:#ffb454">Medium</span> -> <span class="num" style="color:#8db580">2</span>,
+    <span class="typ" style="color:#ffb454">Low</span>    -> <span class="num" style="color:#8db580">1</span>,
+  }
+}</pre>
+      </div>
     </div>
   </div>
 </section>
@@ -992,12 +1054,48 @@
 </section>
 
 <!-- ────────────── STDLIB ────────────── -->
+<section>
+  <div class="container">
+    <div class="effects" style="border-bottom:1px solid var(--rule-soft);">
+      <div class="reveal" style="transition-delay:0.05s">
+        <div class="code-card">
+          <div class="code-card-head">
+            <span class="label">review.cleat</span>
+            <span class="badge">typed LLM output</span>
+          </div>
+<pre><span class="kw" style="color:#b693c4">type</span> <span class="typ" style="color:#ffb454">Review</span> = <span class="kw" style="color:#b693c4">struct</span> {
+    @description(<span class="str" style="color:#8db580">"Safe to merge?"</span>)
+    approved: <span class="typ" style="color:#ffb454">bool</span>,
+    severity: <span class="typ" style="color:#ffb454">Severity</span>,
+    issues:   []<span class="typ" style="color:#ffb454">string</span>,
+    notes:    <span class="typ" style="color:#ffb454">string</span> = <span class="str" style="color:#8db580">""</span>,
+}
+
+<span class="kw" style="color:#b693c4">let</span> review: <span class="typ" style="color:#ffb454">Review</span> =
+    llm.<span class="fn" style="color:#7aa6c7">generate</span>(model: m, prompt: p)?
+
+<span class="cm" style="color:#6a6a64">// review.approved is bool,</span>
+<span class="cm" style="color:#6a6a64">// review.issues is []string —</span>
+<span class="cm" style="color:#6a6a64">// guaranteed at compile time.</span></pre>
+        </div>
+      </div>
+
+      <div class="effects-text reveal">
+        <div class="marker">[ 03 / STRUCTURED OUTPUT ]</div>
+        <h2>Typed LLM output. <em>No JSON</em> jiggery-pokery.</h2>
+        <p>Three lines of Cleat replace forty lines of Python with stronger safety guarantees. The compiler lifts a JSON Schema out of your struct, sends it as a tool constraint, and deserializes the response into a typed value.</p>
+        <p><strong>Non-serializable fields</strong> (functions, channels, streams) fail at compile time. <strong>Fields with defaults</strong> drop out of the schema's <code style="font-family:var(--mono);color:var(--molten-2)">required</code> array. <strong>@description</strong> annotations steer the model. Agents use the same trick — <code style="font-family:var(--mono);color:var(--molten-2)">let r: MyStruct = Agent.run(p)?</code> runs the tool-calling loop, then extracts into <code style="font-family:var(--mono);color:var(--molten-2)">MyStruct</code>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="stdlib" id="stdlib">
   <div class="container">
     <div class="section-header reveal" style="border-bottom:none;padding-bottom:0">
-      <div class="section-num">[ 03 / STDLIB ]</div>
+      <div class="section-num">[ 04 / STDLIB ]</div>
       <div>
-        <h2 class="section-title">Twelve packages.<br><em>No npm</em> required.</h2>
+        <h2 class="section-title">Fifteen packages.<br><em>No npm</em> required.</h2>
         <p class="section-sub">Everything you need to build a real backend, in the box. Each package declares its effects so callers know exactly what they're inheriting.</p>
       </div>
     </div>
@@ -1060,8 +1158,23 @@
       </div>
       <div class="pkg">
         <div class="pkg-name">std<span class="slash">/</span>llm</div>
-        <div class="pkg-desc">LLM prompt &amp; stream, mockable.</div>
+        <div class="pkg-desc">Prompt, stream, typed structured output.</div>
         <div class="pkg-needs">needs · <span>llm</span></div>
+      </div>
+      <div class="pkg">
+        <div class="pkg-name">std<span class="slash">/</span>server</div>
+        <div class="pkg-desc">Declarative HTTP with typed handlers.</div>
+        <div class="pkg-needs">needs · <span>net</span></div>
+      </div>
+      <div class="pkg">
+        <div class="pkg-name">std<span class="slash">/</span>supervisor</div>
+        <div class="pkg-desc">Agent retry, timeout, tracing, summary.</div>
+        <div class="pkg-needs">needs · <span>—</span></div>
+      </div>
+      <div class="pkg">
+        <div class="pkg-name">std<span class="slash">/</span>memory</div>
+        <div class="pkg-desc">Namespaced KV store + context injection.</div>
+        <div class="pkg-needs">needs · <span>—</span></div>
       </div>
     </div>
   </div>
@@ -1071,7 +1184,7 @@
 <section class="features">
   <div class="container">
     <div class="section-header reveal" style="border-bottom:none;padding-bottom:0">
-      <div class="section-num">[ 04 / ERGONOMICS ]</div>
+      <div class="section-num">[ 05 / ERGONOMICS ]</div>
       <div>
         <h2 class="section-title">Modern syntax.<br>No <em>ceremony tax.</em></h2>
         <p class="section-sub">Pattern matching, pipes, string interpolation, named arguments. The things you actually want, without writing a 12-line type signature first.</p>
@@ -1142,33 +1255,44 @@
       <div class="footer-brand">
         <svg><use href="#cleat-logo"/></svg>
         <div class="word">Cleat</div>
-        <p>A compiled orchestration language for auditable, stateful AI backends. Built for the agentic era.</p>
+        <p>A compiled orchestration language for auditable, safe AI agents. Built for the agentic era.</p>
+        <div class="social-row" style="display:flex;gap:14px;margin-top:18px;">
+          <a href="https://github.com/cleat-lang/cleat" target="_blank" rel="noopener" aria-label="GitHub" style="color:var(--ink-dim);">
+            <svg width="20" height="20"><use href="#icon-github"/></svg>
+          </a>
+          <a href="https://discord.gg/cleat-lang" target="_blank" rel="noopener" aria-label="Discord" style="color:var(--ink-dim);">
+            <svg width="20" height="20"><use href="#icon-discord"/></svg>
+          </a>
+          <a href="https://x.com/cleat_lang" target="_blank" rel="noopener" aria-label="X / Twitter" style="color:var(--ink-dim);">
+            <svg width="20" height="20"><use href="#icon-x"/></svg>
+          </a>
+        </div>
       </div>
       <div class="footer-col">
         <h5>Language</h5>
         <a href="#primitives">Primitives</a>
-        <a href="#">Effects</a>
-        <a href="#">Type system</a>
-        <a href="#">Examples</a>
+        <a href="docs.html#effects">Effects</a>
+        <a href="docs.html#types">Type system</a>
+        <a href="examples.html">Examples</a>
       </div>
       <div class="footer-col">
         <h5>Resources</h5>
-        <a href="#">Documentation</a>
-        <a href="#">Stdlib reference</a>
-        <a href="#">Changelog</a>
-        <a href="#">Roadmap</a>
+        <a href="docs.html">Documentation</a>
+        <a href="docs.html#stdlib">Stdlib reference</a>
+        <a href="changelog.html">Changelog</a>
+        <a href="why.html">Why Cleat</a>
       </div>
       <div class="footer-col">
         <h5>Community</h5>
-        <a href="#">GitHub ↗</a>
-        <a href="#">Discord ↗</a>
-        <a href="#">X / Twitter ↗</a>
-        <a href="#">Sponsor</a>
+        <a href="https://github.com/cleat-lang/cleat" target="_blank" rel="noopener">GitHub ↗</a>
+        <a href="https://discord.gg/cleat-lang" target="_blank" rel="noopener">Discord ↗</a>
+        <a href="https://x.com/cleat_lang" target="_blank" rel="noopener">X / Twitter ↗</a>
+        <a href="sponsor.html">Sponsor</a>
       </div>
     </div>
     <div class="footer-bottom">
       <div>© 2026 · Cleat-Lang</div>
-      <div>github.com/cleat-lang/cleat · v0.1.0-alpha</div>
+      <div>github.com/cleat-lang/cleat · v0.1.1-alpha</div>
     </div>
   </div>
 </footer>

@@ -557,7 +557,7 @@
       <a href="docs.html">Docs</a>
       <a href="blog.html">Blog</a>
       <a href="changelog.html" class="active">Changelog</a>
-      <a href="#" class="nav-cta">↗ GitHub</a>
+      <a href="https://github.com/cleat-lang/cleat" target="_blank" rel="noopener" class="nav-cta">↗ GitHub</a>
     </div>
   </div>
 </nav>
@@ -579,7 +579,8 @@
       <div class="ver-jump">
         <div class="label">Jump to version</div>
         <div class="ver-pills">
-          <a href="#v0-1-0" class="ver-pill latest">0.1.0</a>
+          <a href="#v0-1-1" class="ver-pill latest">0.1.1</a>
+          <a href="#v0-1-0" class="ver-pill">0.1.0</a>
           <a href="#v0-0-9" class="ver-pill">0.0.9</a>
           <a href="#v0-0-8" class="ver-pill">0.0.8</a>
           <a href="#v0-0-7" class="ver-pill">0.0.7</a>
@@ -595,16 +596,90 @@
 <section class="releases">
   <div class="container">
 
-    <!-- ───────── v0.1.0 ───────── -->
-    <article id="v0-1-0" class="release reveal">
+    <!-- ───────── v0.1.1 ───────── -->
+    <article id="v0-1-1" class="release reveal">
       <aside class="rel-meta">
         <div class="rel-version current">
-          <span class="v">v</span><span class="num">0.1.0</span>
+          <span class="v">v</span><span class="num">0.1.1</span>
         </div>
         <div class="rel-tag latest">
           <span class="pulse"></span>
           Latest · alpha
         </div>
+        <div class="rel-date">
+          <span class="day">April 18</span><br>
+          2026
+        </div>
+        <div class="rel-stats">
+          <div class="stat-row"><span>Commits</span><span class="num">218</span></div>
+          <div class="stat-row"><span>Tests</span><span class="num">826</span></div>
+          <div class="stat-row"><span>Stdlib pkgs</span><span class="num">15</span></div>
+          <div class="stat-row"><span>Examples</span><span class="num">29</span></div>
+        </div>
+      </aside>
+
+      <div class="rel-content">
+        <h2>Agents, guards &amp; HTTP servers.</h2>
+        <p class="rel-summary">
+          The biggest release since v0.1.0. Four new compiler-enforced primitives — <code style="font-family:var(--mono);font-size:0.9em;color:var(--molten-2)">agent</code>, <code style="font-family:var(--mono);font-size:0.9em;color:var(--molten-2)">guard</code>, <code style="font-family:var(--mono);font-size:0.9em;color:var(--molten-2)">server</code>, and first-class <code style="font-family:var(--mono);font-size:0.9em;color:var(--molten-2)">fn</code> — bring safe AI agents, typed HTTP, and policy enforcement into the language core. Structured LLM output ships with compile-time schema extraction.
+        </p>
+
+        <div class="highlights">
+          <div class="label">★ Highlights</div>
+          <ul>
+            <li><strong>Four new primitives</strong> — <code style="font-family:var(--mono);font-size:0.85em;color:var(--molten-2)">agent</code> for tool-using LLM loops, <code style="font-family:var(--mono);font-size:0.85em;color:var(--molten-2)">guard</code> for pre-flight policy checks, <code style="font-family:var(--mono);font-size:0.85em;color:var(--molten-2)">server</code> for declarative HTTP, <code style="font-family:var(--mono);font-size:0.85em;color:var(--molten-2)">fn</code> as a first-class keyword.</li>
+            <li><strong>Structured LLM output</strong> — annotate a struct, get a typed value. The compiler lifts JSON Schema out of your types and deserializes responses automatically.</li>
+            <li><strong>Three new stdlib packages</strong> — <code style="font-family:var(--mono);font-size:0.85em;color:var(--molten-2)">std/server</code>, <code style="font-family:var(--mono);font-size:0.85em;color:var(--molten-2)">std/supervisor</code>, <code style="font-family:var(--mono);font-size:0.85em;color:var(--molten-2)">std/memory</code> — bringing the total to 15.</li>
+            <li><strong>826 tests passing</strong> across 11 internal packages, up from 626.</li>
+            <li><strong>VS Code extension</strong> with syntax highlighting for <code>.cleat</code> files, published to the marketplace.</li>
+          </ul>
+        </div>
+
+        <div class="change-group">
+          <div class="group-label added">+ Added</div>
+          <ul class="change-list">
+            <li><code>agent</code> primitive with declarative model, tools, max_turns, and system prompt <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">1a22e30</a></li>
+            <li><code>guard</code> primitive with Allow / Deny / Transform return types and composition <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">3f8b91c</a></li>
+            <li><code>server</code> primitive — declarative HTTP routes with typed handlers and middleware <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">7e42a0d</a></li>
+            <li><code>fn</code> promoted to first-class keyword with explicit effect declarations <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">b09f112</a></li>
+            <li>Compile-time JSON Schema extraction from struct types for structured LLM output <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">c44ea80</a></li>
+            <li><code>@description</code> annotation for steering LLM field generation <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">d91c7a2</a></li>
+            <li>Correlation IDs propagated automatically across tool, agent, and chain boundaries <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">f1028bb</a></li>
+            <li><code>std/server</code> stdlib package with JSON request/response helpers <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">52c6f89</a></li>
+            <li><code>std/supervisor</code> for agent retry, timeout, tracing, and execution summaries <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">a704d13</a></li>
+            <li><code>std/memory</code> namespaced KV store with context injection into agents <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">88e2049</a></li>
+            <li>VS Code extension with syntax highlighting, published as <code>cleat-lang.cleat-vscode</code> <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">60a1bef</a></li>
+            <li>Six new example programs covering agents, guards, and HTTP servers <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">ff3e812</a></li>
+          </ul>
+        </div>
+
+        <div class="change-group">
+          <div class="group-label changed">~ Changed</div>
+          <ul class="change-list">
+            <li><code>std/llm</code> now returns typed structured values when the call site has a known struct type <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">4b9a7d1</a></li>
+            <li>Diagnostic output for effect mismatches now includes the full needs-inheritance trace <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">2daf906</a></li>
+            <li><code>cleat run</code> now loads <code>.env</code> files by default; disable with <code>--no-env</code> <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">71e33cc</a></li>
+          </ul>
+        </div>
+
+        <div class="change-group">
+          <div class="group-label fixed">✓ Fixed</div>
+          <ul class="change-list">
+            <li>State machine reachability analyzer no longer reports false positives on mutually recursive guards <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">9c40211</a></li>
+            <li>Tool timeout parameter now correctly propagates through supervisor retry loops <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">5fa8e42</a></li>
+            <li>Formatter preserves blank lines between <code>@description</code>-annotated struct fields <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">a0bc339</a></li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <!-- ───────── v0.1.0 ───────── -->
+    <article id="v0-1-0" class="release reveal">
+      <aside class="rel-meta">
+        <div class="rel-version">
+          <span class="v">v</span><span class="num">0.1.0</span>
+        </div>
+        <div class="rel-tag minor">Minor</div>
         <div class="rel-date">
           <span class="day">April 17</span><br>
           2026
@@ -636,41 +711,41 @@
         <div class="change-group">
           <div class="group-label added">+ Added</div>
           <ul class="change-list">
-            <li><code>chain</code> primitive with Ed25519 signing and configurable retention policies <a href="#" class="commit">a3f12c7</a></li>
-            <li><code>using</code> clause for typed mock substitution inside <code>test</code> blocks <a href="#" class="commit">b7e891d</a></li>
-            <li>Pipe operator <code>|></code> with full type inference across stages <a href="#" class="commit">19f0a44</a></li>
-            <li>String interpolation: <code>"hello, ${name}"</code> with arbitrary expressions <a href="#" class="commit">cc4d3b1</a></li>
-            <li>Pattern matching with exhaustiveness checks for enums and Result types <a href="#" class="commit">e2d9f8a</a></li>
-            <li>Maps: <code>map[string]int</code> with <code>.keys()</code>, <code>.values()</code>, <code>.contains()</code> <a href="#" class="commit">4b1c7e0</a></li>
-            <li>Default and named arguments for tool and function declarations <a href="#" class="commit">7a8e2f3</a></li>
-            <li><code>--no-warn</code> flag to suppress warnings on <code>build</code> and <code>test</code> for CI <a href="#" class="commit">f3c1098</a></li>
+            <li><code>chain</code> primitive with Ed25519 signing and configurable retention policies <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">a3f12c7</a></li>
+            <li><code>using</code> clause for typed mock substitution inside <code>test</code> blocks <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">b7e891d</a></li>
+            <li>Pipe operator <code>|></code> with full type inference across stages <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">19f0a44</a></li>
+            <li>String interpolation: <code>"hello, ${name}"</code> with arbitrary expressions <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">cc4d3b1</a></li>
+            <li>Pattern matching with exhaustiveness checks for enums and Result types <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">e2d9f8a</a></li>
+            <li>Maps: <code>map[string]int</code> with <code>.keys()</code>, <code>.values()</code>, <code>.contains()</code> <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">4b1c7e0</a></li>
+            <li>Default and named arguments for tool and function declarations <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">7a8e2f3</a></li>
+            <li><code>--no-warn</code> flag to suppress warnings on <code>build</code> and <code>test</code> for CI <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">f3c1098</a></li>
           </ul>
         </div>
 
         <div class="change-group">
           <div class="group-label changed">~ Changed</div>
           <ul class="change-list">
-            <li>Diagnostic renderer rewritten in Rustc style with squiggly underlines and span highlighting <a href="#" class="commit">9d4e22b</a></li>
-            <li><code>Result[T, E]</code> error propagation operator narrowed: <code>?</code> now requires explicit return type <a href="#" class="commit">2f6a103</a></li>
-            <li>Stream buffer parameter is now required (default behavior was too easy to footgun) <a href="#" class="commit">81bd9c4</a></li>
+            <li>Diagnostic renderer rewritten in Rustc style with squiggly underlines and span highlighting <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">9d4e22b</a></li>
+            <li><code>Result[T, E]</code> error propagation operator narrowed: <code>?</code> now requires explicit return type <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">2f6a103</a></li>
+            <li>Stream buffer parameter is now required (default behavior was too easy to footgun) <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">81bd9c4</a></li>
           </ul>
         </div>
 
         <div class="change-group">
           <div class="group-label fixed">✓ Fixed</div>
           <ul class="change-list">
-            <li>Effect inference no longer drops <code>needs</code> across method calls on struct receivers <a href="#" class="commit">c5e7811</a></li>
-            <li>Formatter preserves trailing commas in multi-line struct literals <a href="#" class="commit">df21044</a></li>
-            <li>Test runner now exits with non-zero code on any failure (was previously 0) <a href="#" class="commit">6629a3e</a></li>
-            <li>Multi-package import resolver no longer caches stale versions across <code>cleat run</code> calls <a href="#" class="commit">b8c91f7</a></li>
+            <li>Effect inference no longer drops <code>needs</code> across method calls on struct receivers <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">c5e7811</a></li>
+            <li>Formatter preserves trailing commas in multi-line struct literals <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">df21044</a></li>
+            <li>Test runner now exits with non-zero code on any failure (was previously 0) <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">6629a3e</a></li>
+            <li>Multi-package import resolver no longer caches stale versions across <code>cleat run</code> calls <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">b8c91f7</a></li>
           </ul>
         </div>
 
         <div class="change-group">
           <div class="group-label breaking">! Breaking</div>
           <ul class="change-list">
-            <li>Tool decoration syntax moved from comments to first-class keywords. Migration: <code>// timeout: 30s</code> → <code>timeout: 30s</code> outside the tool body block <a href="#" class="commit">7e3df01</a></li>
-            <li><code>std/llm</code> now requires an explicit backend selection. Previously defaulted to mock; now must call <code>llm.use_mock()</code> in tests <a href="#" class="commit">a14f9b2</a></li>
+            <li>Tool decoration syntax moved from comments to first-class keywords. Migration: <code>// timeout: 30s</code> → <code>timeout: 30s</code> outside the tool body block <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">7e3df01</a></li>
+            <li><code>std/llm</code> now requires an explicit backend selection. Previously defaulted to mock; now must call <code>llm.use_mock()</code> in tests <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">a14f9b2</a></li>
           </ul>
         </div>
       </div>
@@ -702,26 +777,26 @@
         <div class="change-group">
           <div class="group-label added">+ Added</div>
           <ul class="change-list">
-            <li><code>state</code> primitive with declarative transitions, guards, and terminal states <a href="#" class="commit">3c9ff21</a></li>
-            <li>Compile-time reachability analysis for state machines (unreachable states are errors) <a href="#" class="commit">5a8e042</a></li>
-            <li>Deadlock detection across <code>when</code> guards and external triggers <a href="#" class="commit">e1b3c84</a></li>
-            <li><code>std/time</code> with deterministic test clocks and wall-clock access <a href="#" class="commit">22f790a</a></li>
+            <li><code>state</code> primitive with declarative transitions, guards, and terminal states <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">3c9ff21</a></li>
+            <li>Compile-time reachability analysis for state machines (unreachable states are errors) <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">5a8e042</a></li>
+            <li>Deadlock detection across <code>when</code> guards and external triggers <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">e1b3c84</a></li>
+            <li><code>std/time</code> with deterministic test clocks and wall-clock access <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">22f790a</a></li>
           </ul>
         </div>
 
         <div class="change-group">
           <div class="group-label changed">~ Changed</div>
           <ul class="change-list">
-            <li>Formatter wraps <code>match</code> arms across multiple lines when total width exceeds 80 cols <a href="#" class="commit">7d44b91</a></li>
-            <li>Loader now reports cyclic imports with the full cycle path, not just the entry edge <a href="#" class="commit">198cda7</a></li>
+            <li>Formatter wraps <code>match</code> arms across multiple lines when total width exceeds 80 cols <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">7d44b91</a></li>
+            <li>Loader now reports cyclic imports with the full cycle path, not just the entry edge <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">198cda7</a></li>
           </ul>
         </div>
 
         <div class="change-group">
           <div class="group-label fixed">✓ Fixed</div>
           <ul class="change-list">
-            <li>Type inference no longer panics on empty struct literals <a href="#" class="commit">f44e10b</a></li>
-            <li>Codegen produces correct Go for <code>Result</code> types nested 3+ levels deep <a href="#" class="commit">cc81023</a></li>
+            <li>Type inference no longer panics on empty struct literals <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">f44e10b</a></li>
+            <li>Codegen produces correct Go for <code>Result</code> types nested 3+ levels deep <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">cc81023</a></li>
           </ul>
         </div>
       </div>
@@ -752,17 +827,17 @@
         <div class="change-group">
           <div class="group-label added">+ Added</div>
           <ul class="change-list">
-            <li><code>stream</code> keyword with <code>yield</code> expressions and explicit buffer sizing <a href="#" class="commit">11ee03f</a></li>
-            <li>Stream consumers via <code>for x in stream</code> with backpressure semantics <a href="#" class="commit">8f12ab9</a></li>
-            <li><code>std/llm</code> with mockable prompt and stream APIs <a href="#" class="commit">a0c4d51</a></li>
+            <li><code>stream</code> keyword with <code>yield</code> expressions and explicit buffer sizing <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">11ee03f</a></li>
+            <li>Stream consumers via <code>for x in stream</code> with backpressure semantics <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">8f12ab9</a></li>
+            <li><code>std/llm</code> with mockable prompt and stream APIs <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">a0c4d51</a></li>
           </ul>
         </div>
 
         <div class="change-group">
           <div class="group-label fixed">✓ Fixed</div>
           <ul class="change-list">
-            <li>Lexer now correctly handles UTF-8 identifiers in error spans <a href="#" class="commit">d7fa118</a></li>
-            <li><code>cleat fmt -w</code> no longer rewrites files when no formatting changes are needed <a href="#" class="commit">3c2906e</a></li>
+            <li>Lexer now correctly handles UTF-8 identifiers in error spans <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">d7fa118</a></li>
+            <li><code>cleat fmt -w</code> no longer rewrites files when no formatting changes are needed <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">3c2906e</a></li>
           </ul>
         </div>
       </div>
@@ -793,16 +868,16 @@
         <div class="change-group">
           <div class="group-label added">+ Added</div>
           <ul class="change-list">
-            <li><code>needs { ... }</code> clause on functions, tools, and methods — required when calling effectful operations <a href="#" class="commit">2bb44e0</a></li>
-            <li>Effect inference for top-level <code>fn main()</code> with helpful diagnostic when missing <a href="#" class="commit">61a039c</a></li>
-            <li>Effect aliases via <code>type io = needs { fs, log }</code> for grouping common combinations <a href="#" class="commit">c4d7e88</a></li>
+            <li><code>needs { ... }</code> clause on functions, tools, and methods — required when calling effectful operations <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">2bb44e0</a></li>
+            <li>Effect inference for top-level <code>fn main()</code> with helpful diagnostic when missing <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">61a039c</a></li>
+            <li>Effect aliases via <code>type io = needs { fs, log }</code> for grouping common combinations <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">c4d7e88</a></li>
           </ul>
         </div>
 
         <div class="change-group">
           <div class="group-label breaking">! Breaking</div>
           <ul class="change-list">
-            <li>All stdlib packages that touch the outside world now require effect declarations. Migration is mechanical but every existing program will need updates <a href="#" class="commit">bb71f29</a></li>
+            <li>All stdlib packages that touch the outside world now require effect declarations. Migration is mechanical but every existing program will need updates <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">bb71f29</a></li>
           </ul>
         </div>
       </div>
@@ -833,16 +908,16 @@
         <div class="change-group">
           <div class="group-label added">+ Added</div>
           <ul class="change-list">
-            <li><code>cleat test --filter "pattern"</code> for selective test execution <a href="#" class="commit">a91e220</a></li>
-            <li>Test output now groups by package with a per-package pass/fail summary <a href="#" class="commit">4f7e88c</a></li>
+            <li><code>cleat test --filter "pattern"</code> for selective test execution <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">a91e220</a></li>
+            <li>Test output now groups by package with a per-package pass/fail summary <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">4f7e88c</a></li>
           </ul>
         </div>
 
         <div class="change-group">
           <div class="group-label fixed">✓ Fixed</div>
           <ul class="change-list">
-            <li>Failing assertions now print expected vs actual values, not just "false" <a href="#" class="commit">7c20e93</a></li>
-            <li>Test discovery no longer skips files with leading underscores <a href="#" class="commit">e88af19</a></li>
+            <li>Failing assertions now print expected vs actual values, not just "false" <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">7c20e93</a></li>
+            <li>Test discovery no longer skips files with leading underscores <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">e88af19</a></li>
           </ul>
         </div>
 
@@ -881,17 +956,17 @@
         <div class="change-group">
           <div class="group-label added">+ Added</div>
           <ul class="change-list">
-            <li>Multi-file package loader with deterministic import resolution <a href="#" class="commit">90a3c7f</a></li>
-            <li><code>import "std/json"</code>, <code>"std/http"</code>, <code>"std/strings"</code> as the first stdlib packages <a href="#" class="commit">2c8e144</a></li>
-            <li><code>tool</code> primitive with <code>timeout</code> and <code>retry</code> as comment-form decorations (later promoted to keywords in 0.1.0) <a href="#" class="commit">5e62a99</a></li>
-            <li>Public/private visibility based on identifier capitalization <a href="#" class="commit">f1bca37</a></li>
+            <li>Multi-file package loader with deterministic import resolution <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">90a3c7f</a></li>
+            <li><code>import "std/json"</code>, <code>"std/http"</code>, <code>"std/strings"</code> as the first stdlib packages <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">2c8e144</a></li>
+            <li><code>tool</code> primitive with <code>timeout</code> and <code>retry</code> as comment-form decorations (later promoted to keywords in 0.1.0) <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">5e62a99</a></li>
+            <li>Public/private visibility based on identifier capitalization <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">f1bca37</a></li>
           </ul>
         </div>
 
         <div class="change-group">
           <div class="group-label removed">− Removed</div>
           <ul class="change-list">
-            <li>The single-file-only mode is gone. All programs now use the multi-package model, even one-file scripts <a href="#" class="commit">3a78d20</a></li>
+            <li>The single-file-only mode is gone. All programs now use the multi-package model, even one-file scripts <a href="https://github.com/cleat-lang/cleat/commits/main" target="_blank" rel="noopener" class="commit">3a78d20</a></li>
           </ul>
         </div>
       </div>
