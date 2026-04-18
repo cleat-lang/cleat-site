@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Changelog · Cleat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #0c0c0d;
+    --bg-2:      #131315;
+    --bg-3:      #1a1a1d;
+    --ink:       #ededea;
+    --ink-dim:   #a7a7a1;
+    --ink-faint: #6a6a64;
+    --rule:      #2a2a2d;
+    --rule-soft: #1f1f22;
+    --molten:    #ff7a18;
+    --molten-2:  #ffb454;
+    --green:     #8db580;
+    --blue:      #7aa6c7;
+    --purple:    #b693c4;
+    --red:       #d97070;
+    --serif:     'Fraunces', 'Times New Roman', serif;
+    --mono:      'JetBrains Mono', ui-monospace, monospace;
+    --sans:      'Inter', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' /%3E%3C/svg%3E");
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* ─── NAV ─── */
+  nav.topnav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 18px 32px;
+    background: rgba(12,12,13,0.78);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .nav-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-brand { display: flex; align-items: center; gap: 12px; }
+  .nav-brand svg { width: 28px; height: 28px; }
+  .nav-brand .word {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 19px;
+  }
+  .nav-links { display: flex; align-items: center; gap: 32px; }
+  .nav-links a {
+    color: var(--ink-dim);
+    font-size: 13px;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--ink); }
+  .nav-cta {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink);
+    border: 1px solid var(--rule);
+    padding: 8px 14px;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+  .nav-cta:hover { border-color: var(--molten); color: var(--molten-2); }
+
+  .container {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* ─── HEADER ─── */
+  .cl-header {
+    padding: 140px 0 60px;
+    border-bottom: 1px solid var(--rule-soft);
+    position: relative;
+  }
+  .cl-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 700px 350px at 80% 0%, rgba(255,122,24,0.04), transparent 70%);
+    pointer-events: none;
+  }
+  .cl-header-grid {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 60px;
+    align-items: end;
+    position: relative;
+  }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--ink-faint);
+    margin-bottom: 20px;
+  }
+  .eyebrow .dot {
+    width: 6px; height: 6px;
+    background: var(--molten);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--molten);
+  }
+  .cl-header h1 {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(48px, 6vw, 84px);
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+    margin-bottom: 16px;
+  }
+  .cl-header h1 em { font-style: italic; font-weight: 400; color: var(--molten-2); }
+  .cl-header .lede {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--ink-dim);
+    max-width: 580px;
+  }
+
+  /* Quick-jump version pills */
+  .ver-jump {
+    background: var(--bg-2);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 18px 20px;
+  }
+  .ver-jump .label {
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--ink-faint);
+    margin-bottom: 12px;
+  }
+  .ver-pills {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .ver-pill {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-dim);
+    padding: 5px 9px;
+    background: var(--bg-3);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    transition: all 0.15s;
+  }
+  .ver-pill:hover { color: var(--molten-2); border-color: var(--molten); }
+  .ver-pill.latest {
+    color: var(--molten);
+    border-color: var(--molten);
+    background: rgba(255,122,24,0.08);
+  }
+
+  /* ─── RELEASE LIST ─── */
+  .releases {
+    padding: 60px 0 120px;
+  }
+  .release {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 56px;
+    padding: 56px 0;
+    border-bottom: 1px solid var(--rule-soft);
+    align-items: start;
+  }
+  .release:first-child { padding-top: 24px; }
+  .release:last-child { border-bottom: none; }
+
+  /* Left rail: version + date + meta */
+  .rel-meta {
+    position: sticky;
+    top: 90px;
+  }
+  .rel-version {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    font-family: var(--mono);
+    font-weight: 500;
+    margin-bottom: 14px;
+  }
+  .rel-version .v {
+    color: var(--ink-faint);
+    font-size: 16px;
+  }
+  .rel-version .num {
+    color: var(--ink);
+    font-size: 28px;
+    letter-spacing: -0.01em;
+  }
+  .rel-version.current .num { color: var(--molten-2); }
+
+  .rel-tag {
+    display: inline-flex;
+    font-family: var(--mono);
+    font-size: 9px;
+    padding: 3px 8px;
+    border-radius: 99px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 14px;
+    align-items: center;
+    gap: 6px;
+  }
+  .rel-tag.latest {
+    background: rgba(255,122,24,0.12);
+    color: var(--molten);
+    border: 1px solid rgba(255,122,24,0.3);
+  }
+  .rel-tag.minor {
+    background: rgba(122,166,199,0.1);
+    color: var(--blue);
+    border: 1px solid rgba(122,166,199,0.25);
+  }
+  .rel-tag.patch {
+    background: rgba(141,181,128,0.1);
+    color: var(--green);
+    border: 1px solid rgba(141,181,128,0.25);
+  }
+  .rel-tag.preview {
+    background: rgba(182,147,196,0.1);
+    color: var(--purple);
+    border: 1px solid rgba(182,147,196,0.25);
+  }
+  .rel-tag .pulse {
+    width: 5px; height: 5px;
+    background: currentColor;
+    border-radius: 50%;
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.3; transform: scale(0.7); }
+  }
+
+  .rel-date {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+  }
+  .rel-date .day {
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 18px;
+    text-transform: none;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  .rel-stats {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    border-top: 1px solid var(--rule-soft);
+    padding-top: 14px;
+    line-height: 1.8;
+  }
+  .rel-stats .stat-row {
+    display: flex;
+    justify-content: space-between;
+  }
+  .rel-stats .num {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  /* Right column: changes */
+  .rel-content h2 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(28px, 3vw, 38px);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+  .rel-content h2 em { font-style: italic; color: var(--molten-2); font-weight: 500; }
+  .rel-summary {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--ink-dim);
+    margin-bottom: 28px;
+    max-width: 680px;
+  }
+
+  .change-group {
+    margin-bottom: 24px;
+  }
+  .group-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin-bottom: 14px;
+    padding: 4px 10px;
+    border-radius: 2px;
+    font-weight: 500;
+  }
+  .group-label.added {
+    color: var(--green);
+    background: rgba(141,181,128,0.08);
+    border: 1px solid rgba(141,181,128,0.25);
+  }
+  .group-label.changed {
+    color: var(--blue);
+    background: rgba(122,166,199,0.08);
+    border: 1px solid rgba(122,166,199,0.25);
+  }
+  .group-label.fixed {
+    color: var(--molten-2);
+    background: rgba(255,180,84,0.08);
+    border: 1px solid rgba(255,180,84,0.3);
+  }
+  .group-label.removed {
+    color: var(--red);
+    background: rgba(217,112,112,0.08);
+    border: 1px solid rgba(217,112,112,0.25);
+  }
+  .group-label.breaking {
+    color: var(--red);
+    background: rgba(217,112,112,0.12);
+    border: 1px solid rgba(217,112,112,0.4);
+  }
+  .group-label.docs {
+    color: var(--purple);
+    background: rgba(182,147,196,0.08);
+    border: 1px solid rgba(182,147,196,0.25);
+  }
+
+  .change-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .change-list li {
+    padding: 8px 14px 8px 28px;
+    color: var(--ink-dim);
+    font-size: 14px;
+    line-height: 1.55;
+    border-radius: 4px;
+    position: relative;
+    transition: background 0.15s;
+  }
+  .change-list li:hover {
+    background: var(--bg-2);
+    color: var(--ink);
+  }
+  .change-list li::before {
+    content: '+';
+    position: absolute;
+    left: 10px;
+    top: 8px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--green);
+    font-weight: 600;
+  }
+  .change-group:has(.changed) .change-list li::before { content: '~'; color: var(--blue); }
+  .change-group:has(.fixed) .change-list li::before { content: '✓'; color: var(--molten-2); font-size: 11px; top: 9px; }
+  .change-group:has(.removed) .change-list li::before { content: '−'; color: var(--red); font-weight: 600; }
+  .change-group:has(.breaking) .change-list li::before { content: '!'; color: var(--red); font-weight: 700; }
+  .change-group:has(.docs) .change-list li::before { content: '¶'; color: var(--purple); }
+
+  .change-list code {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: var(--bg-2);
+    color: var(--molten-2);
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid var(--rule-soft);
+  }
+  .change-list .commit {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    margin-left: 6px;
+  }
+  .change-list .commit::before { content: '· '; color: var(--rule); }
+  .change-list .commit:hover { color: var(--molten-2); }
+
+  /* Highlights box for big releases */
+  .highlights {
+    background: var(--bg-2);
+    border: 1px solid var(--rule);
+    border-left: 2px solid var(--molten);
+    border-radius: 4px;
+    padding: 22px 26px;
+    margin-bottom: 28px;
+  }
+  .highlights .label {
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--molten);
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+  .highlights ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .highlights li {
+    color: var(--ink);
+    font-size: 14.5px;
+    line-height: 1.55;
+    padding-left: 22px;
+    position: relative;
+  }
+  .highlights li::before {
+    content: '★';
+    position: absolute;
+    left: 0;
+    top: 1px;
+    color: var(--molten);
+    font-size: 11px;
+  }
+  .highlights li strong { color: var(--molten-2); font-weight: 500; }
+
+  /* Code snippet inside changelog */
+  .cl-code {
+    background: var(--bg-2);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 14px 18px;
+    margin: 12px 0 16px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.7;
+    overflow-x: auto;
+  }
+  .kw { color: var(--purple); }
+  .fn { color: var(--blue); }
+  .str { color: var(--green); }
+  .typ { color: var(--molten-2); }
+  .pun { color: var(--ink-dim); }
+  .cm { color: var(--ink-faint); font-style: italic; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    padding: 50px 0;
+    border-top: 1px solid var(--rule-soft);
+  }
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .footer-brand { display: flex; align-items: center; gap: 10px; }
+  .footer-brand svg { width: 22px; height: 22px; }
+
+  @media (max-width: 900px) {
+    .cl-header-grid { grid-template-columns: 1fr; gap: 32px; }
+    .release { grid-template-columns: 1fr; gap: 24px; }
+    .rel-meta { position: static; }
+    .rel-stats { display: none; }
+  }
+  @media (max-width: 640px) {
+    .nav-links a:not(.nav-cta) { display: none; }
+    .cl-header { padding: 110px 0 40px; }
+    .footer-inner { flex-direction: column; gap: 12px; }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="cleat-logo" viewBox="0 0 200 200">
+      <g fill="currentColor">
+        <path d="M30 80 L70 80 L80 92 L120 92 L130 80 L170 80 L160 100 L40 100 Z"/>
+        <rect x="86" y="76" width="11" height="32"/>
+        <rect x="103" y="76" width="11" height="32"/>
+        <path d="M70 108 L82 108 L88 128 L72 128 Z"/>
+        <path d="M118 108 L130 108 L128 128 L112 128 Z"/>
+        <path d="M50 132 L150 132 L160 144 L40 144 Z"/>
+        <rect x="48" y="148" width="104" height="6"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- NAV -->
+<nav class="topnav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">
+      <svg><use href="#cleat-logo"/></svg>
+      <span class="word">Cleat</span>
+    </a>
+    <div class="nav-links">
+      <a href="why.html">Why Cleat</a>
+      <a href="docs.html">Docs</a>
+      <a href="blog.html">Blog</a>
+      <a href="changelog.html" class="active">Changelog</a>
+      <a href="#" class="nav-cta">↗ GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HEADER -->
+<header class="cl-header">
+  <div class="container">
+    <div class="cl-header-grid reveal">
+      <div>
+        <div class="eyebrow">
+          <span class="dot"></span>
+          What changed · what broke · what's new
+        </div>
+        <h1>The <em>changelog.</em></h1>
+        <p class="lede">
+          Every release. Every breaking change. Every fix. Pre-1.0 means we move fast — semver is respected, but minor versions may carry breaking changes until we tag stable.
+        </p>
+      </div>
+      <div class="ver-jump">
+        <div class="label">Jump to version</div>
+        <div class="ver-pills">
+          <a href="#v0-1-0" class="ver-pill latest">0.1.0</a>
+          <a href="#v0-0-9" class="ver-pill">0.0.9</a>
+          <a href="#v0-0-8" class="ver-pill">0.0.8</a>
+          <a href="#v0-0-7" class="ver-pill">0.0.7</a>
+          <a href="#v0-0-6" class="ver-pill">0.0.6</a>
+          <a href="#v0-0-5" class="ver-pill">0.0.5</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- RELEASES -->
+<section class="releases">
+  <div class="container">
+
+    <!-- ───────── v0.1.0 ───────── -->
+    <article id="v0-1-0" class="release reveal">
+      <aside class="rel-meta">
+        <div class="rel-version current">
+          <span class="v">v</span><span class="num">0.1.0</span>
+        </div>
+        <div class="rel-tag latest">
+          <span class="pulse"></span>
+          Latest · alpha
+        </div>
+        <div class="rel-date">
+          <span class="day">April 17</span><br>
+          2026
+        </div>
+        <div class="rel-stats">
+          <div class="stat-row"><span>Commits</span><span class="num">312</span></div>
+          <div class="stat-row"><span>Files</span><span class="num">+47 / −12</span></div>
+          <div class="stat-row"><span>Tests</span><span class="num">626</span></div>
+          <div class="stat-row"><span>Stdlib pkgs</span><span class="num">12</span></div>
+        </div>
+      </aside>
+
+      <div class="rel-content">
+        <h2>The first <em>public alpha.</em></h2>
+        <p class="rel-summary">
+          We're cutting the first version of Cleat that the world gets to look at. The compiler, formatter, test runner, and standard library all ship in this release. The language is alpha — usable for real programs, not yet stable for production.
+        </p>
+
+        <div class="highlights">
+          <div class="label">★ Highlights</div>
+          <ul>
+            <li><strong>First-class primitives</strong> — <code style="font-family:var(--mono);font-size:0.85em;color:var(--molten-2)">tool</code>, <code style="font-family:var(--mono);font-size:0.85em;color:var(--molten-2)">stream</code>, <code style="font-family:var(--mono);font-size:0.85em;color:var(--molten-2)">state</code>, and <code style="font-family:var(--mono);font-size:0.85em;color:var(--molten-2)">chain</code> are now compiler-enforced keywords.</li>
+            <li><strong>Effect system</strong> — every function declares side effects with <code style="font-family:var(--mono);font-size:0.85em;color:var(--molten-2)">needs { ... }</code>; the type checker enforces it.</li>
+            <li><strong>12 stdlib packages</strong> shipped in the binary — json, http, fs, strings, math, env, log, os, io, crypto, time, llm.</li>
+            <li><strong>Built-in tooling</strong> — <code style="font-family:var(--mono);font-size:0.85em;color:var(--molten-2)">cleat run</code>, <code style="font-family:var(--mono);font-size:0.85em;color:var(--molten-2)">cleat build</code>, <code style="font-family:var(--mono);font-size:0.85em;color:var(--molten-2)">cleat test</code>, <code style="font-family:var(--mono);font-size:0.85em;color:var(--molten-2)">cleat fmt</code>, <code style="font-family:var(--mono);font-size:0.85em;color:var(--molten-2)">cleat check</code>.</li>
+          </ul>
+        </div>
+
+        <div class="change-group">
+          <div class="group-label added">+ Added</div>
+          <ul class="change-list">
+            <li><code>chain</code> primitive with Ed25519 signing and configurable retention policies <a href="#" class="commit">a3f12c7</a></li>
+            <li><code>using</code> clause for typed mock substitution inside <code>test</code> blocks <a href="#" class="commit">b7e891d</a></li>
+            <li>Pipe operator <code>|></code> with full type inference across stages <a href="#" class="commit">19f0a44</a></li>
+            <li>String interpolation: <code>"hello, ${name}"</code> with arbitrary expressions <a href="#" class="commit">cc4d3b1</a></li>
+            <li>Pattern matching with exhaustiveness checks for enums and Result types <a href="#" class="commit">e2d9f8a</a></li>
+            <li>Maps: <code>map[string]int</code> with <code>.keys()</code>, <code>.values()</code>, <code>.contains()</code> <a href="#" class="commit">4b1c7e0</a></li>
+            <li>Default and named arguments for tool and function declarations <a href="#" class="commit">7a8e2f3</a></li>
+            <li><code>--no-warn</code> flag to suppress warnings on <code>build</code> and <code>test</code> for CI <a href="#" class="commit">f3c1098</a></li>
+          </ul>
+        </div>
+
+        <div class="change-group">
+          <div class="group-label changed">~ Changed</div>
+          <ul class="change-list">
+            <li>Diagnostic renderer rewritten in Rustc style with squiggly underlines and span highlighting <a href="#" class="commit">9d4e22b</a></li>
+            <li><code>Result[T, E]</code> error propagation operator narrowed: <code>?</code> now requires explicit return type <a href="#" class="commit">2f6a103</a></li>
+            <li>Stream buffer parameter is now required (default behavior was too easy to footgun) <a href="#" class="commit">81bd9c4</a></li>
+          </ul>
+        </div>
+
+        <div class="change-group">
+          <div class="group-label fixed">✓ Fixed</div>
+          <ul class="change-list">
+            <li>Effect inference no longer drops <code>needs</code> across method calls on struct receivers <a href="#" class="commit">c5e7811</a></li>
+            <li>Formatter preserves trailing commas in multi-line struct literals <a href="#" class="commit">df21044</a></li>
+            <li>Test runner now exits with non-zero code on any failure (was previously 0) <a href="#" class="commit">6629a3e</a></li>
+            <li>Multi-package import resolver no longer caches stale versions across <code>cleat run</code> calls <a href="#" class="commit">b8c91f7</a></li>
+          </ul>
+        </div>
+
+        <div class="change-group">
+          <div class="group-label breaking">! Breaking</div>
+          <ul class="change-list">
+            <li>Tool decoration syntax moved from comments to first-class keywords. Migration: <code>// timeout: 30s</code> → <code>timeout: 30s</code> outside the tool body block <a href="#" class="commit">7e3df01</a></li>
+            <li><code>std/llm</code> now requires an explicit backend selection. Previously defaulted to mock; now must call <code>llm.use_mock()</code> in tests <a href="#" class="commit">a14f9b2</a></li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <!-- ───────── v0.0.9 ───────── -->
+    <article id="v0-0-9" class="release reveal">
+      <aside class="rel-meta">
+        <div class="rel-version">
+          <span class="v">v</span><span class="num">0.0.9</span>
+        </div>
+        <div class="rel-tag minor">Minor</div>
+        <div class="rel-date">
+          <span class="day">April 03</span><br>
+          2026
+        </div>
+        <div class="rel-stats">
+          <div class="stat-row"><span>Commits</span><span class="num">87</span></div>
+          <div class="stat-row"><span>Tests added</span><span class="num">+94</span></div>
+        </div>
+      </aside>
+
+      <div class="rel-content">
+        <h2>State machines land.</h2>
+        <p class="rel-summary">
+          The <code style="font-family:var(--mono);font-size:0.9em;color:var(--molten-2)">state</code> primitive ships with reachability and deadlock detection. Plus the formatter learned to handle long match expressions without going feral.
+        </p>
+
+        <div class="change-group">
+          <div class="group-label added">+ Added</div>
+          <ul class="change-list">
+            <li><code>state</code> primitive with declarative transitions, guards, and terminal states <a href="#" class="commit">3c9ff21</a></li>
+            <li>Compile-time reachability analysis for state machines (unreachable states are errors) <a href="#" class="commit">5a8e042</a></li>
+            <li>Deadlock detection across <code>when</code> guards and external triggers <a href="#" class="commit">e1b3c84</a></li>
+            <li><code>std/time</code> with deterministic test clocks and wall-clock access <a href="#" class="commit">22f790a</a></li>
+          </ul>
+        </div>
+
+        <div class="change-group">
+          <div class="group-label changed">~ Changed</div>
+          <ul class="change-list">
+            <li>Formatter wraps <code>match</code> arms across multiple lines when total width exceeds 80 cols <a href="#" class="commit">7d44b91</a></li>
+            <li>Loader now reports cyclic imports with the full cycle path, not just the entry edge <a href="#" class="commit">198cda7</a></li>
+          </ul>
+        </div>
+
+        <div class="change-group">
+          <div class="group-label fixed">✓ Fixed</div>
+          <ul class="change-list">
+            <li>Type inference no longer panics on empty struct literals <a href="#" class="commit">f44e10b</a></li>
+            <li>Codegen produces correct Go for <code>Result</code> types nested 3+ levels deep <a href="#" class="commit">cc81023</a></li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <!-- ───────── v0.0.8 ───────── -->
+    <article id="v0-0-8" class="release reveal">
+      <aside class="rel-meta">
+        <div class="rel-version">
+          <span class="v">v</span><span class="num">0.0.8</span>
+        </div>
+        <div class="rel-tag patch">Patch</div>
+        <div class="rel-date">
+          <span class="day">March 18</span><br>
+          2026
+        </div>
+        <div class="rel-stats">
+          <div class="stat-row"><span>Commits</span><span class="num">34</span></div>
+        </div>
+      </aside>
+
+      <div class="rel-content">
+        <h2>Streams &amp; backpressure.</h2>
+        <p class="rel-summary">
+          First-class <code style="font-family:var(--mono);font-size:0.9em;color:var(--molten-2)">stream</code> primitive with typed yields and bounded buffers.
+        </p>
+
+        <div class="change-group">
+          <div class="group-label added">+ Added</div>
+          <ul class="change-list">
+            <li><code>stream</code> keyword with <code>yield</code> expressions and explicit buffer sizing <a href="#" class="commit">11ee03f</a></li>
+            <li>Stream consumers via <code>for x in stream</code> with backpressure semantics <a href="#" class="commit">8f12ab9</a></li>
+            <li><code>std/llm</code> with mockable prompt and stream APIs <a href="#" class="commit">a0c4d51</a></li>
+          </ul>
+        </div>
+
+        <div class="change-group">
+          <div class="group-label fixed">✓ Fixed</div>
+          <ul class="change-list">
+            <li>Lexer now correctly handles UTF-8 identifiers in error spans <a href="#" class="commit">d7fa118</a></li>
+            <li><code>cleat fmt -w</code> no longer rewrites files when no formatting changes are needed <a href="#" class="commit">3c2906e</a></li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <!-- ───────── v0.0.7 ───────── -->
+    <article id="v0-0-7" class="release reveal">
+      <aside class="rel-meta">
+        <div class="rel-version">
+          <span class="v">v</span><span class="num">0.0.7</span>
+        </div>
+        <div class="rel-tag minor">Minor</div>
+        <div class="rel-date">
+          <span class="day">March 02</span><br>
+          2026
+        </div>
+        <div class="rel-stats">
+          <div class="stat-row"><span>Commits</span><span class="num">112</span></div>
+        </div>
+      </aside>
+
+      <div class="rel-content">
+        <h2>The effect system arrives.</h2>
+        <p class="rel-summary">
+          The single largest design change in Cleat's life so far: <code style="font-family:var(--mono);font-size:0.9em;color:var(--molten-2)">needs</code> becomes a first-class part of the type system, not an annotation.
+        </p>
+
+        <div class="change-group">
+          <div class="group-label added">+ Added</div>
+          <ul class="change-list">
+            <li><code>needs { ... }</code> clause on functions, tools, and methods — required when calling effectful operations <a href="#" class="commit">2bb44e0</a></li>
+            <li>Effect inference for top-level <code>fn main()</code> with helpful diagnostic when missing <a href="#" class="commit">61a039c</a></li>
+            <li>Effect aliases via <code>type io = needs { fs, log }</code> for grouping common combinations <a href="#" class="commit">c4d7e88</a></li>
+          </ul>
+        </div>
+
+        <div class="change-group">
+          <div class="group-label breaking">! Breaking</div>
+          <ul class="change-list">
+            <li>All stdlib packages that touch the outside world now require effect declarations. Migration is mechanical but every existing program will need updates <a href="#" class="commit">bb71f29</a></li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <!-- ───────── v0.0.6 ───────── -->
+    <article id="v0-0-6" class="release reveal">
+      <aside class="rel-meta">
+        <div class="rel-version">
+          <span class="v">v</span><span class="num">0.0.6</span>
+        </div>
+        <div class="rel-tag patch">Patch</div>
+        <div class="rel-date">
+          <span class="day">February 14</span><br>
+          2026
+        </div>
+        <div class="rel-stats">
+          <div class="stat-row"><span>Commits</span><span class="num">28</span></div>
+        </div>
+      </aside>
+
+      <div class="rel-content">
+        <h2>Test runner improvements.</h2>
+        <p class="rel-summary">
+          Quality of life on the testing path — better filtering, better output, better failures.
+        </p>
+
+        <div class="change-group">
+          <div class="group-label added">+ Added</div>
+          <ul class="change-list">
+            <li><code>cleat test --filter "pattern"</code> for selective test execution <a href="#" class="commit">a91e220</a></li>
+            <li>Test output now groups by package with a per-package pass/fail summary <a href="#" class="commit">4f7e88c</a></li>
+          </ul>
+        </div>
+
+        <div class="change-group">
+          <div class="group-label fixed">✓ Fixed</div>
+          <ul class="change-list">
+            <li>Failing assertions now print expected vs actual values, not just "false" <a href="#" class="commit">7c20e93</a></li>
+            <li>Test discovery no longer skips files with leading underscores <a href="#" class="commit">e88af19</a></li>
+          </ul>
+        </div>
+
+        <div class="change-group">
+          <div class="group-label docs">¶ Docs</div>
+          <ul class="change-list">
+            <li>Added testing guide and cookbook of common patterns to docs site</li>
+            <li>Standard library reference now includes effect requirements for every function</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <!-- ───────── v0.0.5 ───────── -->
+    <article id="v0-0-5" class="release reveal">
+      <aside class="rel-meta">
+        <div class="rel-version">
+          <span class="v">v</span><span class="num">0.0.5</span>
+        </div>
+        <div class="rel-tag preview">Preview</div>
+        <div class="rel-date">
+          <span class="day">January 28</span><br>
+          2026
+        </div>
+        <div class="rel-stats">
+          <div class="stat-row"><span>Commits</span><span class="num">156</span></div>
+        </div>
+      </aside>
+
+      <div class="rel-content">
+        <h2>Multi-package modules.</h2>
+        <p class="rel-summary">
+          Cleat learns to look across files. Loader, import resolver, and the foundations of the standard library all land in this release.
+        </p>
+
+        <div class="change-group">
+          <div class="group-label added">+ Added</div>
+          <ul class="change-list">
+            <li>Multi-file package loader with deterministic import resolution <a href="#" class="commit">90a3c7f</a></li>
+            <li><code>import "std/json"</code>, <code>"std/http"</code>, <code>"std/strings"</code> as the first stdlib packages <a href="#" class="commit">2c8e144</a></li>
+            <li><code>tool</code> primitive with <code>timeout</code> and <code>retry</code> as comment-form decorations (later promoted to keywords in 0.1.0) <a href="#" class="commit">5e62a99</a></li>
+            <li>Public/private visibility based on identifier capitalization <a href="#" class="commit">f1bca37</a></li>
+          </ul>
+        </div>
+
+        <div class="change-group">
+          <div class="group-label removed">− Removed</div>
+          <ul class="change-list">
+            <li>The single-file-only mode is gone. All programs now use the multi-package model, even one-file scripts <a href="#" class="commit">3a78d20</a></li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <!-- Earlier versions teaser -->
+    <div style="text-align:center; padding: 40px 0; color: var(--ink-faint); font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em;">
+      Earlier releases (0.0.1 – 0.0.4) available in the
+      <a href="#" style="color:var(--molten-2); text-decoration: underline; text-underline-offset: 3px;">GitHub release archive</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <svg><use href="#cleat-logo"/></svg>
+        <span>Cleat · v0.1.0-alpha</span>
+      </div>
+      <div>github.com/cleat-lang/cleat · MIT</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>

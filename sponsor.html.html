@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sponsor · Cleat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #0c0c0d;
+    --bg-2:      #131315;
+    --bg-3:      #1a1a1d;
+    --ink:       #ededea;
+    --ink-dim:   #a7a7a1;
+    --ink-faint: #6a6a64;
+    --rule:      #2a2a2d;
+    --rule-soft: #1f1f22;
+    --molten:    #ff7a18;
+    --molten-2:  #ffb454;
+    --green:     #8db580;
+    --blue:      #7aa6c7;
+    --purple:    #b693c4;
+    --serif:     'Fraunces', 'Times New Roman', serif;
+    --mono:      'JetBrains Mono', ui-monospace, monospace;
+    --sans:      'Inter', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' /%3E%3C/svg%3E");
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* ─── NAV ─── */
+  nav.topnav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 18px 32px;
+    background: rgba(12,12,13,0.78);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .nav-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-brand { display: flex; align-items: center; gap: 12px; }
+  .nav-brand svg { width: 28px; height: 28px; }
+  .nav-brand .word { font-family: var(--serif); font-weight: 500; font-size: 19px; }
+  .nav-links { display: flex; align-items: center; gap: 28px; }
+  .nav-links a { color: var(--ink-dim); font-size: 13px; transition: color 0.2s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--ink); }
+  .nav-cta {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink);
+    border: 1px solid var(--rule);
+    padding: 8px 14px;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+  .nav-cta:hover { border-color: var(--molten); color: var(--molten-2); }
+
+  .container {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    padding: 160px 0 90px;
+    border-bottom: 1px solid var(--rule-soft);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 1000px 500px at 30% 0%, rgba(255,122,24,0.06), transparent 70%);
+    pointer-events: none;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 60px;
+    align-items: end;
+    position: relative;
+  }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--ink-faint);
+    margin-bottom: 26px;
+    padding: 6px 12px;
+    border: 1px solid var(--rule);
+    border-radius: 99px;
+    background: var(--bg-2);
+  }
+  .eyebrow .dot {
+    width: 6px; height: 6px;
+    background: var(--molten);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--molten);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+  .hero h1 {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(48px, 6.2vw, 84px);
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+    margin-bottom: 26px;
+  }
+  .hero h1 em { font-style: italic; font-weight: 400; color: var(--molten-2); }
+  .hero .lede {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 1.55;
+    color: var(--ink-dim);
+    max-width: 640px;
+    margin-bottom: 0;
+  }
+  .hero .lede strong { color: var(--ink); font-weight: 400; }
+
+  /* Funding-so-far card */
+  .funded-card {
+    background: var(--bg-2);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 22px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .funded-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 100% 0%, rgba(255,122,24,0.08), transparent 50%);
+    pointer-events: none;
+  }
+  .funded-card .label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 14px;
+    position: relative;
+  }
+  .funded-card .amount {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 42px;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-bottom: 4px;
+    position: relative;
+  }
+  .funded-card .amount .currency {
+    color: var(--molten-2);
+    font-size: 24px;
+    margin-right: 4px;
+    vertical-align: top;
+    line-height: 1;
+    font-weight: 500;
+  }
+  .funded-card .amount .per {
+    color: var(--ink-faint);
+    font-family: var(--mono);
+    font-size: 14px;
+    margin-left: 8px;
+    font-weight: 400;
+  }
+  .funded-card .meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--rule-soft);
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+  }
+  .funded-card .meta .num { color: var(--ink); }
+
+  /* ─── INTENT (the why-fund-us section) ─── */
+  .intent {
+    padding: 100px 0;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .intent-grid {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 60px;
+    align-items: start;
+  }
+  .intent-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--molten);
+    letter-spacing: 0.12em;
+    padding-top: 14px;
+  }
+  .intent h2 {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(32px, 4vw, 48px);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    margin-bottom: 28px;
+  }
+  .intent h2 em { font-style: italic; font-weight: 400; color: var(--molten-2); }
+  .intent p {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 19px;
+    color: var(--ink-dim);
+    line-height: 1.55;
+    margin-bottom: 22px;
+    max-width: 660px;
+  }
+  .intent p strong { color: var(--ink); font-weight: 400; }
+
+  /* ─── TIERS ─── */
+  .tiers {
+    padding: 100px 0;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .section-head {
+    margin-bottom: 60px;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 60px;
+    align-items: end;
+  }
+  .section-head .num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--molten);
+    letter-spacing: 0.12em;
+  }
+  .section-head h2 {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(32px, 4vw, 52px);
+    line-height: 1;
+    letter-spacing: -0.025em;
+    margin-bottom: 14px;
+  }
+  .section-head h2 em { font-style: italic; font-weight: 400; color: var(--molten-2); }
+  .section-head .sub {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 18px;
+    color: var(--ink-dim);
+    max-width: 580px;
+    line-height: 1.5;
+  }
+
+  .tier-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .tier {
+    background: var(--bg-2);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 32px 28px;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .tier:hover {
+    border-color: var(--molten);
+    transform: translateY(-2px);
+  }
+  .tier.featured {
+    border-color: var(--molten);
+    background: linear-gradient(180deg, rgba(255,122,24,0.04) 0%, var(--bg-2) 60%);
+    box-shadow: 0 0 0 1px var(--molten), 0 20px 50px -20px rgba(255,122,24,0.2);
+  }
+  .tier.featured::before {
+    content: 'Most popular';
+    position: absolute;
+    top: 0;
+    right: 24px;
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--bg);
+    background: var(--molten-2);
+    padding: 5px 12px;
+    border-radius: 0 0 3px 3px;
+  }
+
+  .tier-name {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--molten);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin-bottom: 18px;
+  }
+  .tier-price {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 56px;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: baseline;
+  }
+  .tier-price .currency {
+    color: var(--molten-2);
+    font-size: 28px;
+    font-weight: 500;
+    margin-right: 4px;
+    line-height: 1;
+    align-self: flex-start;
+    margin-top: 6px;
+  }
+  .tier-price .num { color: var(--ink); }
+  .tier-period {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 22px;
+  }
+  .tier-tagline {
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 17px;
+    color: var(--ink);
+    line-height: 1.45;
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--rule-soft);
+    min-height: 48px;
+  }
+  .tier-perks {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 28px;
+    flex: 1;
+  }
+  .tier-perks li {
+    padding: 8px 0 8px 22px;
+    color: var(--ink-dim);
+    font-size: 13.5px;
+    line-height: 1.55;
+    position: relative;
+  }
+  .tier-perks li::before {
+    content: '+';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    color: var(--molten);
+    font-family: var(--mono);
+    font-weight: 600;
+  }
+  .tier-perks li strong { color: var(--ink); font-weight: 500; }
+
+  .tier-btn {
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 13px 18px;
+    border-radius: 3px;
+    border: 1px solid var(--rule);
+    color: var(--ink);
+    background: transparent;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+  }
+  .tier-btn:hover {
+    border-color: var(--molten);
+    color: var(--molten-2);
+  }
+  .tier.featured .tier-btn {
+    background: var(--ink);
+    color: var(--bg);
+    border-color: var(--ink);
+  }
+  .tier.featured .tier-btn:hover {
+    background: var(--molten-2);
+    color: var(--bg);
+    border-color: var(--molten-2);
+  }
+  .tier-btn .arrow { transition: transform 0.2s; }
+  .tier-btn:hover .arrow { transform: translateX(4px); }
+
+  .custom-tier {
+    margin-top: 32px;
+    padding: 22px 28px;
+    border: 1px dashed var(--rule);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    background: var(--bg-2);
+  }
+  .custom-tier .text {
+    font-size: 14px;
+    color: var(--ink-dim);
+  }
+  .custom-tier .text strong { color: var(--ink); font-weight: 500; }
+  .custom-tier a {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--molten-2);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+    border-bottom: 1px solid var(--molten);
+    padding-bottom: 2px;
+  }
+
+  /* ─── ALLOCATION (where the money goes) ─── */
+  .allocation {
+    padding: 100px 0;
+    border-bottom: 1px solid var(--rule-soft);
+    background: var(--bg-2);
+  }
+  .alloc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    margin-top: 50px;
+    align-items: start;
+  }
+  .alloc-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .alloc-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .alloc-bar .row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+  }
+  .alloc-bar .name {
+    font-family: var(--serif);
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .alloc-bar .pct {
+    font-family: var(--mono);
+    color: var(--molten-2);
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .alloc-bar .desc {
+    font-size: 12.5px;
+    color: var(--ink-faint);
+    line-height: 1.5;
+  }
+  .alloc-bar .track {
+    height: 6px;
+    background: var(--bg-3);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 4px;
+  }
+  .alloc-bar .fill {
+    height: 100%;
+    background: linear-gradient(to right, var(--molten), var(--molten-2));
+    border-radius: 3px;
+  }
+
+  .alloc-narrative {
+    background: var(--bg);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 28px 32px;
+  }
+  .alloc-narrative h3 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 22px;
+    margin-bottom: 14px;
+    letter-spacing: -0.015em;
+  }
+  .alloc-narrative p {
+    color: var(--ink-dim);
+    font-size: 14.5px;
+    line-height: 1.65;
+    margin-bottom: 14px;
+  }
+  .alloc-narrative p:last-child { margin-bottom: 0; }
+  .alloc-narrative p strong { color: var(--ink); font-weight: 500; }
+
+  /* ─── BACKERS WALL ─── */
+  .backers {
+    padding: 100px 0;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .backers-grid {
+    margin-top: 50px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: start;
+  }
+  .backer-block h3 {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 24px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--rule-soft);
+    display: flex;
+    justify-content: space-between;
+  }
+  .backer-block h3 .count { color: var(--molten); }
+
+  .backer-empty-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .backer-slot {
+    aspect-ratio: 16/9;
+    border: 1px dashed var(--rule);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-2);
+    transition: all 0.2s;
+    cursor: default;
+  }
+  .backer-slot:hover {
+    border-color: var(--molten);
+    background: var(--bg-3);
+  }
+  .backer-slot .placeholder {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    text-align: center;
+    line-height: 1.4;
+  }
+  .backer-slot:hover .placeholder { color: var(--molten-2); }
+
+  .individual-empty {
+    background: var(--bg-2);
+    border: 1px dashed var(--rule);
+    border-radius: 4px;
+    padding: 40px 28px;
+    text-align: center;
+    transition: all 0.2s;
+  }
+  .individual-empty:hover { border-color: var(--molten); }
+  .individual-empty .quote {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 17px;
+    color: var(--ink-dim);
+    line-height: 1.5;
+    margin-bottom: 16px;
+    font-weight: 300;
+  }
+  .individual-empty .quote strong { color: var(--molten-2); font-weight: 400; }
+  .individual-empty .by {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+  }
+
+  /* ─── FAQ ─── */
+  .faq {
+    padding: 100px 0;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .faq-list {
+    margin-top: 50px;
+    border-top: 1px solid var(--rule-soft);
+  }
+  .faq-item {
+    border-bottom: 1px solid var(--rule-soft);
+    padding: 24px 0;
+    cursor: pointer;
+  }
+  .faq-q {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+  }
+  .faq-q h4 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 19px;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    transition: color 0.2s;
+  }
+  .faq-item:hover .faq-q h4 { color: var(--molten-2); }
+  .faq-q .toggle {
+    font-family: var(--mono);
+    font-size: 18px;
+    color: var(--ink-faint);
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+  .faq-item.open .faq-q .toggle { transform: rotate(45deg); color: var(--molten-2); }
+  .faq-a {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+    color: var(--ink-dim);
+    font-size: 15px;
+    line-height: 1.65;
+    max-width: 760px;
+  }
+  .faq-item.open .faq-a {
+    max-height: 400px;
+    padding-top: 16px;
+  }
+  .faq-a p { margin-bottom: 12px; }
+  .faq-a p:last-child { margin-bottom: 0; }
+  .faq-a strong { color: var(--ink); font-weight: 500; }
+  .faq-a code {
+    font-family: var(--mono);
+    font-size: 13px;
+    background: var(--bg-2);
+    color: var(--molten-2);
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid var(--rule-soft);
+  }
+
+  /* ─── ALT-WAYS ─── */
+  .alt-ways {
+    padding: 100px 0;
+    text-align: center;
+    background:
+      radial-gradient(ellipse 700px 300px at 50% 50%, rgba(255,122,24,0.05), transparent 70%);
+    position: relative;
+    overflow: hidden;
+  }
+  .alt-ways h2 {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(34px, 4vw, 52px);
+    letter-spacing: -0.025em;
+    line-height: 1;
+    margin-bottom: 18px;
+    position: relative;
+  }
+  .alt-ways h2 em { font-style: italic; color: var(--molten-2); font-weight: 400; }
+  .alt-ways .sub {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 18px;
+    color: var(--ink-dim);
+    margin-bottom: 50px;
+    max-width: 540px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+  }
+  .alt-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    position: relative;
+  }
+  .alt-card {
+    background: var(--bg-2);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 26px 22px;
+    transition: all 0.2s;
+    text-align: left;
+  }
+  .alt-card:hover {
+    border-color: var(--molten);
+    transform: translateY(-2px);
+  }
+  .alt-card .icon {
+    font-family: var(--serif);
+    font-size: 28px;
+    color: var(--molten-2);
+    margin-bottom: 14px;
+    font-weight: 400;
+    font-style: italic;
+  }
+  .alt-card h4 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 17px;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .alt-card p {
+    color: var(--ink-dim);
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    padding: 50px 0;
+    border-top: 1px solid var(--rule-soft);
+  }
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .footer-brand { display: flex; align-items: center; gap: 10px; }
+  .footer-brand svg { width: 22px; height: 22px; }
+
+  @media (max-width: 1024px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+    .intent-grid, .section-head { grid-template-columns: 1fr; gap: 24px; }
+    .tier-grid { grid-template-columns: 1fr; }
+    .alloc-grid, .backers-grid { grid-template-columns: 1fr; }
+    .alt-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .nav-links a:not(.nav-cta) { display: none; }
+    .hero { padding: 120px 0 60px; }
+    .footer-inner { flex-direction: column; gap: 12px; }
+    .alt-grid { grid-template-columns: 1fr; }
+    .backer-empty-grid { grid-template-columns: repeat(2, 1fr); }
+    .custom-tier { flex-direction: column; align-items: flex-start; }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="cleat-logo" viewBox="0 0 200 200">
+      <g fill="currentColor">
+        <path d="M30 80 L70 80 L80 92 L120 92 L130 80 L170 80 L160 100 L40 100 Z"/>
+        <rect x="86" y="76" width="11" height="32"/>
+        <rect x="103" y="76" width="11" height="32"/>
+        <path d="M70 108 L82 108 L88 128 L72 128 Z"/>
+        <path d="M118 108 L130 108 L128 128 L112 128 Z"/>
+        <path d="M50 132 L150 132 L160 144 L40 144 Z"/>
+        <rect x="48" y="148" width="104" height="6"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- NAV -->
+<nav class="topnav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">
+      <svg><use href="#cleat-logo"/></svg>
+      <span class="word">Cleat</span>
+    </a>
+    <div class="nav-links">
+      <a href="why.html">Why Cleat</a>
+      <a href="docs.html">Docs</a>
+      <a href="examples.html">Examples</a>
+      <a href="blog.html">Blog</a>
+      <a href="changelog.html">Changelog</a>
+      <a href="sponsor.html" class="active">Sponsor</a>
+      <a href="#" class="nav-cta">↗ GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid reveal">
+      <div>
+        <div class="eyebrow">
+          <span class="dot"></span>
+          Cleat is built in the open · funded by people who use it
+        </div>
+        <h1>Help us <em>forge</em> a language<br>for the long haul.</h1>
+        <p class="lede">
+          Cleat is built by one person on nights and weekends. Sponsorship turns part-time work into full-time work, and full-time work is how alpha software becomes infrastructure people trust. <strong>Every dollar goes back into the language.</strong>
+        </p>
+      </div>
+      <div class="funded-card">
+        <div class="label">Funded so far</div>
+        <div class="amount"><span class="currency">$</span>0<span class="per">/mo</span></div>
+        <div class="meta">
+          <span><span class="num">0</span> sponsors</span>
+          <span>be the first →</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INTENT -->
+<section class="intent">
+  <div class="container">
+    <div class="intent-grid reveal">
+      <div class="intent-num">[ 01 / WHY FUND ]</div>
+      <div>
+        <h2>Maintainers <em>burn out.</em><br>Sponsors prevent that.</h2>
+        <p>Open source has a quiet failure mode: the maintainer gets a real job, the project goes silent, the people who depended on it go scrambling. Sponsorship is how you avoid that with Cleat.</p>
+        <p>If a meaningful number of people fund Cleat at <strong>$25–$100/month</strong>, Jayden can spend full days on the compiler instead of an hour at midnight. That means faster releases, faster bug fixes, real responsiveness to issues, and a roadmap that gets executed instead of just talked about.</p>
+        <p style="font-size:17px; color: var(--ink-faint); border-left: 2px solid var(--molten); padding-left: 22px; margin-top: 32px;">
+          Cleat will always be MIT-licensed and free to use. Sponsorship buys speed and stability, not access.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIERS -->
+<section class="tiers">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="num">[ 02 / TIERS ]</div>
+      <div>
+        <h2>Three tiers. <em>No tricks.</em></h2>
+        <p class="sub">Pick the one that fits. Cancel anytime, change tiers anytime, no annual lock-in.</p>
+      </div>
+    </div>
+
+    <div class="tier-grid reveal">
+      <!-- Tier 1: Supporter -->
+      <div class="tier">
+        <div class="tier-name">Supporter</div>
+        <div class="tier-price"><span class="currency">$</span><span class="num">5</span></div>
+        <div class="tier-period">per month</div>
+        <div class="tier-tagline">Coffee money. Says "thanks for building this."</div>
+        <ul class="tier-perks">
+          <li><strong>Sponsor badge</strong> on your GitHub profile</li>
+          <li>Discord <strong>supporter role</strong> with a private channel</li>
+          <li>Warm fuzzy feelings, knowing you helped</li>
+          <li>Cancel anytime, no questions asked</li>
+        </ul>
+        <a href="#" class="tier-btn">Sponsor with $5 <span class="arrow">→</span></a>
+      </div>
+
+      <!-- Tier 2: Backer (featured) -->
+      <div class="tier featured">
+        <div class="tier-name">Backer</div>
+        <div class="tier-price"><span class="currency">$</span><span class="num">25</span></div>
+        <div class="tier-period">per month</div>
+        <div class="tier-tagline">For developers who use Cleat in real projects.</div>
+        <ul class="tier-perks">
+          <li>Everything in Supporter, plus:</li>
+          <li>Your <strong>name in CONTRIBUTORS.md</strong>, listed on this page</li>
+          <li>Priority bug reports — <strong>first response within 48hrs</strong></li>
+          <li><strong>Early access</strong> to release candidates and roadmap drafts</li>
+          <li>Vote on minor design decisions in monthly polls</li>
+        </ul>
+        <a href="#" class="tier-btn">Sponsor with $25 <span class="arrow">→</span></a>
+      </div>
+
+      <!-- Tier 3: Patron -->
+      <div class="tier">
+        <div class="tier-name">Patron · for companies</div>
+        <div class="tier-price"><span class="currency">$</span><span class="num">100</span></div>
+        <div class="tier-period">per month</div>
+        <div class="tier-tagline">For teams or companies running Cleat in production.</div>
+        <ul class="tier-perks">
+          <li>Everything in Backer, plus:</li>
+          <li>Your <strong>company logo</strong> on the homepage and on this page</li>
+          <li><strong>Dedicated Slack channel</strong> with the maintainer</li>
+          <li>Private quarterly call to discuss your use case &amp; priorities</li>
+          <li>Influence on the public roadmap</li>
+        </ul>
+        <a href="#" class="tier-btn">Sponsor with $100 <span class="arrow">→</span></a>
+      </div>
+    </div>
+
+    <div class="custom-tier reveal">
+      <div class="text">
+        <strong>Need a custom tier or one-time gift?</strong> &nbsp;Larger sponsorships, retainers, and bespoke contracts are all on the table.
+      </div>
+      <a href="mailto:sponsor@cleat-lang.dev">Get in touch ↗</a>
+    </div>
+  </div>
+</section>
+
+<!-- ALLOCATION -->
+<section class="allocation">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="num">[ 03 / TRANSPARENCY ]</div>
+      <div>
+        <h2>Where the <em>money goes.</em></h2>
+        <p class="sub">No middlemen, no admin overhead. Every dollar funds someone working on Cleat.</p>
+      </div>
+    </div>
+
+    <div class="alloc-grid reveal">
+      <div class="alloc-bars">
+
+        <div class="alloc-bar">
+          <div class="row">
+            <span class="name">Maintainer time</span>
+            <span class="pct">70%</span>
+          </div>
+          <div class="desc">Direct compensation for compiler work, stdlib expansion, issue triage, and writing.</div>
+          <div class="track"><div class="fill" style="width: 70%"></div></div>
+        </div>
+
+        <div class="alloc-bar">
+          <div class="row">
+            <span class="name">Infrastructure</span>
+            <span class="pct">15%</span>
+          </div>
+          <div class="desc">CI minutes, hosting for docs and the playground, package registry, CDN.</div>
+          <div class="track"><div class="fill" style="width: 15%"></div></div>
+        </div>
+
+        <div class="alloc-bar">
+          <div class="row">
+            <span class="name">Contributor bounties</span>
+            <span class="pct">10%</span>
+          </div>
+          <div class="desc">Paying community contributors for specific issues, especially good first issues.</div>
+          <div class="track"><div class="fill" style="width: 10%"></div></div>
+        </div>
+
+        <div class="alloc-bar">
+          <div class="row">
+            <span class="name">Security audits</span>
+            <span class="pct">5%</span>
+          </div>
+          <div class="desc">Set aside for periodic third-party audits of the compiler and stdlib crypto code.</div>
+          <div class="track"><div class="fill" style="width: 5%"></div></div>
+        </div>
+
+      </div>
+
+      <div class="alloc-narrative">
+        <h3>Why we publish this</h3>
+        <p>Most sponsorship pages ask for money and don't say what it's for. We think that's lazy.</p>
+        <p>If you sponsor Cleat, <strong>70 cents of every dollar goes directly to maintainer time</strong> — measured in hours of compiler work per month, not abstract "support." The remaining 30% covers running costs and rewards external contributors who help.</p>
+        <p>Once we hit <strong>$2,000/month in recurring funding</strong>, we'll publish a quarterly transparency report showing exactly where the money went. That's the threshold where part-time becomes full-time.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BACKERS WALL -->
+<section class="backers">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="num">[ 04 / IN GOOD COMPANY ]</div>
+      <div>
+        <h2>Be <em>first.</em></h2>
+        <p class="sub">No sponsors yet — Cleat just shipped its public alpha. The early supporters get the first slots.</p>
+      </div>
+    </div>
+
+    <div class="backers-grid reveal">
+      <!-- Companies -->
+      <div class="backer-block">
+        <h3><span>Patron companies</span><span class="count">0 / ∞</span></h3>
+        <div class="backer-empty-grid">
+          <div class="backer-slot"><div class="placeholder">Your<br>logo<br>here</div></div>
+          <div class="backer-slot"><div class="placeholder">Your<br>logo<br>here</div></div>
+          <div class="backer-slot"><div class="placeholder">Your<br>logo<br>here</div></div>
+          <div class="backer-slot"><div class="placeholder">Your<br>logo<br>here</div></div>
+          <div class="backer-slot"><div class="placeholder">Your<br>logo<br>here</div></div>
+          <div class="backer-slot"><div class="placeholder">Your<br>logo<br>here</div></div>
+        </div>
+        <p style="margin-top:18px; font-size: 12.5px; color: var(--ink-faint); line-height: 1.55;">
+          Patron-tier sponsors get prominent placement on the homepage, on this page, and in the README. Be one of the first six and we'll never bump you down the wall.
+        </p>
+      </div>
+
+      <!-- Individuals -->
+      <div class="backer-block">
+        <h3><span>Individual backers</span><span class="count">0 backers</span></h3>
+        <div class="individual-empty">
+          <div class="quote">
+            "<strong>Your name</strong> · April 2026"
+          </div>
+          <div class="by">→ Be the first sponsor on the wall</div>
+        </div>
+        <p style="margin-top:18px; font-size: 12.5px; color: var(--ink-faint); line-height: 1.55;">
+          Backer-tier sponsors are listed here in the order they signed up. Joining early means staying near the top forever.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="num">[ 05 / FAQ ]</div>
+      <div>
+        <h2>The <em>questions</em> we'd ask too.</h2>
+        <p class="sub">If yours isn't here, ping us on Discord or open an issue.</p>
+      </div>
+    </div>
+
+    <div class="faq-list reveal">
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <h4>Is Cleat going to stay open source?</h4>
+          <span class="toggle">+</span>
+        </div>
+        <div class="faq-a">
+          <p>Yes. Cleat is MIT-licensed and that won't change. There is no premium tier, no closed-source compiler, no "Cleat Enterprise" lurking on the roadmap. Sponsorship buys <strong>maintainer time and stability</strong> — every line of code stays public.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <h4>What does my sponsorship actually unlock?</h4>
+          <span class="toggle">+</span>
+        </div>
+        <div class="faq-a">
+          <p>The realistic answer: <strong>faster development</strong>. Each sponsor brings a small amount of maintainer time. Aggregated, they turn this from a side project into a real one. That's the unlock.</p>
+          <p>Tier perks are real but secondary. The main thing you're funding is the project's continued existence at a serious pace.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <h4>Can my company expense this?</h4>
+          <span class="toggle">+</span>
+        </div>
+        <div class="faq-a">
+          <p>Yes. We support both <strong>GitHub Sponsors</strong> (with proper invoices) and <strong>Open Collective</strong> for companies whose finance teams can't process GitHub. For larger sponsorships or annual contracts, email <code>sponsor@cleat-lang.dev</code> and we'll work out invoicing that fits your AP process.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <h4>What happens if I sponsor and Cleat goes dormant?</h4>
+          <span class="toggle">+</span>
+        </div>
+        <div class="faq-a">
+          <p>Honest answer: you lose the money for the months you sponsored, the same way any subscription works. We commit to <strong>transparency</strong>: if maintainer time drops below a sustainable level, we'll announce it publicly and tell sponsors to cancel.</p>
+          <p>Cleat is alpha software built by one person. There's real risk. We won't pretend otherwise — sponsorship at this stage is a vote of confidence, not a guarantee.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <h4>Will sponsors get to influence the roadmap?</h4>
+          <span class="toggle">+</span>
+        </div>
+        <div class="faq-a">
+          <p>Backer-tier sponsors get to <strong>vote in monthly polls</strong> on minor design decisions. Patron-tier sponsors get a <strong>private call each quarter</strong> to discuss their use case, and their priorities are weighted higher in roadmap planning.</p>
+          <p>That said: the language is opinionated and we'll say no to things that don't fit Cleat's design philosophy, even from sponsors. The bar for inclusion is "does this make Cleat better for everyone," not "did the sponsor ask for it."</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <h4>Why $2,000/month as the threshold for full-time?</h4>
+          <span class="toggle">+</span>
+        </div>
+        <div class="faq-a">
+          <p>It's the floor where Jayden could meaningfully reduce contract work and devote serious daytime hours to Cleat. It's not a salary — it's the buffer that makes "I can ignore one client this week to ship a release" possible.</p>
+          <p>The next milestone after that is <strong>$8,000/month</strong>, which is roughly the threshold for Cleat to become a primary income source rather than a supplement.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ALT WAYS -->
+<section class="alt-ways">
+  <div class="container">
+    <h2>Can't sponsor? <em>Help anyway.</em></h2>
+    <p class="sub">Money is one form of support. Several others move the needle just as much.</p>
+    <div class="alt-grid">
+      <a href="#" class="alt-card">
+        <div class="icon">★</div>
+        <h4>Star the repo</h4>
+        <p>Genuinely helps with discoverability. Free, takes one click, statistically meaningful.</p>
+      </a>
+      <a href="#" class="alt-card">
+        <div class="icon">✎</div>
+        <h4>Write about Cleat</h4>
+        <p>A blog post, a tweet, a "what I built with Cleat" thread. Word-of-mouth is everything at alpha.</p>
+      </a>
+      <a href="#" class="alt-card">
+        <div class="icon">⌥</div>
+        <h4>Try it on a real project</h4>
+        <p>Even if you only ship internally, real usage surfaces real bugs. File issues, send PRs.</p>
+      </a>
+      <a href="#" class="alt-card">
+        <div class="icon">↻</div>
+        <h4>Contribute code</h4>
+        <p>Issues tagged "good first issue" are scoped for first-time contributors. PRs welcome.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <svg><use href="#cleat-logo"/></svg>
+        <span>Cleat · v0.1.0-alpha</span>
+      </div>
+      <div>github.com/cleat-lang/cleat · MIT</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -50px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // FAQ accordion
+  document.querySelectorAll('.faq-item').forEach(item => {
+    item.addEventListener('click', () => {
+      item.classList.toggle('open');
+    });
+  });
+</script>
+
+</body>
+</html>

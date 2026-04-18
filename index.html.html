@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cleat — A compiled orchestration language for auditable AI backends</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #0c0c0d;
+    --bg-2:      #131315;
+    --bg-3:      #1a1a1d;
+    --ink:       #ededea;
+    --ink-dim:   #a7a7a1;
+    --ink-faint: #6a6a64;
+    --rule:      #2a2a2d;
+    --rule-soft: #1f1f22;
+    --molten:    #ff7a18;
+    --molten-2:  #ffb454;
+    --green:     #8db580;
+    --blue:      #7aa6c7;
+    --purple:    #b693c4;
+    --serif:     'Fraunces', 'Times New Roman', serif;
+    --mono:      'JetBrains Mono', ui-monospace, monospace;
+    --sans:      'Inter', system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+    background-image:
+      radial-gradient(ellipse 1200px 600px at 50% -100px, rgba(255,122,24,0.04), transparent 70%),
+      linear-gradient(to bottom, var(--bg) 0%, var(--bg) 100%);
+    background-attachment: fixed;
+  }
+
+  /* Subtle film grain across the entire page */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' /%3E%3C/svg%3E");
+  }
+
+  /* ───────────────────────── NAV ───────────────────────── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 18px 32px;
+    background: rgba(12,12,13,0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .nav-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-brand { display: flex; align-items: center; gap: 12px; }
+  .nav-brand svg { width: 28px; height: 28px; }
+  .nav-brand .word {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 19px;
+    letter-spacing: -0.01em;
+  }
+  .nav-links { display: flex; align-items: center; gap: 32px; }
+  .nav-links a {
+    color: var(--ink-dim);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 400;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-cta {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink);
+    border: 1px solid var(--rule);
+    padding: 8px 14px;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+  .nav-cta:hover { border-color: var(--molten); color: var(--molten-2); }
+
+  /* ───────────────────────── LAYOUT ───────────────────────── */
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  section { position: relative; }
+
+  /* ───────────────────────── HERO ───────────────────────── */
+  .hero {
+    padding: 180px 0 120px;
+    border-bottom: 1px solid var(--rule-soft);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Decorative grid lines */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, var(--rule-soft) 1px, transparent 1px);
+    background-size: 80px 100%;
+    opacity: 0.4;
+    pointer-events: none;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 30%, transparent 80%);
+  }
+
+  .hero-inner {
+    display: grid;
+    grid-template-columns: 1fr 480px;
+    gap: 80px;
+    align-items: start;
+    position: relative;
+    z-index: 1;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--ink-faint);
+    margin-bottom: 32px;
+    padding: 6px 12px;
+    border: 1px solid var(--rule);
+    border-radius: 99px;
+    background: var(--bg-2);
+  }
+  .eyebrow .dot {
+    width: 6px; height: 6px;
+    background: var(--molten);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--molten);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  h1.headline {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(48px, 6.2vw, 88px);
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+    color: var(--ink);
+    margin-bottom: 32px;
+  }
+  h1.headline em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--molten-2);
+  }
+  h1.headline .strike {
+    position: relative;
+    display: inline-block;
+  }
+
+  .lede {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 21px;
+    line-height: 1.5;
+    color: var(--ink-dim);
+    max-width: 540px;
+    margin-bottom: 40px;
+  }
+  .lede strong {
+    color: var(--ink);
+    font-weight: 400;
+  }
+
+  .cta-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 56px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 14px 22px;
+    border-radius: 3px;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    border: 1px solid transparent;
+  }
+  .btn-primary {
+    background: var(--ink);
+    color: var(--bg);
+  }
+  .btn-primary:hover {
+    background: var(--molten-2);
+    transform: translateY(-1px);
+  }
+  .btn-secondary {
+    background: transparent;
+    color: var(--ink);
+    border-color: var(--rule);
+  }
+  .btn-secondary:hover {
+    border-color: var(--ink-dim);
+    background: var(--bg-2);
+  }
+  .btn .arrow { transition: transform 0.2s; }
+  .btn:hover .arrow { transform: translateX(3px); }
+
+  /* Stats strip */
+  .stats {
+    display: flex;
+    gap: 56px;
+    padding-top: 32px;
+    border-top: 1px solid var(--rule-soft);
+  }
+  .stat .num {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 36px;
+    color: var(--ink);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .stat .label {
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink-faint);
+    margin-top: 8px;
+  }
+
+  /* Hero terminal */
+  .terminal {
+    background: var(--bg-2);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow:
+      0 30px 80px -20px rgba(0,0,0,0.6),
+      0 0 0 1px rgba(255,255,255,0.02) inset;
+    position: relative;
+  }
+  .terminal::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 6px;
+    pointer-events: none;
+    background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, transparent 30%);
+  }
+  .terminal-bar {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg-3);
+  }
+  .term-dot { width: 11px; height: 11px; border-radius: 50%; background: var(--rule); }
+  .terminal-bar .filename {
+    margin-left: 12px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+  }
+  .terminal-body {
+    padding: 24px;
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.7;
+    overflow-x: auto;
+  }
+  .ln { color: var(--ink-faint); margin-right: 18px; user-select: none; display: inline-block; width: 18px; text-align: right; }
+  .kw  { color: var(--purple); }
+  .fn  { color: var(--blue); }
+  .str { color: var(--green); }
+  .typ { color: var(--molten-2); }
+  .num { color: var(--green); }
+  .cm  { color: var(--ink-faint); font-style: italic; }
+  .pun { color: var(--ink-dim); }
+
+  /* ───────────────────────── PRIMITIVES SECTION ───────────────────────── */
+  .section-header {
+    padding: 100px 0 60px;
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 40px;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .section-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--molten);
+    letter-spacing: 0.12em;
+  }
+  .section-title {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(36px, 4vw, 56px);
+    line-height: 1;
+    letter-spacing: -0.025em;
+    margin-bottom: 20px;
+  }
+  .section-title em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--molten-2);
+  }
+  .section-sub {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 19px;
+    color: var(--ink-dim);
+    line-height: 1.5;
+    max-width: 640px;
+  }
+
+  .primitives {
+    padding: 80px 0 120px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--rule-soft);
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .primitive {
+    background: var(--bg);
+    padding: 48px 40px;
+    transition: background 0.3s;
+    position: relative;
+  }
+  .primitive:hover { background: var(--bg-2); }
+  .primitive .keyword {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--molten);
+    margin-bottom: 12px;
+    display: inline-block;
+    border: 1px solid var(--molten);
+    padding: 3px 10px;
+    border-radius: 2px;
+    background: rgba(255,122,24,0.06);
+  }
+  .primitive h3 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 28px;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+    margin-top: 16px;
+  }
+  .primitive p {
+    color: var(--ink-dim);
+    font-size: 15px;
+    line-height: 1.6;
+    max-width: 460px;
+    margin-bottom: 24px;
+  }
+  .primitive pre {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.7;
+    color: var(--ink);
+    background: var(--bg-2);
+    border: 1px solid var(--rule-soft);
+    border-radius: 4px;
+    padding: 16px 18px;
+    overflow-x: auto;
+  }
+  .primitive:hover pre { background: var(--bg-3); }
+
+  /* ───────────────────────── EFFECTS SECTION (split) ───────────────────────── */
+  .effects {
+    padding: 120px 0;
+    border-bottom: 1px solid var(--rule-soft);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .effects-text .marker {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--molten);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 24px;
+  }
+  .effects-text h2 {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(36px, 4vw, 52px);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    margin-bottom: 28px;
+  }
+  .effects-text h2 em { font-style: italic; color: var(--molten-2); font-weight: 400; }
+  .effects-text p {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 19px;
+    color: var(--ink-dim);
+    line-height: 1.55;
+    margin-bottom: 20px;
+  }
+  .effects-text p strong { color: var(--ink); font-weight: 400; }
+
+  .code-card {
+    background: var(--bg-2);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .code-card-head {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--rule);
+    background: var(--bg-3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .code-card-head .label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .code-card-head .badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 99px;
+    background: rgba(141,181,128,0.12);
+    color: var(--green);
+    border: 1px solid rgba(141,181,128,0.3);
+  }
+  .code-card-head .badge.bad {
+    background: rgba(255,122,24,0.12);
+    color: var(--molten);
+    border-color: rgba(255,122,24,0.3);
+  }
+  .code-card pre {
+    padding: 22px 24px;
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.75;
+    overflow-x: auto;
+  }
+  .code-card .err-line {
+    background: rgba(255,122,24,0.06);
+    margin: 0 -24px;
+    padding: 0 24px;
+    border-left: 2px solid var(--molten);
+  }
+  .code-card .err-msg {
+    color: var(--molten);
+    font-style: italic;
+    font-size: 12px;
+  }
+
+  /* ───────────────────────── STDLIB ───────────────────────── */
+  .stdlib {
+    padding: 120px 0;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .stdlib-grid {
+    margin-top: 60px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--rule-soft);
+    border: 1px solid var(--rule-soft);
+  }
+  .pkg {
+    background: var(--bg);
+    padding: 28px 24px;
+    transition: background 0.2s;
+    cursor: default;
+  }
+  .pkg:hover { background: var(--bg-2); }
+  .pkg-name {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .pkg-name .slash { color: var(--molten); }
+  .pkg-desc {
+    font-size: 13px;
+    color: var(--ink-dim);
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+  .pkg-needs {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .pkg-needs span {
+    color: var(--molten-2);
+    text-transform: lowercase;
+    letter-spacing: 0;
+  }
+
+  /* ───────────────────────── FEATURES ROW ───────────────────────── */
+  .features {
+    padding: 120px 0;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .features-grid {
+    margin-top: 60px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--rule-soft);
+    border: 1px solid var(--rule-soft);
+  }
+  .feature {
+    background: var(--bg);
+    padding: 36px 32px;
+  }
+  .feature .num {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 32px;
+    color: var(--molten);
+    line-height: 1;
+    margin-bottom: 20px;
+  }
+  .feature h4 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 22px;
+    margin-bottom: 12px;
+    letter-spacing: -0.015em;
+  }
+  .feature p {
+    font-size: 14px;
+    color: var(--ink-dim);
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  .feature code {
+    font-family: var(--mono);
+    font-size: 12px;
+    background: var(--bg-3);
+    padding: 8px 12px;
+    border-radius: 3px;
+    color: var(--ink);
+    display: block;
+    border-left: 2px solid var(--molten);
+    overflow-x: auto;
+  }
+
+  /* ───────────────────────── INSTALL ───────────────────────── */
+  .install {
+    padding: 140px 0;
+    text-align: center;
+    border-bottom: 1px solid var(--rule-soft);
+    position: relative;
+    overflow: hidden;
+  }
+  .install::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 800px 400px at 50% 50%, rgba(255,122,24,0.06), transparent 70%);
+    pointer-events: none;
+  }
+  .install h2 {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(40px, 5vw, 64px);
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  .install h2 em { font-style: italic; color: var(--molten-2); font-weight: 400; }
+  .install p {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 19px;
+    color: var(--ink-dim);
+    margin-bottom: 48px;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+  }
+  .install-cmd {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    background: var(--bg-2);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 20px 50px -10px rgba(0,0,0,0.5);
+  }
+  .install-cmd .prompt {
+    padding: 18px 18px 18px 24px;
+    color: var(--molten);
+    font-family: var(--mono);
+    font-size: 14px;
+  }
+  .install-cmd .cmd {
+    padding: 18px 24px 18px 0;
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .install-cmd .copy {
+    border-left: 1px solid var(--rule);
+    padding: 18px 22px;
+    background: var(--bg-3);
+    color: var(--ink-dim);
+    cursor: pointer;
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition: all 0.2s;
+    border: none;
+  }
+  .install-cmd .copy:hover { color: var(--molten-2); background: var(--bg-2); }
+
+  .install-meta {
+    margin-top: 32px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    position: relative;
+  }
+
+  /* ───────────────────────── FOOTER ───────────────────────── */
+  footer {
+    padding: 80px 0 60px;
+  }
+  .footer-inner {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 60px;
+    margin-bottom: 60px;
+  }
+  .footer-brand svg { width: 36px; height: 36px; margin-bottom: 16px; }
+  .footer-brand .word {
+    font-family: var(--serif);
+    font-size: 24px;
+    font-weight: 400;
+    margin-bottom: 12px;
+  }
+  .footer-brand p {
+    font-size: 13px;
+    color: var(--ink-dim);
+    max-width: 320px;
+    line-height: 1.6;
+  }
+  .footer-col h5 {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 18px;
+    font-weight: 500;
+  }
+  .footer-col a {
+    display: block;
+    color: var(--ink-dim);
+    text-decoration: none;
+    font-size: 13px;
+    padding: 6px 0;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover { color: var(--molten-2); }
+
+  .footer-bottom {
+    padding-top: 32px;
+    border-top: 1px solid var(--rule-soft);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .hero-inner, .effects { grid-template-columns: 1fr; gap: 60px; }
+    .primitives, .features-grid { grid-template-columns: 1fr; }
+    .stdlib-grid { grid-template-columns: repeat(2, 1fr); }
+    .section-header { grid-template-columns: 1fr; gap: 16px; }
+    .footer-inner { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    .nav-links a:not(.nav-cta) { display: none; }
+    .hero { padding: 130px 0 80px; }
+    .stats { gap: 32px; flex-wrap: wrap; }
+    .stdlib-grid { grid-template-columns: 1fr; }
+    .footer-inner { grid-template-columns: 1fr; gap: 40px; }
+    .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+    .install-cmd { flex-direction: column; width: 100%; max-width: 360px; }
+    .install-cmd .copy { border-left: none; border-top: 1px solid var(--rule); width: 100%; }
+  }
+
+  /* Reveal animation */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- Reusable logo SVG, defined once -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="cleat-logo" viewBox="0 0 200 200">
+      <!-- Anvil/forge silhouette recreated from the provided logo -->
+      <g fill="currentColor">
+        <!-- Top horizontal beam with angled ends -->
+        <path d="M30 80 L70 80 L80 92 L120 92 L130 80 L170 80 L160 100 L40 100 Z"/>
+        <!-- Center vertical block -->
+        <rect x="86" y="76" width="11" height="32"/>
+        <rect x="103" y="76" width="11" height="32"/>
+        <!-- Two angled supports -->
+        <path d="M70 108 L82 108 L88 128 L72 128 Z"/>
+        <path d="M118 108 L130 108 L128 128 L112 128 Z"/>
+        <!-- Base plate -->
+        <path d="M50 132 L150 132 L160 144 L40 144 Z"/>
+        <rect x="48" y="148" width="104" height="6"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ────────────── NAV ────────────── -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-brand" style="text-decoration:none;color:inherit">
+      <svg><use href="#cleat-logo"/></svg>
+      <span class="word">Cleat</span>
+    </a>
+    <div class="nav-links">
+      <a href="#primitives">Language</a>
+      <a href="#stdlib">Stdlib</a>
+      <a href="#install">Install</a>
+      <a href="#" class="nav-cta">↗ GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ────────────── HERO ────────────── -->
+<section class="hero">
+  <div class="container hero-inner">
+    <div class="reveal">
+      <div class="eyebrow">
+        <span class="dot"></span>
+        v0.1 alpha · 626 tests passing
+      </div>
+      <h1 class="headline">
+        Forge AI backends<br>
+        that <em>prove</em> what<br>
+        they did.
+      </h1>
+      <p class="lede">
+        Cleat is a <strong>compiled, statically typed language</strong> for auditable, stateful AI orchestration. Tools, streams, state machines, and provenance chains are <strong>compiler-enforced primitives</strong>—not library abstractions you hope someone wired up correctly.
+      </p>
+      <div class="cta-row">
+        <a href="#install" class="btn btn-primary">
+          Get started
+          <span class="arrow">→</span>
+        </a>
+        <a href="#primitives" class="btn btn-secondary">
+          Read the docs
+        </a>
+      </div>
+      <div class="stats">
+        <div class="stat">
+          <div class="num">626</div>
+          <div class="label">Tests</div>
+        </div>
+        <div class="stat">
+          <div class="num">12</div>
+          <div class="label">Stdlib pkgs</div>
+        </div>
+        <div class="stat">
+          <div class="num">23</div>
+          <div class="label">Examples</div>
+        </div>
+        <div class="stat">
+          <div class="num">9</div>
+          <div class="label">Compiler pkgs</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal" style="transition-delay: 0.15s">
+      <div class="terminal">
+        <div class="terminal-bar">
+          <div class="term-dot"></div>
+          <div class="term-dot"></div>
+          <div class="term-dot"></div>
+          <span class="filename">analyze.cleat</span>
+        </div>
+        <div class="terminal-body">
+<span class="ln">1</span><span class="kw">tool</span> <span class="fn">analyze</span><span class="pun">(</span>repo<span class="pun">:</span> <span class="typ">string</span><span class="pun">,</span> pr<span class="pun">:</span> <span class="typ">int</span><span class="pun">)</span>
+<span class="ln">2</span>  <span class="pun">-></span> <span class="typ">Result</span><span class="pun">[</span><span class="typ">Analysis</span><span class="pun">,</span> <span class="typ">string</span><span class="pun">]</span>
+<span class="ln">3</span>  <span class="kw">needs</span> <span class="pun">{</span> net <span class="pun">}</span>
+<span class="ln">4</span>  <span class="cm">timeout: 30s</span>
+<span class="ln">5</span>  <span class="cm">retry: 2</span>
+<span class="ln">6</span><span class="pun">{</span>
+<span class="ln">7</span>  <span class="kw">let</span> url <span class="pun">=</span> <span class="str">"https://api/${repo}/pr/${pr}"</span>
+<span class="ln">8</span>  <span class="kw">let</span> resp <span class="pun">=</span> <span class="fn">http.get</span><span class="pun">(</span>url<span class="pun">)?</span>
+<span class="ln">9</span>  <span class="kw">let</span> data <span class="pun">=</span> <span class="fn">json.decode</span><span class="pun">(</span>resp.body<span class="pun">)?</span>
+<span class="ln">10</span> <span class="kw">return</span> <span class="fn">Ok</span><span class="pun">(</span>data<span class="pun">)</span>
+<span class="ln">11</span><span class="pun">}</span>
+<span class="ln">12</span>
+<span class="ln">13</span><span class="kw">test</span> <span class="str">"analyze can be mocked"</span> <span class="pun">{</span>
+<span class="ln">14</span>  <span class="kw">using</span> analyze <span class="pun">=</span> <span class="kw">fn</span><span class="pun">(</span>r<span class="pun">,</span> p<span class="pun">)</span> <span class="pun">{</span>
+<span class="ln">15</span>    <span class="kw">return</span> <span class="fn">Ok</span><span class="pun">(</span><span class="typ">Analysis</span> <span class="pun">{</span> ... <span class="pun">})</span>
+<span class="ln">16</span>  <span class="pun">}</span>
+<span class="ln">17</span>  <span class="fn">assert</span><span class="pun">(</span><span class="fn">analyze</span><span class="pun">().</span><span class="fn">IsOk</span><span class="pun">())</span>
+<span class="ln">18</span><span class="pun">}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────── PRIMITIVES ────────────── -->
+<section id="primitives">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-num">[ 01 / PRIMITIVES ]</div>
+      <div>
+        <h2 class="section-title">Four <em>first-class</em> primitives.<br>Enforced by the compiler.</h2>
+        <p class="section-sub">Most languages bolt orchestration on through frameworks. Cleat bakes it in. <code style="font-family:var(--mono);font-size:0.9em;color:var(--molten-2)">tool</code>, <code style="font-family:var(--mono);font-size:0.9em;color:var(--molten-2)">stream</code>, <code style="font-family:var(--mono);font-size:0.9em;color:var(--molten-2)">state</code>, and <code style="font-family:var(--mono);font-size:0.9em;color:var(--molten-2)">chain</code> are keywords—and the type-checker has opinions about all of them.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="primitives">
+      <div class="primitive reveal">
+        <span class="keyword">tool</span>
+        <h3>Typed callables, declared effects.</h3>
+        <p>Tools have timeouts, retries, and explicit side-effect declarations. The compiler refuses to compile a tool that lies about what it touches.</p>
+<pre><span class="kw" style="color:#b693c4">tool</span> <span class="fn" style="color:#7aa6c7">fetch_data</span>(url: <span class="typ" style="color:#ffb454">string</span>)
+  -> <span class="typ" style="color:#ffb454">Result</span>[<span class="typ" style="color:#ffb454">string</span>, <span class="typ" style="color:#ffb454">string</span>]
+  <span class="kw" style="color:#b693c4">needs</span> { net }
+  timeout: <span class="num" style="color:#8db580">10s</span>
+  retry: <span class="num" style="color:#8db580">1</span>
+{ ... }</pre>
+      </div>
+
+      <div class="primitive reveal" style="transition-delay:0.05s">
+        <span class="keyword">stream</span>
+        <h3>Backpressured by default.</h3>
+        <p>First-class streaming with typed yields and bounded buffers. No more wrapping callbacks in a Promise wrapped in a generator wrapped in regret.</p>
+<pre><span class="kw" style="color:#b693c4">stream</span> <span class="fn" style="color:#7aa6c7">tokens</span>(prompt: <span class="typ" style="color:#ffb454">string</span>) -> <span class="typ" style="color:#ffb454">string</span>
+  <span class="kw" style="color:#b693c4">needs</span> { llm }
+  buffer: <span class="num" style="color:#8db580">16</span>
+{
+  <span class="kw" style="color:#b693c4">yield</span> <span class="str" style="color:#8db580">"chunk1"</span>
+  <span class="kw" style="color:#b693c4">yield</span> <span class="str" style="color:#8db580">"chunk2"</span>
+}</pre>
+      </div>
+
+      <div class="primitive reveal" style="transition-delay:0.1s">
+        <span class="keyword">state</span>
+        <h3>Reachability, checked at compile.</h3>
+        <p>Declarative state machines with deadlock and reachability detection. Unreachable states won't compile. Neither will deadlocks.</p>
+<pre><span class="kw" style="color:#b693c4">state</span> <span class="typ" style="color:#ffb454">PRReview</span> {
+  initial: Pending
+  Pending -> InReview { <span class="kw" style="color:#b693c4">when</span>: assigned }
+  InReview -> Approved { <span class="kw" style="color:#b693c4">when</span>: approved && ci_green }
+  any -> Cancelled { <span class="kw" style="color:#b693c4">when</span>: closed }
+  terminal: Merged, Cancelled
+}</pre>
+      </div>
+
+      <div class="primitive reveal" style="transition-delay:0.15s">
+        <span class="keyword">chain</span>
+        <h3>Cryptographic provenance, native.</h3>
+        <p>Append-only, signed records with retention policies. Every action your AI takes can be cryptographically attested without bolting on a separate audit pipeline.</p>
+<pre><span class="kw" style="color:#b693c4">chain</span> <span class="typ" style="color:#ffb454">AuditTrail</span> {
+  signing: ed25519
+  @retention(<span class="num" style="color:#8db580">7y</span>)
+  record <span class="typ" style="color:#ffb454">Entry</span> {
+    source: <span class="typ" style="color:#ffb454">string</span>,
+    hash: sha256,
+    timestamp: <span class="typ" style="color:#ffb454">time</span>
+  }
+}</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────── EFFECTS ────────────── -->
+<section>
+  <div class="container">
+    <div class="effects">
+      <div class="effects-text reveal">
+        <div class="marker">[ 02 / EFFECTS ]</div>
+        <h2>Side effects? <em>Declared.</em><br>Or the build fails.</h2>
+        <p>Every function declares what it touches with <strong>needs</strong>. A pure function calling an effectful one is a compile error—not a runtime surprise found in production at 3am.</p>
+        <p>Tests use <strong>using</strong> to swap real effects for mocks. Type-checked, scoped, and impossible to forget to remove.</p>
+      </div>
+
+      <div class="reveal" style="transition-delay:0.1s">
+        <div class="code-card">
+          <div class="code-card-head">
+            <span class="label">pure_transform.cleat</span>
+            <span class="badge bad">compile error</span>
+          </div>
+<pre><span class="kw" style="color:#b693c4">fn</span> <span class="fn" style="color:#7aa6c7">pure_transform</span>(s: <span class="typ" style="color:#ffb454">string</span>) -> <span class="typ" style="color:#ffb454">string</span> {
+<span class="err-line">    http.get(s)</span>
+<span class="err-line">    <span class="err-msg">^─── missing needs effect: net</span></span>
+    <span class="kw" style="color:#b693c4">return</span> strings.<span class="fn" style="color:#7aa6c7">to_upper</span>(s)
+}</pre>
+        </div>
+        <div style="height:18px"></div>
+        <div class="code-card">
+          <div class="code-card-head">
+            <span class="label">fetch.cleat</span>
+            <span class="badge">checked ✓</span>
+          </div>
+<pre><span class="kw" style="color:#b693c4">fn</span> <span class="fn" style="color:#7aa6c7">fetch</span>(url: <span class="typ" style="color:#ffb454">string</span>)
+  -> <span class="typ" style="color:#ffb454">Result</span>[<span class="typ" style="color:#ffb454">string</span>, <span class="typ" style="color:#ffb454">string</span>]
+  <span class="kw" style="color:#b693c4">needs</span> { net }
+{
+    <span class="kw" style="color:#b693c4">let</span> resp = http.<span class="fn" style="color:#7aa6c7">get</span>(url)?
+    <span class="kw" style="color:#b693c4">return</span> <span class="fn" style="color:#7aa6c7">Ok</span>(resp.body)
+}</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────── STDLIB ────────────── -->
+<section class="stdlib" id="stdlib">
+  <div class="container">
+    <div class="section-header reveal" style="border-bottom:none;padding-bottom:0">
+      <div class="section-num">[ 03 / STDLIB ]</div>
+      <div>
+        <h2 class="section-title">Twelve packages.<br><em>No npm</em> required.</h2>
+        <p class="section-sub">Everything you need to build a real backend, in the box. Each package declares its effects so callers know exactly what they're inheriting.</p>
+      </div>
+    </div>
+
+    <div class="stdlib-grid reveal">
+      <div class="pkg">
+        <div class="pkg-name">std<span class="slash">/</span>json</div>
+        <div class="pkg-desc">Encode, decode, pretty-print, validate.</div>
+        <div class="pkg-needs">needs · <span>—</span></div>
+      </div>
+      <div class="pkg">
+        <div class="pkg-name">std<span class="slash">/</span>http</div>
+        <div class="pkg-desc">GET, POST, custom requests.</div>
+        <div class="pkg-needs">needs · <span>net</span></div>
+      </div>
+      <div class="pkg">
+        <div class="pkg-name">std<span class="slash">/</span>fs</div>
+        <div class="pkg-desc">Read, write, list, exists, mkdir.</div>
+        <div class="pkg-needs">needs · <span>fs</span></div>
+      </div>
+      <div class="pkg">
+        <div class="pkg-name">std<span class="slash">/</span>strings</div>
+        <div class="pkg-desc">19 string functions: split, join, trim…</div>
+        <div class="pkg-needs">needs · <span>—</span></div>
+      </div>
+      <div class="pkg">
+        <div class="pkg-name">std<span class="slash">/</span>math</div>
+        <div class="pkg-desc">abs, min, max, clamp, floor, sqrt, pow.</div>
+        <div class="pkg-needs">needs · <span>—</span></div>
+      </div>
+      <div class="pkg">
+        <div class="pkg-name">std<span class="slash">/</span>env</div>
+        <div class="pkg-desc">Environment variable access.</div>
+        <div class="pkg-needs">needs · <span>io</span></div>
+      </div>
+      <div class="pkg">
+        <div class="pkg-name">std<span class="slash">/</span>log</div>
+        <div class="pkg-desc">Leveled logging to stderr.</div>
+        <div class="pkg-needs">needs · <span>log</span></div>
+      </div>
+      <div class="pkg">
+        <div class="pkg-name">std<span class="slash">/</span>os</div>
+        <div class="pkg-desc">Process args, exit, getwd, hostname.</div>
+        <div class="pkg-needs">needs · <span>io</span></div>
+      </div>
+      <div class="pkg">
+        <div class="pkg-name">std<span class="slash">/</span>io</div>
+        <div class="pkg-desc">Print to stdout.</div>
+        <div class="pkg-needs">needs · <span>io</span></div>
+      </div>
+      <div class="pkg">
+        <div class="pkg-name">std<span class="slash">/</span>crypto</div>
+        <div class="pkg-desc">SHA-256 hashing, hex encoding.</div>
+        <div class="pkg-needs">needs · <span>—</span></div>
+      </div>
+      <div class="pkg">
+        <div class="pkg-name">std<span class="slash">/</span>time</div>
+        <div class="pkg-desc">Wall-clock + deterministic test clocks.</div>
+        <div class="pkg-needs">needs · <span>time</span></div>
+      </div>
+      <div class="pkg">
+        <div class="pkg-name">std<span class="slash">/</span>llm</div>
+        <div class="pkg-desc">LLM prompt &amp; stream, mockable.</div>
+        <div class="pkg-needs">needs · <span>llm</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────── FEATURES ────────────── -->
+<section class="features">
+  <div class="container">
+    <div class="section-header reveal" style="border-bottom:none;padding-bottom:0">
+      <div class="section-num">[ 04 / ERGONOMICS ]</div>
+      <div>
+        <h2 class="section-title">Modern syntax.<br>No <em>ceremony tax.</em></h2>
+        <p class="section-sub">Pattern matching, pipes, string interpolation, named arguments. The things you actually want, without writing a 12-line type signature first.</p>
+      </div>
+    </div>
+
+    <div class="features-grid reveal">
+      <div class="feature">
+        <div class="num">01</div>
+        <h4>Pattern matching</h4>
+        <p>Exhaustive, with bindings. The compiler tells you what you forgot.</p>
+        <code>match expr { Ok(v) => v, Err(e) => 0, _ => -1 }</code>
+      </div>
+      <div class="feature">
+        <div class="num">02</div>
+        <h4>Pipe operators</h4>
+        <p>Read left-to-right like the data flows. Compose without nesting hell.</p>
+        <code>xs |> filter(x > 0) |> map(x * 2) |> sum()</code>
+      </div>
+      <div class="feature">
+        <div class="num">03</div>
+        <h4>Result &amp; ?</h4>
+        <p>Errors are values. The question mark propagates them, no try/catch.</p>
+        <code>let data = risky_call()?</code>
+      </div>
+      <div class="feature">
+        <div class="num">04</div>
+        <h4>String interpolation</h4>
+        <p>Templates with full expression support. No printf. No backticks.</p>
+        <code>"hello, ${name}! found ${items.len()} items"</code>
+      </div>
+      <div class="feature">
+        <div class="num">05</div>
+        <h4>Built-in test runner</h4>
+        <p>Tests live next to code. <code style="background:none;border:none;padding:0;color:var(--molten-2)">cleat test</code> just works.</p>
+        <code>test "low score is Low risk" { assert(...) }</code>
+      </div>
+      <div class="feature">
+        <div class="num">06</div>
+        <h4>Named &amp; default args</h4>
+        <p>Call sites that read like English. Defaults that document themselves.</p>
+        <code>analyze(repo: "acme", pr: 42)</code>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────── INSTALL ────────────── -->
+<section class="install" id="install">
+  <div class="container">
+    <div class="reveal">
+      <h2>Start <em>forging.</em></h2>
+      <p>Cleat compiles to native binaries through Go. One build step, zero runtime dependencies.</p>
+      <div class="install-cmd">
+        <span class="prompt">$</span>
+        <span class="cmd">go build -o cleat ./cmd/cleat</span>
+        <button class="copy" onclick="copyCmd(this)">Copy</button>
+      </div>
+      <div class="install-meta">requires go 1.22+ · macOS, linux, windows</div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────── FOOTER ────────────── -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <svg><use href="#cleat-logo"/></svg>
+        <div class="word">Cleat</div>
+        <p>A compiled orchestration language for auditable, stateful AI backends. Built for the agentic era.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Language</h5>
+        <a href="#primitives">Primitives</a>
+        <a href="#">Effects</a>
+        <a href="#">Type system</a>
+        <a href="#">Examples</a>
+      </div>
+      <div class="footer-col">
+        <h5>Resources</h5>
+        <a href="#">Documentation</a>
+        <a href="#">Stdlib reference</a>
+        <a href="#">Changelog</a>
+        <a href="#">Roadmap</a>
+      </div>
+      <div class="footer-col">
+        <h5>Community</h5>
+        <a href="#">GitHub ↗</a>
+        <a href="#">Discord ↗</a>
+        <a href="#">X / Twitter ↗</a>
+        <a href="#">Sponsor</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 · Cleat-Lang</div>
+      <div>github.com/cleat-lang/cleat · v0.1.0-alpha</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Reveal-on-scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Copy install command
+  function copyCmd(btn) {
+    navigator.clipboard.writeText('go build -o cleat ./cmd/cleat');
+    const orig = btn.textContent;
+    btn.textContent = 'Copied';
+    btn.style.color = 'var(--molten-2)';
+    setTimeout(() => {
+      btn.textContent = orig;
+      btn.style.color = '';
+    }, 1400);
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Why Cleat — Comparisons with LangGraph, Temporal, and Python</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #0c0c0d;
+    --bg-2:      #131315;
+    --bg-3:      #1a1a1d;
+    --ink:       #ededea;
+    --ink-dim:   #a7a7a1;
+    --ink-faint: #6a6a64;
+    --rule:      #2a2a2d;
+    --rule-soft: #1f1f22;
+    --molten:    #ff7a18;
+    --molten-2:  #ffb454;
+    --green:     #8db580;
+    --blue:      #7aa6c7;
+    --purple:    #b693c4;
+    --red:       #d97070;
+    --serif:     'Fraunces', 'Times New Roman', serif;
+    --mono:      'JetBrains Mono', ui-monospace, monospace;
+    --sans:      'Inter', system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' /%3E%3C/svg%3E");
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* ─────────── NAV ─────────── */
+  nav.topnav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 18px 32px;
+    background: rgba(12,12,13,0.78);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .nav-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-brand { display: flex; align-items: center; gap: 12px; }
+  .nav-brand svg { width: 28px; height: 28px; }
+  .nav-brand .word {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 19px;
+  }
+  .nav-links { display: flex; align-items: center; gap: 32px; }
+  .nav-links a {
+    color: var(--ink-dim);
+    font-size: 13px;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--ink); }
+  .nav-cta {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink);
+    border: 1px solid var(--rule);
+    padding: 8px 14px;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+  .nav-cta:hover { border-color: var(--molten); color: var(--molten-2); }
+
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* ─────────── HERO ─────────── */
+  .hero {
+    padding: 160px 0 90px;
+    border-bottom: 1px solid var(--rule-soft);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 1000px 500px at 30% 0%, rgba(255,122,24,0.05), transparent 70%);
+    pointer-events: none;
+  }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--ink-faint);
+    margin-bottom: 28px;
+    padding: 6px 12px;
+    border: 1px solid var(--rule);
+    border-radius: 99px;
+    background: var(--bg-2);
+  }
+  .eyebrow .dot {
+    width: 6px; height: 6px;
+    background: var(--molten);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--molten);
+  }
+
+  .hero h1 {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(44px, 5.5vw, 76px);
+    line-height: 1;
+    letter-spacing: -0.035em;
+    margin-bottom: 28px;
+    max-width: 920px;
+  }
+  .hero h1 em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--molten-2);
+  }
+
+  .hero-lede {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 21px;
+    line-height: 1.5;
+    color: var(--ink-dim);
+    max-width: 720px;
+    margin-bottom: 40px;
+  }
+  .hero-lede strong { color: var(--ink); font-weight: 400; }
+
+  /* Jump nav */
+  .jump-nav {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding-top: 32px;
+    border-top: 1px solid var(--rule-soft);
+  }
+  .jump-nav a {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-dim);
+    padding: 8px 14px;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    transition: all 0.2s;
+    background: var(--bg-2);
+  }
+  .jump-nav a:hover {
+    color: var(--molten-2);
+    border-color: var(--molten);
+  }
+  .jump-nav .arrow { color: var(--ink-faint); margin-right: 8px; }
+
+  /* ─────────── SECTION HEADERS ─────────── */
+  .section-header {
+    padding: 100px 0 56px;
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 40px;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .section-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--molten);
+    letter-spacing: 0.12em;
+    padding-top: 12px;
+  }
+  .section-title {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(34px, 4vw, 52px);
+    line-height: 1;
+    letter-spacing: -0.025em;
+    margin-bottom: 18px;
+  }
+  .section-title em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--molten-2);
+  }
+  .section-sub {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 18px;
+    color: var(--ink-dim);
+    line-height: 1.55;
+    max-width: 700px;
+  }
+
+  /* ─────────── COMPARISON BLOCK ─────────── */
+  .comparison {
+    padding: 60px 0 100px;
+  }
+
+  .vs-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--rule-soft);
+    border: 1px solid var(--rule-soft);
+    margin-bottom: 32px;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .vs-meta-cell {
+    background: var(--bg-2);
+    padding: 24px 28px;
+  }
+  .vs-meta-cell.right {
+    background: linear-gradient(180deg, rgba(255,122,24,0.04), var(--bg-2));
+  }
+  .vs-meta-cell .label {
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--ink-faint);
+    margin-bottom: 8px;
+  }
+  .vs-meta-cell.right .label { color: var(--molten); }
+  .vs-meta-cell .name {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 24px;
+    margin-bottom: 4px;
+  }
+  .vs-meta-cell .tagline {
+    font-size: 13px;
+    color: var(--ink-dim);
+  }
+
+  /* The actual code diff */
+  .code-diff {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .code-pane {
+    background: var(--bg-2);
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .code-pane.right {
+    background: var(--bg-2);
+    box-shadow: inset 2px 0 0 var(--molten);
+  }
+  .code-pane-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--rule);
+    background: var(--bg-3);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .code-pane.right .code-pane-head {
+    background: linear-gradient(180deg, rgba(255,122,24,0.08), var(--bg-3));
+  }
+  .code-pane-head .filename { color: var(--ink); text-transform: none; letter-spacing: 0; }
+  .code-pane-head .lang { color: var(--molten); }
+  .code-pane pre {
+    padding: 20px 22px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.7;
+    overflow-x: auto;
+    flex: 1;
+    color: var(--ink);
+  }
+  .code-pane pre::-webkit-scrollbar { height: 6px; width: 6px; }
+  .code-pane pre::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 3px; }
+
+  /* Code block highlights */
+  .kw  { color: var(--purple); }
+  .fn  { color: var(--blue); }
+  .str { color: var(--green); }
+  .typ { color: var(--molten-2); }
+  .nm  { color: var(--green); }
+  .cm  { color: var(--ink-faint); font-style: italic; }
+  .pun { color: var(--ink-dim); }
+  .dec { color: var(--molten-2); }
+
+  /* Win/Lose annotations under code */
+  .takeaways {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .takeaway {
+    padding: 18px 22px;
+    border-radius: 4px;
+    border: 1px solid var(--rule-soft);
+    background: var(--bg-2);
+  }
+  .takeaway.win {
+    border-left: 2px solid var(--molten);
+  }
+  .takeaway .label {
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--ink-faint);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .takeaway.win .label { color: var(--molten); }
+  .takeaway ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .takeaway li {
+    padding-left: 18px;
+    position: relative;
+    color: var(--ink-dim);
+    font-size: 13.5px;
+    line-height: 1.55;
+    margin-bottom: 8px;
+  }
+  .takeaway li:last-child { margin-bottom: 0; }
+  .takeaway li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--ink-faint);
+  }
+  .takeaway.win li::before { color: var(--molten); }
+
+  /* ─────────── FEATURE TABLE ─────────── */
+  .feature-table {
+    margin: 60px 0 80px;
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    overflow: hidden;
+    background: var(--bg-2);
+  }
+  .feature-table table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .feature-table th, .feature-table td {
+    padding: 16px 20px;
+    text-align: left;
+    border-bottom: 1px solid var(--rule-soft);
+    font-size: 13.5px;
+  }
+  .feature-table tr:last-child td { border-bottom: none; }
+  .feature-table th {
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--ink-faint);
+    font-weight: 500;
+    background: var(--bg-3);
+    border-bottom: 1px solid var(--rule);
+  }
+  .feature-table th.cleat-col {
+    color: var(--molten);
+    background: linear-gradient(180deg, rgba(255,122,24,0.08), var(--bg-3));
+  }
+  .feature-table td.cleat-col {
+    background: rgba(255,122,24,0.025);
+  }
+  .feature-table td.feat-name {
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .feature-table td.feat-desc {
+    color: var(--ink-faint);
+    font-size: 12px;
+    font-family: var(--mono);
+    padding-top: 4px;
+  }
+  .feature-table .yes { color: var(--molten-2); font-family: var(--mono); font-size: 13px; }
+  .feature-table .no { color: var(--ink-faint); font-family: var(--mono); font-size: 13px; }
+  .feature-table .partial { color: var(--blue); font-family: var(--mono); font-size: 13px; }
+  .feature-table tbody tr:hover td { background: rgba(255,255,255,0.015); }
+  .feature-table tbody tr:hover td.cleat-col { background: rgba(255,122,24,0.045); }
+
+  /* ─────────── HONESTY / WHEN-NOT ─────────── */
+  .honesty {
+    padding: 100px 0;
+    border-top: 1px solid var(--rule-soft);
+    background:
+      radial-gradient(ellipse 800px 300px at 50% 0%, rgba(255,122,24,0.03), transparent 70%);
+  }
+  .honesty-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-top: 50px;
+  }
+  .honesty-card {
+    padding: 32px;
+    background: var(--bg-2);
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+  }
+  .honesty-card h3 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 24px;
+    letter-spacing: -0.015em;
+    margin-bottom: 16px;
+  }
+  .honesty-card.use h3::before {
+    content: '✓ ';
+    color: var(--molten);
+    font-weight: 600;
+  }
+  .honesty-card.dont h3::before {
+    content: '✕ ';
+    color: var(--ink-faint);
+    font-weight: 600;
+  }
+  .honesty-card p {
+    color: var(--ink-dim);
+    font-size: 14px;
+    line-height: 1.65;
+    margin-bottom: 16px;
+  }
+  .honesty-card ul {
+    list-style: none;
+    padding: 0;
+  }
+  .honesty-card li {
+    padding: 8px 0 8px 22px;
+    border-top: 1px solid var(--rule-soft);
+    position: relative;
+    color: var(--ink);
+    font-size: 13.5px;
+  }
+  .honesty-card li:first-child { border-top: none; }
+  .honesty-card.use li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    color: var(--molten);
+    font-family: var(--mono);
+  }
+  .honesty-card.dont li::before {
+    content: '·';
+    position: absolute;
+    left: 6px;
+    top: 4px;
+    color: var(--ink-faint);
+    font-size: 18px;
+  }
+  .honesty-card li small {
+    display: block;
+    color: var(--ink-faint);
+    font-size: 12px;
+    margin-top: 3px;
+    line-height: 1.5;
+  }
+
+  /* ─────────── CTA ─────────── */
+  .cta {
+    padding: 140px 0;
+    text-align: center;
+    border-top: 1px solid var(--rule-soft);
+    position: relative;
+    overflow: hidden;
+  }
+  .cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 800px 400px at 50% 50%, rgba(255,122,24,0.06), transparent 70%);
+    pointer-events: none;
+  }
+  .cta h2 {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(36px, 5vw, 60px);
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  .cta h2 em { font-style: italic; color: var(--molten-2); font-weight: 400; }
+  .cta p {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 19px;
+    color: var(--ink-dim);
+    margin-bottom: 40px;
+    max-width: 540px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+  }
+  .cta-buttons {
+    display: inline-flex;
+    gap: 14px;
+    position: relative;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .btn {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 14px 22px;
+    border-radius: 3px;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid transparent;
+  }
+  .btn-primary {
+    background: var(--ink);
+    color: var(--bg);
+  }
+  .btn-primary:hover {
+    background: var(--molten-2);
+    transform: translateY(-1px);
+  }
+  .btn-secondary {
+    background: transparent;
+    color: var(--ink);
+    border-color: var(--rule);
+  }
+  .btn-secondary:hover {
+    border-color: var(--molten);
+    background: var(--bg-2);
+  }
+
+  /* ─────────── FOOTER ─────────── */
+  footer {
+    padding: 60px 0 40px;
+    border-top: 1px solid var(--rule-soft);
+  }
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .footer-brand { display: flex; align-items: center; gap: 10px; }
+  .footer-brand svg { width: 22px; height: 22px; }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .code-diff, .vs-meta, .takeaways, .honesty-grid { grid-template-columns: 1fr; }
+    .section-header { grid-template-columns: 1fr; gap: 16px; padding: 80px 0 40px; }
+    .feature-table { overflow-x: auto; }
+    .feature-table table { min-width: 600px; }
+    .footer-inner { flex-direction: column; gap: 20px; }
+  }
+  @media (max-width: 640px) {
+    .nav-links a:not(.nav-cta) { display: none; }
+    .hero { padding: 120px 0 60px; }
+    .jump-nav { gap: 8px; }
+    .jump-nav a { font-size: 11px; padding: 6px 10px; }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="cleat-logo" viewBox="0 0 200 200">
+      <g fill="currentColor">
+        <path d="M30 80 L70 80 L80 92 L120 92 L130 80 L170 80 L160 100 L40 100 Z"/>
+        <rect x="86" y="76" width="11" height="32"/>
+        <rect x="103" y="76" width="11" height="32"/>
+        <path d="M70 108 L82 108 L88 128 L72 128 Z"/>
+        <path d="M118 108 L130 108 L128 128 L112 128 Z"/>
+        <path d="M50 132 L150 132 L160 144 L40 144 Z"/>
+        <rect x="48" y="148" width="104" height="6"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ─────────── NAV ─────────── -->
+<nav class="topnav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">
+      <svg><use href="#cleat-logo"/></svg>
+      <span class="word">Cleat</span>
+    </a>
+    <div class="nav-links">
+      <a href="#" class="active">Why Cleat</a>
+      <a href="#">Docs</a>
+      <a href="#">Examples</a>
+      <a href="#">Stdlib</a>
+      <a href="#" class="nav-cta">↗ GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ─────────── HERO ─────────── -->
+<section class="hero">
+  <div class="container">
+    <div class="reveal">
+      <div class="eyebrow">
+        <span class="dot"></span>
+        Compared honestly · against frameworks we respect
+      </div>
+      <h1>You already have <em>options.</em><br>Here's where Cleat <em>fits.</em></h1>
+      <p class="hero-lede">
+        LangGraph, Temporal, and plain Python with Pydantic are all reasonable choices for building stateful AI backends. Each makes different bets. <strong>Cleat makes a different bet too</strong>—that auditability, effect tracking, and orchestration belong in the type system, not in your prayers.
+      </p>
+      <p class="hero-lede" style="font-size: 17px; color: var(--ink-faint);">
+        This page shows the same problem solved four ways, then where each tool wins. No strawmen. No marketing math.
+      </p>
+      <div class="jump-nav">
+        <a href="#langgraph"><span class="arrow">→</span>vs LangGraph</a>
+        <a href="#temporal"><span class="arrow">→</span>vs Temporal</a>
+        <a href="#python"><span class="arrow">→</span>vs Python + Pydantic</a>
+        <a href="#table"><span class="arrow">→</span>Feature matrix</a>
+        <a href="#honest"><span class="arrow">→</span>When NOT to use Cleat</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────── VS LANGGRAPH ─────────── -->
+<section id="langgraph">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-num">[ 01 / VS LANGGRAPH ]</div>
+      <div>
+        <h2 class="section-title">vs <em>LangGraph</em></h2>
+        <p class="section-sub">LangGraph is the dominant choice for stateful agent workflows—graph nodes, shared state, checkpoints, human-in-the-loop. It's a Python library running inside your interpreter, and effects are whatever your nodes happen to do.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container comparison">
+    <div class="vs-meta reveal">
+      <div class="vs-meta-cell">
+        <div class="label">Library</div>
+        <div class="name">LangGraph</div>
+        <div class="tagline">Python framework, runtime-discovered effects, observability via LangSmith.</div>
+      </div>
+      <div class="vs-meta-cell right">
+        <div class="label">Language</div>
+        <div class="name">Cleat</div>
+        <div class="tagline">Compiled, declared effects, provenance and timeouts as syntax.</div>
+      </div>
+    </div>
+
+    <div class="code-diff reveal">
+      <!-- LangGraph -->
+      <div class="code-pane">
+        <div class="code-pane-head">
+          <span class="filename">analyze_graph.py</span>
+          <span class="lang">python</span>
+        </div>
+<pre><span class="kw">from</span> typing <span class="kw">import</span> TypedDict
+<span class="kw">from</span> langgraph.graph <span class="kw">import</span> StateGraph, END
+<span class="kw">import</span> httpx, json
+
+<span class="kw">class</span> <span class="typ">State</span><span class="pun">(</span>TypedDict<span class="pun">):</span>
+    repo<span class="pun">:</span> str
+    pr<span class="pun">:</span> int
+    result<span class="pun">:</span> dict | <span class="kw">None</span>
+
+<span class="kw">async def</span> <span class="fn">analyze</span><span class="pun">(</span>state<span class="pun">:</span> <span class="typ">State</span><span class="pun">)</span> <span class="pun">-></span> dict<span class="pun">:</span>
+    <span class="cm"># network call — but who knows? caller doesn't.</span>
+    url <span class="pun">=</span> <span class="str">f"https://api/{state['repo']}/pr/{state['pr']}"</span>
+    <span class="kw">try</span><span class="pun">:</span>
+        <span class="kw">async with</span> httpx.AsyncClient<span class="pun">()</span> <span class="kw">as</span> c<span class="pun">:</span>
+            r <span class="pun">=</span> <span class="kw">await</span> c.get<span class="pun">(</span>url<span class="pun">,</span> timeout<span class="pun">=</span><span class="nm">30</span><span class="pun">)</span>
+            r.raise_for_status<span class="pun">()</span>
+            <span class="kw">return</span> <span class="pun">{</span><span class="str">"result"</span><span class="pun">:</span> r.json<span class="pun">()}</span>
+    <span class="kw">except</span> Exception <span class="kw">as</span> e<span class="pun">:</span>
+        <span class="cm"># retry? you're writing it.</span>
+        <span class="kw">return</span> <span class="pun">{</span><span class="str">"result"</span><span class="pun">:</span> <span class="kw">None</span><span class="pun">}</span>
+
+graph <span class="pun">=</span> StateGraph<span class="pun">(</span><span class="typ">State</span><span class="pun">)</span>
+graph.add_node<span class="pun">(</span><span class="str">"analyze"</span><span class="pun">,</span> analyze<span class="pun">)</span>
+graph.set_entry_point<span class="pun">(</span><span class="str">"analyze"</span><span class="pun">)</span>
+graph.add_edge<span class="pun">(</span><span class="str">"analyze"</span><span class="pun">,</span> END<span class="pun">)</span>
+app <span class="pun">=</span> graph.compile<span class="pun">()</span>
+
+<span class="cm"># mocking? monkeypatch httpx, hope nothing else uses it.</span></pre>
+      </div>
+
+      <!-- Cleat -->
+      <div class="code-pane right">
+        <div class="code-pane-head">
+          <span class="filename">analyze.cleat</span>
+          <span class="lang">cleat</span>
+        </div>
+<pre><span class="kw">import</span> <span class="str">"std/http"</span>
+<span class="kw">import</span> <span class="str">"std/json"</span>
+
+<span class="kw">type</span> <span class="typ">Analysis</span> <span class="pun">=</span> <span class="kw">struct</span> <span class="pun">{</span>
+    files_changed<span class="pun">:</span> <span class="typ">int</span><span class="pun">,</span>
+    summary<span class="pun">:</span> <span class="typ">string</span><span class="pun">,</span>
+<span class="pun">}</span>
+
+<span class="kw">tool</span> <span class="fn">analyze</span><span class="pun">(</span>repo<span class="pun">:</span> <span class="typ">string</span><span class="pun">,</span> pr<span class="pun">:</span> <span class="typ">int</span><span class="pun">)</span>
+    <span class="pun">-></span> <span class="typ">Result</span><span class="pun">[</span><span class="typ">Analysis</span><span class="pun">,</span> <span class="typ">string</span><span class="pun">]</span>
+    <span class="kw">needs</span> <span class="pun">{</span> net <span class="pun">}</span>      <span class="cm">// declared, enforced</span>
+    <span class="cm">timeout: 30s         // syntax, not config</span>
+    <span class="cm">retry: 2             // syntax, not glue</span>
+<span class="pun">{</span>
+    <span class="kw">let</span> url <span class="pun">=</span> <span class="str">"https://api/${repo}/pr/${pr}"</span>
+    <span class="kw">let</span> resp <span class="pun">=</span> <span class="fn">http.get</span><span class="pun">(</span>url<span class="pun">)?</span>
+    <span class="kw">let</span> data<span class="pun">:</span> <span class="typ">Analysis</span> <span class="pun">=</span> <span class="fn">json.decode</span><span class="pun">(</span>resp.body<span class="pun">)?</span>
+    <span class="kw">return</span> <span class="fn">Ok</span><span class="pun">(</span>data<span class="pun">)</span>
+<span class="pun">}</span>
+
+<span class="kw">test</span> <span class="str">"analyze can be mocked"</span> <span class="pun">{</span>
+    <span class="kw">using</span> analyze <span class="pun">=</span> <span class="kw">fn</span><span class="pun">(</span>r<span class="pun">,</span> p<span class="pun">)</span> <span class="pun">{</span>
+        <span class="kw">return</span> <span class="fn">Ok</span><span class="pun">(</span><span class="typ">Analysis</span> <span class="pun">{</span> ... <span class="pun">})</span>
+    <span class="pun">}</span>      <span class="cm">// scoped, typed, no monkeypatch</span>
+<span class="pun">}</span></pre>
+      </div>
+    </div>
+
+    <div class="takeaways reveal">
+      <div class="takeaway">
+        <div class="label">LangGraph wins when</div>
+        <ul>
+          <li>You're already deep in the LangChain ecosystem and want LangSmith tracing</li>
+          <li>You need cyclic graph execution with rich human-in-the-loop checkpoints</li>
+          <li>Your team thinks in Python and the orchestration layer should match</li>
+          <li>You want a vast pre-built library of agent patterns and integrations</li>
+        </ul>
+      </div>
+      <div class="takeaway win">
+        <div class="label">→ Cleat wins when</div>
+        <ul>
+          <li>Effects matter—you want the compiler to refuse a tool that lies about side effects</li>
+          <li>Provenance is a requirement, not a feature you'll build later</li>
+          <li>You'd rather ship a single binary than manage a Python deployment</li>
+          <li>Mocking should be a language feature, not a third-party framework</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────── VS TEMPORAL ─────────── -->
+<section id="temporal" style="background: linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-num">[ 02 / VS TEMPORAL ]</div>
+      <div>
+        <h2 class="section-title">vs <em>Temporal</em></h2>
+        <p class="section-sub">Temporal is the gold standard for durable execution—workflows that survive crashes and run for months. It's also a separate service you operate, with deterministic constraints that make general-purpose languages awkward to use correctly.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container comparison">
+    <div class="vs-meta reveal">
+      <div class="vs-meta-cell">
+        <div class="label">Platform</div>
+        <div class="name">Temporal</div>
+        <div class="tagline">Durable execution service · multi-language SDKs · operate the cluster.</div>
+      </div>
+      <div class="vs-meta-cell right">
+        <div class="label">Language</div>
+        <div class="name">Cleat</div>
+        <div class="tagline">Compile to native binary · zero infrastructure · auditability built-in.</div>
+      </div>
+    </div>
+
+    <div class="code-diff reveal">
+      <div class="code-pane">
+        <div class="code-pane-head">
+          <span class="filename">workflow.py · Temporal</span>
+          <span class="lang">python</span>
+        </div>
+<pre><span class="kw">from</span> datetime <span class="kw">import</span> timedelta
+<span class="kw">from</span> temporalio <span class="kw">import</span> workflow, activity
+<span class="kw">from</span> temporalio.common <span class="kw">import</span> RetryPolicy
+
+<span class="dec">@activity.defn</span>
+<span class="kw">async def</span> <span class="fn">fetch_pr</span><span class="pun">(</span>repo<span class="pun">:</span> str<span class="pun">,</span> pr<span class="pun">:</span> int<span class="pun">)</span> <span class="pun">-></span> dict<span class="pun">:</span>
+    <span class="cm"># effect is here — but workflow can't call it directly,</span>
+    <span class="cm"># must use execute_activity. determinism rule.</span>
+    ...
+
+<span class="dec">@workflow.defn</span>
+<span class="kw">class</span> <span class="typ">AnalyzeWorkflow</span><span class="pun">:</span>
+    <span class="dec">@workflow.run</span>
+    <span class="kw">async def</span> <span class="fn">run</span><span class="pun">(</span>self<span class="pun">,</span> repo<span class="pun">:</span> str<span class="pun">,</span> pr<span class="pun">:</span> int<span class="pun">)</span><span class="pun">:</span>
+        <span class="kw">return await</span> workflow.execute_activity<span class="pun">(</span>
+            fetch_pr<span class="pun">,</span> args<span class="pun">=[</span>repo<span class="pun">,</span> pr<span class="pun">],</span>
+            start_to_close_timeout<span class="pun">=</span>timedelta<span class="pun">(</span>seconds<span class="pun">=</span><span class="nm">30</span><span class="pun">),</span>
+            retry_policy<span class="pun">=</span>RetryPolicy<span class="pun">(</span>maximum_attempts<span class="pun">=</span><span class="nm">3</span><span class="pun">),</span>
+        <span class="pun">)</span>
+
+<span class="cm"># plus: a Worker process, a Temporal Service running</span>
+<span class="cm"># somewhere, and the discipline to never call random()</span>
+<span class="cm"># or datetime.now() directly inside a workflow.</span></pre>
+      </div>
+
+      <div class="code-pane right">
+        <div class="code-pane-head">
+          <span class="filename">analyze.cleat</span>
+          <span class="lang">cleat</span>
+        </div>
+<pre><span class="kw">import</span> <span class="str">"std/http"</span>
+
+<span class="kw">tool</span> <span class="fn">fetch_pr</span><span class="pun">(</span>repo<span class="pun">:</span> <span class="typ">string</span><span class="pun">,</span> pr<span class="pun">:</span> <span class="typ">int</span><span class="pun">)</span>
+    <span class="pun">-></span> <span class="typ">Result</span><span class="pun">[</span>http.<span class="typ">Response</span><span class="pun">,</span> <span class="typ">string</span><span class="pun">]</span>
+    <span class="kw">needs</span> <span class="pun">{</span> net <span class="pun">}</span>
+    <span class="cm">timeout: 30s</span>
+    <span class="cm">retry: 3</span>
+<span class="pun">{</span>
+    <span class="kw">let</span> url <span class="pun">=</span> <span class="str">"https://api/${repo}/pr/${pr}"</span>
+    <span class="kw">return</span> <span class="fn">http.get</span><span class="pun">(</span>url<span class="pun">)</span>
+<span class="pun">}</span>
+
+<span class="cm">// for long-running, durable state, attach a chain:</span>
+<span class="kw">chain</span> <span class="typ">PRAuditTrail</span> <span class="pun">{</span>
+    signing<span class="pun">:</span> ed25519
+    <span class="dec">@retention</span><span class="pun">(</span><span class="nm">7y</span><span class="pun">)</span>
+    record <span class="typ">Step</span> <span class="pun">{</span>
+        action<span class="pun">:</span> <span class="typ">string</span><span class="pun">,</span>
+        result<span class="pun">:</span> <span class="typ">string</span><span class="pun">,</span>
+        timestamp<span class="pun">:</span> <span class="typ">time</span><span class="pun">,</span>
+    <span class="pun">}</span>
+<span class="pun">}</span>
+
+<span class="cm">// no Workers. no Service. one binary.</span></pre>
+      </div>
+    </div>
+
+    <div class="takeaways reveal">
+      <div class="takeaway">
+        <div class="label">Temporal wins when</div>
+        <ul>
+          <li>You need true durable execution—workflows that resume after a server reboot weeks later</li>
+          <li>Polyglot teams where workflows span Go, Java, TypeScript, Python, and .NET</li>
+          <li>You already operate distributed infrastructure and a Temporal Service is no extra burden</li>
+          <li>Mission-critical orchestration where automatic state replay justifies the operational cost</li>
+        </ul>
+      </div>
+      <div class="takeaway win">
+        <div class="label">→ Cleat wins when</div>
+        <ul>
+          <li>Workflows are seconds-to-minutes long, not weeks—you don't need a workflow service</li>
+          <li>Auditability via signed provenance chains is a first-class need</li>
+          <li>You want determinism enforced by the language, not by SDK conventions you can violate</li>
+          <li>Single-binary deployment matters more than multi-language interop</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────── VS PYTHON + PYDANTIC ─────────── -->
+<section id="python">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-num">[ 03 / VS PYTHON + PYDANTIC ]</div>
+      <div>
+        <h2 class="section-title">vs <em>Python</em> + Pydantic</h2>
+        <p class="section-sub">The default. You reach for FastAPI, Pydantic, httpx, and write the orchestration yourself. Maximum flexibility, maximum surface area, runtime everything.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container comparison">
+    <div class="vs-meta reveal">
+      <div class="vs-meta-cell">
+        <div class="label">Stack</div>
+        <div class="name">Python + Pydantic</div>
+        <div class="tagline">Glue your own. Runtime validation. Mypy if you remember to run it.</div>
+      </div>
+      <div class="vs-meta-cell right">
+        <div class="label">Language</div>
+        <div class="name">Cleat</div>
+        <div class="tagline">Static types. Compile-time effects. Built-in test runner. One binary.</div>
+      </div>
+    </div>
+
+    <div class="code-diff reveal">
+      <div class="code-pane">
+        <div class="code-pane-head">
+          <span class="filename">analyze.py</span>
+          <span class="lang">python</span>
+        </div>
+<pre><span class="kw">from</span> pydantic <span class="kw">import</span> BaseModel
+<span class="kw">import</span> httpx, asyncio
+<span class="kw">from</span> tenacity <span class="kw">import</span> retry, stop_after_attempt
+
+<span class="kw">class</span> <span class="typ">Analysis</span><span class="pun">(</span>BaseModel<span class="pun">):</span>
+    files_changed<span class="pun">:</span> int
+    summary<span class="pun">:</span> str
+
+<span class="dec">@retry</span><span class="pun">(</span>stop<span class="pun">=</span>stop_after_attempt<span class="pun">(</span><span class="nm">3</span><span class="pun">))</span>
+<span class="kw">async def</span> <span class="fn">analyze</span><span class="pun">(</span>repo<span class="pun">:</span> str<span class="pun">,</span> pr<span class="pun">:</span> int<span class="pun">)</span> <span class="pun">-></span> <span class="typ">Analysis</span><span class="pun">:</span>
+    <span class="cm"># effects: ¯\_(ツ)_/¯</span>
+    url <span class="pun">=</span> <span class="str">f"https://api/{repo}/pr/{pr}"</span>
+    <span class="kw">async with</span> httpx.AsyncClient<span class="pun">(</span>timeout<span class="pun">=</span><span class="nm">30</span><span class="pun">)</span> <span class="kw">as</span> c<span class="pun">:</span>
+        r <span class="pun">=</span> <span class="kw">await</span> c.get<span class="pun">(</span>url<span class="pun">)</span>
+        r.raise_for_status<span class="pun">()</span>
+        <span class="kw">return</span> <span class="typ">Analysis</span><span class="pun">.</span>model_validate<span class="pun">(</span>r.json<span class="pun">())</span>
+
+<span class="cm"># tests: pytest + pytest-mock + AsyncMock + a prayer</span>
+<span class="kw">import</span> pytest
+<span class="kw">from</span> unittest.mock <span class="kw">import</span> AsyncMock<span class="pun">,</span> patch
+
+<span class="dec">@pytest.mark.asyncio</span>
+<span class="kw">async def</span> <span class="fn">test_analyze</span><span class="pun">():</span>
+    <span class="kw">with</span> patch<span class="pun">(</span><span class="str">"httpx.AsyncClient.get"</span><span class="pun">,</span>
+               new_callable<span class="pun">=</span>AsyncMock<span class="pun">)</span> <span class="kw">as</span> m<span class="pun">:</span>
+        m.return_value.json.return_value <span class="pun">=</span> <span class="pun">{...}</span>
+        result <span class="pun">=</span> <span class="kw">await</span> analyze<span class="pun">(</span><span class="str">"a"</span><span class="pun">,</span> <span class="nm">1</span><span class="pun">)</span>
+        <span class="kw">assert</span> result.files_changed <span class="pun">==</span> <span class="nm">3</span></pre>
+      </div>
+
+      <div class="code-pane right">
+        <div class="code-pane-head">
+          <span class="filename">analyze.cleat</span>
+          <span class="lang">cleat</span>
+        </div>
+<pre><span class="kw">import</span> <span class="str">"std/http"</span>
+<span class="kw">import</span> <span class="str">"std/json"</span>
+
+<span class="kw">type</span> <span class="typ">Analysis</span> <span class="pun">=</span> <span class="kw">struct</span> <span class="pun">{</span>
+    files_changed<span class="pun">:</span> <span class="typ">int</span><span class="pun">,</span>
+    summary<span class="pun">:</span> <span class="typ">string</span><span class="pun">,</span>
+<span class="pun">}</span>
+
+<span class="kw">tool</span> <span class="fn">analyze</span><span class="pun">(</span>repo<span class="pun">:</span> <span class="typ">string</span><span class="pun">,</span> pr<span class="pun">:</span> <span class="typ">int</span><span class="pun">)</span>
+    <span class="pun">-></span> <span class="typ">Result</span><span class="pun">[</span><span class="typ">Analysis</span><span class="pun">,</span> <span class="typ">string</span><span class="pun">]</span>
+    <span class="kw">needs</span> <span class="pun">{</span> net <span class="pun">}</span>
+    <span class="cm">timeout: 30s</span>
+    <span class="cm">retry: 3</span>
+<span class="pun">{</span>
+    <span class="kw">let</span> url <span class="pun">=</span> <span class="str">"https://api/${repo}/pr/${pr}"</span>
+    <span class="kw">let</span> resp <span class="pun">=</span> <span class="fn">http.get</span><span class="pun">(</span>url<span class="pun">)?</span>
+    <span class="kw">let</span> data<span class="pun">:</span> <span class="typ">Analysis</span> <span class="pun">=</span> <span class="fn">json.decode</span><span class="pun">(</span>resp.body<span class="pun">)?</span>
+    <span class="kw">return</span> <span class="fn">Ok</span><span class="pun">(</span>data<span class="pun">)</span>
+<span class="pun">}</span>
+
+<span class="kw">test</span> <span class="str">"analyze can be mocked"</span> <span class="pun">{</span>
+    <span class="kw">using</span> analyze <span class="pun">=</span> <span class="kw">fn</span><span class="pun">(</span>r<span class="pun">,</span> p<span class="pun">)</span> <span class="pun">{</span>
+        <span class="kw">return</span> <span class="fn">Ok</span><span class="pun">(</span><span class="typ">Analysis</span> <span class="pun">{</span>
+            files_changed<span class="pun">:</span> <span class="nm">3</span><span class="pun">,</span> summary<span class="pun">:</span> <span class="str">"ok"</span>
+        <span class="pun">})</span>
+    <span class="pun">}</span>
+    <span class="fn">assert</span><span class="pun">(</span><span class="fn">analyze</span><span class="pun">(</span><span class="str">"a"</span><span class="pun">,</span> <span class="nm">1</span><span class="pun">).</span><span class="fn">IsOk</span><span class="pun">())</span>
+<span class="pun">}</span>
+
+<span class="cm">// no pytest. no tenacity. no AsyncMock.</span></pre>
+      </div>
+    </div>
+
+    <div class="takeaways reveal">
+      <div class="takeaway">
+        <div class="label">Python wins when</div>
+        <ul>
+          <li>You need the entire Python ML and data ecosystem in the same process</li>
+          <li>Your team's existing skills are Python and switching costs outweigh language wins</li>
+          <li>You're prototyping fast and orchestration discipline can come later (or never)</li>
+          <li>You need a library that exists in PyPI and nowhere else</li>
+        </ul>
+      </div>
+      <div class="takeaway win">
+        <div class="label">→ Cleat wins when</div>
+        <ul>
+          <li>You want a single binary, no virtualenv, no dependency hell</li>
+          <li>Effect tracking and mocking should be free, not 4 dependencies</li>
+          <li>Compile-time errors beat runtime AttributeErrors at 3am</li>
+          <li>You're building a backend whose correctness you'll have to defend in an audit</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────── FEATURE TABLE ─────────── -->
+<section id="table" style="background: var(--bg-2);">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-num">[ 04 / FEATURE MATRIX ]</div>
+      <div>
+        <h2 class="section-title">The <em>full</em> matrix.</h2>
+        <p class="section-sub">No tool wins on every row. This is what each one actually ships.</p>
+      </div>
+    </div>
+
+    <div class="feature-table reveal">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 32%">Feature</th>
+            <th style="width: 17%">LangGraph</th>
+            <th style="width: 17%">Temporal</th>
+            <th style="width: 17%">Python+Pydantic</th>
+            <th style="width: 17%" class="cleat-col">Cleat</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="feat-name">Static type checking<div class="feat-desc">errors at compile, not runtime</div></td>
+            <td><span class="partial">via mypy</span></td>
+            <td><span class="partial">SDK-level</span></td>
+            <td><span class="partial">via mypy</span></td>
+            <td class="cleat-col"><span class="yes">native</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">Compile-time effect tracking<div class="feat-desc"><code style="color:var(--molten-2);font-size:11px">needs { net, fs }</code> enforced</div></td>
+            <td><span class="no">no</span></td>
+            <td><span class="no">no</span></td>
+            <td><span class="no">no</span></td>
+            <td class="cleat-col"><span class="yes">enforced</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">First-class tools<div class="feat-desc">timeout, retry as syntax</div></td>
+            <td><span class="partial">decorators</span></td>
+            <td><span class="yes">activities</span></td>
+            <td><span class="no">DIY</span></td>
+            <td class="cleat-col"><span class="yes">keyword</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">First-class streams<div class="feat-desc">backpressure, typed yields</div></td>
+            <td><span class="yes">yes</span></td>
+            <td><span class="partial">via signals</span></td>
+            <td><span class="no">DIY</span></td>
+            <td class="cleat-col"><span class="yes">keyword</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">State machines with reachability checks</td>
+            <td><span class="partial">graph nodes</span></td>
+            <td><span class="partial">SDK pattern</span></td>
+            <td><span class="no">DIY</span></td>
+            <td class="cleat-col"><span class="yes">keyword</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">Cryptographic provenance<div class="feat-desc">signed audit trail, native</div></td>
+            <td><span class="no">via LangSmith</span></td>
+            <td><span class="partial">event history</span></td>
+            <td><span class="no">DIY</span></td>
+            <td class="cleat-col"><span class="yes">keyword</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">Durable execution across crashes<div class="feat-desc">multi-day workflows that resume</div></td>
+            <td><span class="yes">checkpoints</span></td>
+            <td><span class="yes">flagship</span></td>
+            <td><span class="no">no</span></td>
+            <td class="cleat-col"><span class="partial">roadmap</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">Built-in test runner<div class="feat-desc">no external framework</div></td>
+            <td><span class="no">pytest</span></td>
+            <td><span class="no">SDK testkits</span></td>
+            <td><span class="no">pytest</span></td>
+            <td class="cleat-col"><span class="yes">cleat test</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">Built-in formatter</td>
+            <td><span class="no">ruff/black</span></td>
+            <td><span class="no">per-language</span></td>
+            <td><span class="no">ruff/black</span></td>
+            <td class="cleat-col"><span class="yes">cleat fmt</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">Compiles to native binary</td>
+            <td><span class="no">interpreter</span></td>
+            <td><span class="partial">per SDK</span></td>
+            <td><span class="no">interpreter</span></td>
+            <td class="cleat-col"><span class="yes">via Go</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">External infrastructure required</td>
+            <td><span class="partial">optional</span></td>
+            <td><span class="no">cluster</span></td>
+            <td><span class="yes">none</span></td>
+            <td class="cleat-col"><span class="yes">none</span></td>
+          </tr>
+          <tr>
+            <td class="feat-name">Ecosystem maturity</td>
+            <td><span class="yes">large</span></td>
+            <td><span class="yes">large</span></td>
+            <td><span class="yes">vast</span></td>
+            <td class="cleat-col"><span class="partial">alpha</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p style="text-align:center; font-family: var(--mono); font-size: 11px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.12em; margin-top: 20px;">
+      Last updated April 2026 · corrections welcome on GitHub
+    </p>
+  </div>
+</section>
+
+<!-- ─────────── HONESTY ─────────── -->
+<section class="honesty" id="honest">
+  <div class="container">
+    <div class="section-header reveal" style="border-bottom:none;padding-bottom:0;">
+      <div class="section-num">[ 05 / HONESTY ]</div>
+      <div>
+        <h2 class="section-title">When <em>not</em> to use Cleat.</h2>
+        <p class="section-sub">A new language is a real cost. If your problem is shaped like one of these, pick something else and we won't be offended.</p>
+      </div>
+    </div>
+
+    <div class="honesty-grid reveal">
+      <div class="honesty-card use">
+        <h3>Reach for Cleat when…</h3>
+        <p>Your backend coordinates AI tools and you care about what they actually did. Especially if "what they did" might one day need to be defended in an audit, a postmortem, or a regulatory review.</p>
+        <ul>
+          <li>You're building a multi-step AI pipeline and side effects keep biting you in production
+            <small>tools that hit the wrong API, retries that didn't fire, mocks left in by accident</small>
+          </li>
+          <li>Provenance, signing, and audit trails are requirements—not "nice to have"
+            <small>regulated industries, security tooling, financial workflows, healthcare</small>
+          </li>
+          <li>You want one statically-typed binary, not a Python service plus a workflow cluster plus an observability stack
+            <small>small teams, edge deployment, anyone tired of YAML</small>
+          </li>
+          <li>You're starting a new project and the team has appetite for a new language
+            <small>greenfield is much easier than retrofitting; go all-in or don't bother</small>
+          </li>
+        </ul>
+      </div>
+
+      <div class="honesty-card dont">
+        <h3>Stay where you are when…</h3>
+        <p>Cleat is alpha software. The compiler works, the stdlib ships, real programs run—but it's a young language with a small ecosystem. Be honest about your constraints.</p>
+        <ul>
+          <li>You need a specific Python or npm library that has no equivalent
+            <small>scientific computing, ML training loops, niche SDKs—use the language with the library</small>
+          </li>
+          <li>Your workflows must survive multi-day server crashes
+            <small>Temporal solved this. Use Temporal. Cleat's durable execution story is on the roadmap, not in the box</small>
+          </li>
+          <li>You're shipping next quarter and risk-averse stakeholders need a 1.0 release
+            <small>Cleat is alpha. Wait for a stable tag, or pilot it on a non-critical service first</small>
+          </li>
+          <li>Your team has zero appetite to learn a new language
+            <small>That's a real constraint. Forcing a language on an unwilling team produces worse code than the language you replaced</small>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────── CTA ─────────── -->
+<section class="cta">
+  <div class="container">
+    <div class="reveal">
+      <h2>Still <em>curious?</em></h2>
+      <p>Read the intro, browse the 23 example programs, or clone the repo and compile something in five minutes.</p>
+      <div class="cta-buttons">
+        <a href="docs.html" class="btn btn-primary">
+          Read the docs <span>→</span>
+        </a>
+        <a href="#" class="btn btn-secondary">
+          Browse examples
+        </a>
+        <a href="#" class="btn btn-secondary">
+          ↗ GitHub
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────── FOOTER ─────────── -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <svg><use href="#cleat-logo"/></svg>
+        <span>Cleat · v0.1.0-alpha</span>
+      </div>
+      <div>github.com/cleat-lang/cleat · MIT</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>

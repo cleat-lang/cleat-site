@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Examples · Cleat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #0c0c0d;
+    --bg-2:      #131315;
+    --bg-3:      #1a1a1d;
+    --ink:       #ededea;
+    --ink-dim:   #a7a7a1;
+    --ink-faint: #6a6a64;
+    --rule:      #2a2a2d;
+    --rule-soft: #1f1f22;
+    --molten:    #ff7a18;
+    --molten-2:  #ffb454;
+    --green:     #8db580;
+    --blue:      #7aa6c7;
+    --purple:    #b693c4;
+    --red:       #d97070;
+    --serif:     'Fraunces', 'Times New Roman', serif;
+    --mono:      'JetBrains Mono', ui-monospace, monospace;
+    --sans:      'Inter', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' /%3E%3C/svg%3E");
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* ─── NAV ─── */
+  nav.topnav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 18px 32px;
+    background: rgba(12,12,13,0.78);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .nav-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-brand { display: flex; align-items: center; gap: 12px; }
+  .nav-brand svg { width: 28px; height: 28px; }
+  .nav-brand .word { font-family: var(--serif); font-weight: 500; font-size: 19px; }
+  .nav-links { display: flex; align-items: center; gap: 32px; }
+  .nav-links a { color: var(--ink-dim); font-size: 13px; transition: color 0.2s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--ink); }
+  .nav-cta {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink);
+    border: 1px solid var(--rule);
+    padding: 8px 14px;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+  .nav-cta:hover { border-color: var(--molten); color: var(--molten-2); }
+
+  .container {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* ─── HEADER ─── */
+  .ex-header {
+    padding: 140px 0 50px;
+    border-bottom: 1px solid var(--rule-soft);
+    position: relative;
+  }
+  .ex-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 800px 350px at 20% 0%, rgba(255,122,24,0.04), transparent 70%);
+    pointer-events: none;
+  }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--ink-faint);
+    margin-bottom: 22px;
+  }
+  .eyebrow .dot {
+    width: 6px; height: 6px;
+    background: var(--molten);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--molten);
+  }
+  .ex-header h1 {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(48px, 6vw, 84px);
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+    margin-bottom: 18px;
+  }
+  .ex-header h1 em { font-style: italic; font-weight: 400; color: var(--molten-2); }
+  .ex-header .lede {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 1.5;
+    color: var(--ink-dim);
+    max-width: 680px;
+    margin-bottom: 32px;
+  }
+
+  /* ─── TOOLBAR (filter + search) ─── */
+  .toolbar {
+    padding: 32px 0 24px;
+    border-bottom: 1px solid var(--rule-soft);
+    background: var(--bg);
+    position: sticky;
+    top: 60px;
+    z-index: 50;
+    backdrop-filter: blur(12px);
+    background: rgba(12,12,13,0.85);
+  }
+  .toolbar-inner {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .filter-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--ink-faint);
+    margin-right: 4px;
+  }
+  .filter-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .chip {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-dim);
+    padding: 7px 12px;
+    border: 1px solid var(--rule);
+    border-radius: 99px;
+    background: var(--bg-2);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .chip:hover { color: var(--ink); border-color: var(--ink-faint); }
+  .chip.active {
+    color: var(--bg);
+    background: var(--molten-2);
+    border-color: var(--molten-2);
+  }
+  .chip .count {
+    background: rgba(0,0,0,0.15);
+    padding: 1px 6px;
+    border-radius: 99px;
+    font-size: 10px;
+  }
+  .chip:not(.active) .count {
+    background: var(--bg-3);
+    color: var(--ink-faint);
+  }
+  .chip.tool .dot, .chip-icon-tool { color: var(--blue); }
+  .chip.stream .dot, .chip-icon-stream { color: var(--green); }
+  .chip.state .dot, .chip-icon-state { color: var(--purple); }
+  .chip.chain .dot, .chip-icon-chain { color: var(--molten-2); }
+
+  .search-box {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--bg-2);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 7px 12px;
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 12px;
+    min-width: 240px;
+    transition: border-color 0.2s;
+  }
+  .search-box:focus-within { border-color: var(--molten); }
+  .search-box span { color: var(--ink-faint); }
+  .search-box input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 12px;
+    width: 100%;
+  }
+  .search-box input::placeholder { color: var(--ink-faint); }
+
+  /* ─── GRID ─── */
+  .gallery {
+    padding: 56px 0 100px;
+  }
+  .gallery-meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 28px;
+  }
+  .gallery-meta .num { color: var(--molten-2); }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  @media (max-width: 1100px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 700px) { .grid { grid-template-columns: 1fr; } }
+
+  /* Card */
+  .card {
+    background: var(--bg-2);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: var(--molten);
+    box-shadow: 0 12px 30px -12px rgba(255,122,24,0.15);
+  }
+  .card-preview {
+    background: var(--bg-3);
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 11px;
+    line-height: 1.7;
+    height: 180px;
+    overflow: hidden;
+    position: relative;
+    color: var(--ink);
+  }
+  .card-preview::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 80px;
+    background: linear-gradient(to bottom, transparent, var(--bg-3));
+    pointer-events: none;
+  }
+  .card-preview .ln { color: var(--ink-faint); margin-right: 12px; user-select: none; display: inline-block; width: 16px; text-align: right; }
+
+  /* Card body */
+  .card-body {
+    padding: 18px 20px 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .card-tags {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .card-tag {
+    font-family: var(--mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    padding: 3px 8px;
+    border-radius: 99px;
+    border: 1px solid;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .card-tag.tool { color: var(--blue); border-color: rgba(122,166,199,0.3); background: rgba(122,166,199,0.06); }
+  .card-tag.stream { color: var(--green); border-color: rgba(141,181,128,0.3); background: rgba(141,181,128,0.06); }
+  .card-tag.state { color: var(--purple); border-color: rgba(182,147,196,0.3); background: rgba(182,147,196,0.06); }
+  .card-tag.chain { color: var(--molten-2); border-color: rgba(255,180,84,0.3); background: rgba(255,180,84,0.06); }
+  .card-tag .dot { width: 4px; height: 4px; background: currentColor; border-radius: 50%; }
+
+  .card-difficulty {
+    margin-left: auto;
+    font-family: var(--mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--ink-faint);
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+  .card-difficulty .pip {
+    width: 6px;
+    height: 6px;
+    background: var(--rule);
+    border-radius: 1px;
+  }
+  .card-difficulty .pip.on { background: var(--molten); }
+
+  .card h3 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    margin-bottom: 8px;
+    color: var(--ink);
+  }
+  .card:hover h3 { color: var(--molten-2); transition: color 0.2s; }
+  .card-desc {
+    font-size: 13px;
+    color: var(--ink-dim);
+    line-height: 1.55;
+    flex: 1;
+    margin-bottom: 14px;
+  }
+  .card-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 12px;
+    border-top: 1px solid var(--rule-soft);
+  }
+  .card-foot .lines {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+  .card-foot .lines .num { color: var(--ink); }
+  .card-foot .open {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    transition: gap 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .card:hover .card-foot .open { color: var(--molten-2); gap: 9px; }
+
+  /* Code preview syntax */
+  .kw { color: var(--purple); }
+  .fn { color: var(--blue); }
+  .str { color: var(--green); }
+  .typ { color: var(--molten-2); }
+  .nm { color: var(--green); }
+  .cm { color: var(--ink-faint); font-style: italic; }
+  .pun { color: var(--ink-dim); }
+
+  /* ─── EMPTY STATE ─── */
+  .empty {
+    display: none;
+    text-align: center;
+    padding: 100px 32px;
+  }
+  .empty.show { display: block; }
+  .empty .icon {
+    font-family: var(--serif);
+    font-size: 60px;
+    color: var(--molten);
+    margin-bottom: 20px;
+    font-style: italic;
+    font-weight: 300;
+  }
+  .empty h3 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 28px;
+    margin-bottom: 12px;
+    letter-spacing: -0.015em;
+  }
+  .empty p {
+    color: var(--ink-dim);
+    font-size: 15px;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+  .empty button {
+    margin-top: 24px;
+    font-family: var(--mono);
+    font-size: 12px;
+    background: var(--ink);
+    color: var(--bg);
+    border: none;
+    padding: 12px 22px;
+    border-radius: 3px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .empty button:hover { background: var(--molten-2); }
+
+  /* ─── MODAL ─── */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(12,12,13,0.85);
+    backdrop-filter: blur(8px);
+    z-index: 200;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .modal-backdrop.open { display: flex; opacity: 1; }
+  .modal {
+    background: var(--bg-2);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    width: 100%;
+    max-width: 920px;
+    max-height: 85vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 30px 80px -20px rgba(0,0,0,0.7);
+    transform: translateY(10px);
+    transition: transform 0.25s ease;
+  }
+  .modal-backdrop.open .modal { transform: translateY(0); }
+  .modal-head {
+    padding: 22px 28px;
+    border-bottom: 1px solid var(--rule);
+    background: var(--bg-3);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  .modal-head .info { flex: 1; min-width: 0; }
+  .modal-head .tags { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
+  .modal-head h2 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 26px;
+    letter-spacing: -0.015em;
+    margin-bottom: 6px;
+  }
+  .modal-head .filename {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-faint);
+  }
+  .modal-close {
+    background: transparent;
+    border: 1px solid var(--rule);
+    color: var(--ink-dim);
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.15s;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-close:hover { color: var(--molten-2); border-color: var(--molten); }
+  .modal-body {
+    padding: 0;
+    overflow-y: auto;
+    flex: 1;
+  }
+  .modal-body pre {
+    padding: 28px 32px;
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--ink);
+    overflow-x: auto;
+  }
+  .modal-foot {
+    padding: 16px 28px;
+    border-top: 1px solid var(--rule);
+    background: var(--bg-3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+  }
+  .modal-foot .lhs {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .modal-foot .actions { display: flex; gap: 10px; }
+  .modal-foot button, .modal-foot a {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 8px 14px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--rule);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .modal-foot button:hover, .modal-foot a:hover { border-color: var(--molten); color: var(--molten-2); }
+  .modal-foot .primary {
+    background: var(--ink);
+    color: var(--bg);
+    border-color: var(--ink);
+  }
+  .modal-foot .primary:hover {
+    background: var(--molten-2);
+    border-color: var(--molten-2);
+    color: var(--bg);
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    padding: 50px 0;
+    border-top: 1px solid var(--rule-soft);
+  }
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .footer-brand { display: flex; align-items: center; gap: 10px; }
+  .footer-brand svg { width: 22px; height: 22px; }
+
+  @media (max-width: 640px) {
+    .nav-links a:not(.nav-cta) { display: none; }
+    .ex-header { padding: 110px 0 30px; }
+    .toolbar-inner { gap: 14px; }
+    .search-box { min-width: 0; width: 100%; margin-left: 0; }
+    .footer-inner { flex-direction: column; gap: 12px; }
+    .modal-head { flex-direction: column; }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(15px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="cleat-logo" viewBox="0 0 200 200">
+      <g fill="currentColor">
+        <path d="M30 80 L70 80 L80 92 L120 92 L130 80 L170 80 L160 100 L40 100 Z"/>
+        <rect x="86" y="76" width="11" height="32"/>
+        <rect x="103" y="76" width="11" height="32"/>
+        <path d="M70 108 L82 108 L88 128 L72 128 Z"/>
+        <path d="M118 108 L130 108 L128 128 L112 128 Z"/>
+        <path d="M50 132 L150 132 L160 144 L40 144 Z"/>
+        <rect x="48" y="148" width="104" height="6"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- NAV -->
+<nav class="topnav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">
+      <svg><use href="#cleat-logo"/></svg>
+      <span class="word">Cleat</span>
+    </a>
+    <div class="nav-links">
+      <a href="why.html">Why Cleat</a>
+      <a href="docs.html">Docs</a>
+      <a href="examples.html" class="active">Examples</a>
+      <a href="blog.html">Blog</a>
+      <a href="changelog.html">Changelog</a>
+      <a href="#" class="nav-cta">↗ GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HEADER -->
+<header class="ex-header">
+  <div class="container">
+    <div class="reveal">
+      <div class="eyebrow">
+        <span class="dot"></span>
+        23 example programs · all compile · all tested
+      </div>
+      <h1>Real Cleat, <em>read it.</em></h1>
+      <p class="lede">
+        Every example is a complete, type-checked, executable program. Click any card to see the full source. Filter by primitive to find what you're looking for.
+      </p>
+    </div>
+  </div>
+</header>
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <div class="container">
+    <div class="toolbar-inner">
+      <span class="filter-label">Filter</span>
+      <div class="filter-row" id="filters">
+        <button class="chip active" data-filter="all">All <span class="count">23</span></button>
+        <button class="chip tool" data-filter="tool"><span class="dot" style="width:5px;height:5px;background:var(--blue);border-radius:50%"></span>Tool <span class="count">9</span></button>
+        <button class="chip stream" data-filter="stream"><span class="dot" style="width:5px;height:5px;background:var(--green);border-radius:50%"></span>Stream <span class="count">5</span></button>
+        <button class="chip state" data-filter="state"><span class="dot" style="width:5px;height:5px;background:var(--purple);border-radius:50%"></span>State <span class="count">4</span></button>
+        <button class="chip chain" data-filter="chain"><span class="dot" style="width:5px;height:5px;background:var(--molten-2);border-radius:50%"></span>Chain <span class="count">3</span></button>
+        <button class="chip" data-filter="basics">Basics <span class="count">2</span></button>
+      </div>
+      <div class="search-box">
+        <span>⌕</span>
+        <input type="text" id="search" placeholder="Search examples…" />
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GRID -->
+<section class="gallery">
+  <div class="container">
+    <div class="gallery-meta reveal">Showing <span class="num" id="visible-count">12</span> of 23 examples</div>
+    <div class="grid" id="grid">
+
+      <!-- 1: hello -->
+      <article class="card reveal" data-tags="basics" data-name="hello world io">
+        <div class="card-preview"><span class="ln">1</span><span class="kw">import</span> <span class="str">"std/io"</span>
+<span class="ln">2</span>
+<span class="ln">3</span><span class="kw">fn</span> <span class="fn">main</span><span class="pun">()</span> <span class="pun">-></span> <span class="typ">int</span> <span class="kw">needs</span> <span class="pun">{</span> io <span class="pun">}</span> <span class="pun">{</span>
+<span class="ln">4</span>    io.<span class="fn">println</span><span class="pun">(</span><span class="str">"hello from cleat"</span><span class="pun">)</span>
+<span class="ln">5</span>    <span class="kw">return</span> <span class="nm">0</span>
+<span class="ln">6</span><span class="pun">}</span></div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="card-tag" style="color:var(--ink-dim);border-color:var(--rule);background:var(--bg-3)"><span class="dot" style="background:var(--ink-faint)"></span>Basics</span>
+            <span class="card-difficulty"><span class="pip on"></span><span class="pip"></span><span class="pip"></span></span>
+          </div>
+          <h3>Hello, world</h3>
+          <p class="card-desc">The smallest possible Cleat program. Demonstrates the <code style="font-family:var(--mono);font-size:11px;color:var(--molten-2)">needs</code> clause on main.</p>
+          <div class="card-foot">
+            <span class="lines"><span class="num">6</span> lines</span>
+            <span class="open">View source →</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- 2: PR analyzer -->
+      <article class="card reveal" data-tags="tool" data-name="pr analyzer github review">
+        <div class="card-preview"><span class="ln">1</span><span class="kw">tool</span> <span class="fn">analyze</span><span class="pun">(</span>repo<span class="pun">:</span> <span class="typ">string</span><span class="pun">,</span> pr<span class="pun">:</span> <span class="typ">int</span><span class="pun">)</span>
+<span class="ln">2</span>    <span class="pun">-></span> <span class="typ">Result</span><span class="pun">[</span><span class="typ">Analysis</span><span class="pun">,</span> <span class="typ">string</span><span class="pun">]</span>
+<span class="ln">3</span>    <span class="kw">needs</span> <span class="pun">{</span> net <span class="pun">}</span>
+<span class="ln">4</span>    <span class="cm">timeout: 30s</span>
+<span class="ln">5</span>    <span class="cm">retry: 2</span>
+<span class="ln">6</span><span class="pun">{</span>
+<span class="ln">7</span>    <span class="kw">let</span> url <span class="pun">=</span> <span class="str">"https://api/${repo}/pr/${pr}"</span>
+<span class="ln">8</span>    <span class="kw">let</span> resp <span class="pun">=</span> <span class="fn">http.get</span><span class="pun">(</span>url<span class="pun">)?</span></div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="card-tag tool"><span class="dot"></span>Tool</span>
+            <span class="card-difficulty"><span class="pip on"></span><span class="pip on"></span><span class="pip"></span></span>
+          </div>
+          <h3>PR analyzer</h3>
+          <p class="card-desc">Fetches a pull request, parses the diff, returns a typed risk assessment. The canonical Cleat tool example.</p>
+          <div class="card-foot">
+            <span class="lines"><span class="num">42</span> lines</span>
+            <span class="open">View source →</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- 3: LLM token stream -->
+      <article class="card reveal" data-tags="stream" data-name="llm tokens streaming chat">
+        <div class="card-preview"><span class="ln">1</span><span class="kw">stream</span> <span class="fn">tokens</span><span class="pun">(</span>prompt<span class="pun">:</span> <span class="typ">string</span><span class="pun">)</span> <span class="pun">-></span> <span class="typ">string</span>
+<span class="ln">2</span>    <span class="kw">needs</span> <span class="pun">{</span> llm <span class="pun">}</span>
+<span class="ln">3</span>    <span class="cm">buffer: 16</span>
+<span class="ln">4</span><span class="pun">{</span>
+<span class="ln">5</span>    <span class="kw">let</span> stream <span class="pun">=</span> <span class="fn">llm.stream</span><span class="pun">(</span>prompt<span class="pun">)</span>
+<span class="ln">6</span>    <span class="kw">for</span> chunk <span class="kw">in</span> stream <span class="pun">{</span>
+<span class="ln">7</span>        <span class="kw">yield</span> chunk.text
+<span class="ln">8</span>    <span class="pun">}</span>
+<span class="ln">9</span><span class="pun">}</span></div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="card-tag stream"><span class="dot"></span>Stream</span>
+            <span class="card-difficulty"><span class="pip on"></span><span class="pip"></span><span class="pip"></span></span>
+          </div>
+          <h3>LLM token stream</h3>
+          <p class="card-desc">Streams tokens from an LLM with backpressure-aware buffering. Wraps <code style="font-family:var(--mono);font-size:11px;color:var(--molten-2)">std/llm</code> for safe consumption.</p>
+          <div class="card-foot">
+            <span class="lines"><span class="num">18</span> lines</span>
+            <span class="open">View source →</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- 4: PR review state machine -->
+      <article class="card reveal" data-tags="state" data-name="state machine pr review approval">
+        <div class="card-preview"><span class="ln">1</span><span class="kw">state</span> <span class="typ">PRReview</span> <span class="pun">{</span>
+<span class="ln">2</span>    initial<span class="pun">:</span> Pending
+<span class="ln">3</span>    Pending <span class="pun">-></span> InReview <span class="pun">{</span> <span class="kw">when</span><span class="pun">:</span> assigned <span class="pun">}</span>
+<span class="ln">4</span>    InReview <span class="pun">-></span> Approved <span class="pun">{</span>
+<span class="ln">5</span>        <span class="kw">when</span><span class="pun">:</span> approved && ci_green
+<span class="ln">6</span>    <span class="pun">}</span>
+<span class="ln">7</span>    Approved <span class="pun">-></span> Merged <span class="pun">{</span> <span class="kw">when</span><span class="pun">:</span> merged <span class="pun">}</span>
+<span class="ln">8</span>    any <span class="pun">-></span> Cancelled <span class="pun">{</span> <span class="kw">when</span><span class="pun">:</span> closed <span class="pun">}</span></div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="card-tag state"><span class="dot"></span>State</span>
+            <span class="card-difficulty"><span class="pip on"></span><span class="pip on"></span><span class="pip"></span></span>
+          </div>
+          <h3>PR review state machine</h3>
+          <p class="card-desc">A complete pull request lifecycle modeled as a state machine with reachability checks at compile time.</p>
+          <div class="card-foot">
+            <span class="lines"><span class="num">31</span> lines</span>
+            <span class="open">View source →</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- 5: Audit chain -->
+      <article class="card reveal" data-tags="chain" data-name="audit trail provenance signing">
+        <div class="card-preview"><span class="ln">1</span><span class="kw">chain</span> <span class="typ">AuditTrail</span> <span class="pun">{</span>
+<span class="ln">2</span>    signing<span class="pun">:</span> ed25519
+<span class="ln">3</span>    <span class="cm">@retention(7y)</span>
+<span class="ln">4</span>    record <span class="typ">Entry</span> <span class="pun">{</span>
+<span class="ln">5</span>        source<span class="pun">:</span> <span class="typ">string</span><span class="pun">,</span>
+<span class="ln">6</span>        action<span class="pun">:</span> <span class="typ">string</span><span class="pun">,</span>
+<span class="ln">7</span>        hash<span class="pun">:</span> sha256<span class="pun">,</span>
+<span class="ln">8</span>        timestamp<span class="pun">:</span> <span class="typ">time</span><span class="pun">,</span>
+<span class="ln">9</span>    <span class="pun">}</span></div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="card-tag chain"><span class="dot"></span>Chain</span>
+            <span class="card-difficulty"><span class="pip on"></span><span class="pip on"></span><span class="pip"></span></span>
+          </div>
+          <h3>Cryptographic audit chain</h3>
+          <p class="card-desc">Signed, append-only log of every action your AI takes. Ed25519 signatures, SHA-256 content addressing, 7-year retention.</p>
+          <div class="card-foot">
+            <span class="lines"><span class="num">54</span> lines</span>
+            <span class="open">View source →</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- 6: HTTP fetcher -->
+      <article class="card reveal" data-tags="tool" data-name="http get fetch json api">
+        <div class="card-preview"><span class="ln">1</span><span class="kw">import</span> <span class="str">"std/http"</span>
+<span class="ln">2</span><span class="kw">import</span> <span class="str">"std/json"</span>
+<span class="ln">3</span>
+<span class="ln">4</span><span class="kw">tool</span> <span class="fn">fetch_json</span><span class="pun">(</span>url<span class="pun">:</span> <span class="typ">string</span><span class="pun">)</span>
+<span class="ln">5</span>    <span class="pun">-></span> <span class="typ">Result</span><span class="pun">[</span>json.<span class="typ">Value</span><span class="pun">,</span> <span class="typ">string</span><span class="pun">]</span>
+<span class="ln">6</span>    <span class="kw">needs</span> <span class="pun">{</span> net <span class="pun">}</span>
+<span class="ln">7</span>    <span class="cm">timeout: 10s</span></div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="card-tag tool"><span class="dot"></span>Tool</span>
+            <span class="card-difficulty"><span class="pip on"></span><span class="pip"></span><span class="pip"></span></span>
+          </div>
+          <h3>HTTP JSON fetcher</h3>
+          <p class="card-desc">Generic HTTP GET with JSON parsing and typed error returns. Common building block for API integrations.</p>
+          <div class="card-foot">
+            <span class="lines"><span class="num">22</span> lines</span>
+            <span class="open">View source →</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- 7: file processor -->
+      <article class="card reveal" data-tags="tool" data-name="file fs read write batch">
+        <div class="card-preview"><span class="ln">1</span><span class="kw">tool</span> <span class="fn">process_files</span><span class="pun">(</span>dir<span class="pun">:</span> <span class="typ">string</span><span class="pun">)</span>
+<span class="ln">2</span>    <span class="pun">-></span> <span class="typ">Result</span><span class="pun">[</span><span class="typ">int</span><span class="pun">,</span> <span class="typ">string</span><span class="pun">]</span>
+<span class="ln">3</span>    <span class="kw">needs</span> <span class="pun">{</span> fs <span class="pun">}</span>
+<span class="ln">4</span><span class="pun">{</span>
+<span class="ln">5</span>    <span class="kw">let</span> files <span class="pun">=</span> fs.<span class="fn">list</span><span class="pun">(</span>dir<span class="pun">)?</span>
+<span class="ln">6</span>    <span class="kw">let</span> count <span class="pun">=</span> files
+<span class="ln">7</span>      |> <span class="fn">filter</span><span class="pun">(</span><span class="kw">fn</span><span class="pun">(</span>f<span class="pun">)</span> f.endswith<span class="pun">(</span><span class="str">".txt"</span><span class="pun">))</span></div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="card-tag tool"><span class="dot"></span>Tool</span>
+            <span class="card-difficulty"><span class="pip on"></span><span class="pip on"></span><span class="pip"></span></span>
+          </div>
+          <h3>Batch file processor</h3>
+          <p class="card-desc">Walks a directory, filters by extension, processes each file. Demonstrates the pipe operator and <code style="font-family:var(--mono);font-size:11px;color:var(--molten-2)">std/fs</code>.</p>
+          <div class="card-foot">
+            <span class="lines"><span class="num">38</span> lines</span>
+            <span class="open">View source →</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- 8: order workflow state -->
+      <article class="card reveal" data-tags="state" data-name="order workflow ecommerce checkout">
+        <div class="card-preview"><span class="ln">1</span><span class="kw">state</span> <span class="typ">OrderWorkflow</span> <span class="pun">{</span>
+<span class="ln">2</span>    initial<span class="pun">:</span> Cart
+<span class="ln">3</span>    Cart <span class="pun">-></span> CheckedOut <span class="pun">{</span>
+<span class="ln">4</span>        <span class="kw">when</span><span class="pun">:</span> payment_authorized
+<span class="ln">5</span>    <span class="pun">}</span>
+<span class="ln">6</span>    CheckedOut <span class="pun">-></span> Shipped <span class="pun">{</span>
+<span class="ln">7</span>        <span class="kw">when</span><span class="pun">:</span> warehouse_picked
+<span class="ln">8</span>    <span class="pun">}</span></div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="card-tag state"><span class="dot"></span>State</span>
+            <span class="card-difficulty"><span class="pip on"></span><span class="pip on"></span><span class="pip on"></span></span>
+          </div>
+          <h3>E-commerce order workflow</h3>
+          <p class="card-desc">Cart → Checkout → Shipped → Delivered with refund branches. Shows guards, terminal states, and rollback patterns.</p>
+          <div class="card-foot">
+            <span class="lines"><span class="num">67</span> lines</span>
+            <span class="open">View source →</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- 9: data pipeline stream -->
+      <article class="card reveal" data-tags="stream" data-name="pipeline data etl streaming transform">
+        <div class="card-preview"><span class="ln">1</span><span class="kw">stream</span> <span class="fn">pipeline</span><span class="pun">(</span>source<span class="pun">:</span> <span class="typ">string</span><span class="pun">)</span>
+<span class="ln">2</span>    <span class="pun">-></span> <span class="typ">Record</span>
+<span class="ln">3</span>    <span class="kw">needs</span> <span class="pun">{</span> net<span class="pun">,</span> fs <span class="pun">}</span>
+<span class="ln">4</span>    <span class="cm">buffer: 64</span>
+<span class="ln">5</span><span class="pun">{</span>
+<span class="ln">6</span>    <span class="kw">for</span> raw <span class="kw">in</span> <span class="fn">read_chunks</span><span class="pun">(</span>source<span class="pun">)</span> <span class="pun">{</span>
+<span class="ln">7</span>        <span class="kw">let</span> parsed <span class="pun">=</span> <span class="fn">parse</span><span class="pun">(</span>raw<span class="pun">)?</span>
+<span class="ln">8</span>        <span class="kw">yield</span> <span class="fn">enrich</span><span class="pun">(</span>parsed<span class="pun">)</span></div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="card-tag stream"><span class="dot"></span>Stream</span>
+            <span class="card-difficulty"><span class="pip on"></span><span class="pip on"></span><span class="pip"></span></span>
+          </div>
+          <h3>ETL pipeline</h3>
+          <p class="card-desc">Streaming extract → transform → load with bounded buffers. Backpressure ensures upstream slows when downstream lags.</p>
+          <div class="card-foot">
+            <span class="lines"><span class="num">71</span> lines</span>
+            <span class="open">View source →</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- 10: rate limiter -->
+      <article class="card reveal" data-tags="tool" data-name="rate limit throttle leaky bucket">
+        <div class="card-preview"><span class="ln">1</span><span class="kw">type</span> <span class="typ">RateLimiter</span> <span class="pun">=</span> <span class="kw">struct</span> <span class="pun">{</span>
+<span class="ln">2</span>    capacity<span class="pun">:</span> <span class="typ">int</span><span class="pun">,</span>
+<span class="ln">3</span>    tokens<span class="pun">:</span> <span class="typ">float</span><span class="pun">,</span>
+<span class="ln">4</span>    refill_rate<span class="pun">:</span> <span class="typ">float</span><span class="pun">,</span>
+<span class="ln">5</span><span class="pun">}</span>
+<span class="ln">6</span>
+<span class="ln">7</span><span class="kw">tool</span> <span class="fn">try_acquire</span><span class="pun">(</span>l<span class="pun">:</span> <span class="typ">RateLimiter</span><span class="pun">)</span>
+<span class="ln">8</span>    <span class="pun">-></span> <span class="typ">bool</span> <span class="kw">needs</span> <span class="pun">{</span> time <span class="pun">}</span></div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="card-tag tool"><span class="dot"></span>Tool</span>
+            <span class="card-difficulty"><span class="pip on"></span><span class="pip on"></span><span class="pip"></span></span>
+          </div>
+          <h3>Token bucket rate limiter</h3>
+          <p class="card-desc">A leaky-bucket rate limiter with deterministic test clocks for repeatable tests. No flakiness.</p>
+          <div class="card-foot">
+            <span class="lines"><span class="num">48</span> lines</span>
+            <span class="open">View source →</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- 11: retry with backoff -->
+      <article class="card reveal" data-tags="tool" data-name="retry backoff exponential resilient">
+        <div class="card-preview"><span class="ln">1</span><span class="kw">tool</span> <span class="fn">resilient_call</span><span class="pun">(</span>url<span class="pun">:</span> <span class="typ">string</span><span class="pun">)</span>
+<span class="ln">2</span>    <span class="pun">-></span> <span class="typ">Result</span><span class="pun">[</span>http.<span class="typ">Response</span><span class="pun">,</span> <span class="typ">string</span><span class="pun">]</span>
+<span class="ln">3</span>    <span class="kw">needs</span> <span class="pun">{</span> net<span class="pun">,</span> time <span class="pun">}</span>
+<span class="ln">4</span>    <span class="cm">timeout: 5s</span>
+<span class="ln">5</span>    <span class="cm">retry: 5</span>
+<span class="ln">6</span>    <span class="cm">backoff: exponential</span>
+<span class="ln">7</span><span class="pun">{</span>
+<span class="ln">8</span>    <span class="kw">return</span> <span class="fn">http.get</span><span class="pun">(</span>url<span class="pun">)</span></div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="card-tag tool"><span class="dot"></span>Tool</span>
+            <span class="card-difficulty"><span class="pip on"></span><span class="pip"></span><span class="pip"></span></span>
+          </div>
+          <h3>Resilient HTTP with backoff</h3>
+          <p class="card-desc">Demonstrates declarative retry policies with exponential backoff. Five lines of config, zero glue code.</p>
+          <div class="card-foot">
+            <span class="lines"><span class="num">14</span> lines</span>
+            <span class="open">View source →</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- 12: agent loop -->
+      <article class="card reveal" data-tags="tool stream chain" data-name="agent loop llm reasoning multi-step">
+        <div class="card-preview"><span class="ln">1</span><span class="kw">tool</span> <span class="fn">agent_step</span><span class="pun">(</span>state<span class="pun">:</span> <span class="typ">AgentState</span><span class="pun">)</span>
+<span class="ln">2</span>    <span class="pun">-></span> <span class="typ">Result</span><span class="pun">[</span><span class="typ">Action</span><span class="pun">,</span> <span class="typ">string</span><span class="pun">]</span>
+<span class="ln">3</span>    <span class="kw">needs</span> <span class="pun">{</span> llm<span class="pun">,</span> net <span class="pun">}</span>
+<span class="ln">4</span><span class="pun">{</span>
+<span class="ln">5</span>    <span class="kw">let</span> reasoning <span class="pun">=</span> <span class="fn">llm.complete</span><span class="pun">(</span>state.prompt<span class="pun">)?</span>
+<span class="ln">6</span>    <span class="kw">let</span> action <span class="pun">=</span> <span class="fn">parse_action</span><span class="pun">(</span>reasoning<span class="pun">)?</span>
+<span class="ln">7</span>    AuditTrail.<span class="fn">append</span><span class="pun">(</span>action<span class="pun">)</span></div>
+        <div class="card-body">
+          <div class="card-tags">
+            <span class="card-tag tool"><span class="dot"></span>Tool</span>
+            <span class="card-tag chain"><span class="dot"></span>Chain</span>
+            <span class="card-difficulty"><span class="pip on"></span><span class="pip on"></span><span class="pip on"></span></span>
+          </div>
+          <h3>Agent reasoning loop</h3>
+          <p class="card-desc">A complete agent: LLM reasoning, action parsing, tool execution, audit trail. Combines three primitives.</p>
+          <div class="card-foot">
+            <span class="lines"><span class="num">94</span> lines</span>
+            <span class="open">View source →</span>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- Empty state -->
+    <div class="empty" id="empty">
+      <div class="icon">∅</div>
+      <h3>No examples match.</h3>
+      <p>Try a broader filter or clear your search. The full archive lives on GitHub if you can't find what you need here.</p>
+      <button onclick="clearAll()">Reset filters</button>
+    </div>
+  </div>
+</section>
+
+<!-- Modal -->
+<div class="modal-backdrop" id="modal-backdrop">
+  <div class="modal" id="modal">
+    <div class="modal-head">
+      <div class="info">
+        <div class="tags" id="modal-tags"></div>
+        <h2 id="modal-title">—</h2>
+        <div class="filename" id="modal-filename">—</div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <pre id="modal-code">—</pre>
+    </div>
+    <div class="modal-foot">
+      <span class="lhs" id="modal-meta">—</span>
+      <div class="actions">
+        <button onclick="copyCode()">Copy</button>
+        <a href="#">↗ View on GitHub</a>
+        <button class="primary">Open in playground</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <svg><use href="#cleat-logo"/></svg>
+        <span>Cleat · v0.1.0-alpha</span>
+      </div>
+      <div>github.com/cleat-lang/cleat · MIT</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Reveal-on-scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Filter & search
+  const cards = document.querySelectorAll('.card');
+  const chips = document.querySelectorAll('.chip');
+  const searchInput = document.getElementById('search');
+  const empty = document.getElementById('empty');
+  const visibleCount = document.getElementById('visible-count');
+  let activeFilter = 'all';
+
+  function applyFilters() {
+    const q = searchInput.value.toLowerCase().trim();
+    let visible = 0;
+    cards.forEach(card => {
+      const tags = (card.dataset.tags || '').split(' ');
+      const name = (card.dataset.name || '').toLowerCase();
+      const titleEl = card.querySelector('h3');
+      const descEl = card.querySelector('.card-desc');
+      const title = titleEl ? titleEl.textContent.toLowerCase() : '';
+      const desc = descEl ? descEl.textContent.toLowerCase() : '';
+      const passesFilter = activeFilter === 'all' || tags.includes(activeFilter);
+      const passesSearch = !q || name.includes(q) || title.includes(q) || desc.includes(q);
+      const show = passesFilter && passesSearch;
+      card.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    visibleCount.textContent = visible;
+    empty.classList.toggle('show', visible === 0);
+  }
+
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      chips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      activeFilter = chip.dataset.filter;
+      applyFilters();
+    });
+  });
+  searchInput.addEventListener('input', applyFilters);
+
+  function clearAll() {
+    chips.forEach(c => c.classList.remove('active'));
+    document.querySelector('.chip[data-filter="all"]').classList.add('active');
+    activeFilter = 'all';
+    searchInput.value = '';
+    applyFilters();
+  }
+
+  // Modal — fills with full source from the card preview (extended)
+  const modalBackdrop = document.getElementById('modal-backdrop');
+  const modalTitle = document.getElementById('modal-title');
+  const modalFilename = document.getElementById('modal-filename');
+  const modalCode = document.getElementById('modal-code');
+  const modalMeta = document.getElementById('modal-meta');
+  const modalTags = document.getElementById('modal-tags');
+
+  cards.forEach(card => {
+    card.addEventListener('click', () => {
+      const title = card.querySelector('h3').textContent;
+      const desc = card.querySelector('.card-desc').textContent;
+      const lines = card.querySelector('.lines').textContent;
+      const tags = card.querySelectorAll('.card-tag');
+      const previewCode = card.querySelector('.card-preview').innerHTML;
+
+      modalTitle.textContent = title;
+      modalFilename.textContent = title.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '') + '.cleat';
+      modalCode.innerHTML = previewCode +
+        '\n<span class="cm">// ... continues for ' + lines.replace('lines','more lines') + ' total. Click "View on GitHub" for the full source.</span>';
+      modalMeta.textContent = lines + ' · alpha · MIT';
+      modalTags.innerHTML = '';
+      tags.forEach(t => {
+        const clone = t.cloneNode(true);
+        modalTags.appendChild(clone);
+      });
+      modalBackdrop.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
+  function closeModal() {
+    modalBackdrop.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  modalBackdrop.addEventListener('click', (e) => {
+    if (e.target === modalBackdrop) closeModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  function copyCode() {
+    const text = modalCode.innerText;
+    navigator.clipboard.writeText(text);
+  }
+
+  // Initial count
+  applyFilters();
+</script>
+
+</body>
+</html>

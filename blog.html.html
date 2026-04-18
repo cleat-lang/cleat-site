@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Blog · Cleat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #0c0c0d;
+    --bg-2:      #131315;
+    --bg-3:      #1a1a1d;
+    --ink:       #ededea;
+    --ink-dim:   #a7a7a1;
+    --ink-faint: #6a6a64;
+    --rule:      #2a2a2d;
+    --rule-soft: #1f1f22;
+    --molten:    #ff7a18;
+    --molten-2:  #ffb454;
+    --green:     #8db580;
+    --blue:      #7aa6c7;
+    --purple:    #b693c4;
+    --serif:     'Fraunces', 'Times New Roman', serif;
+    --mono:      'JetBrains Mono', ui-monospace, monospace;
+    --sans:      'Inter', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' /%3E%3C/svg%3E");
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* ─── NAV ─── */
+  nav.topnav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 18px 32px;
+    background: rgba(12,12,13,0.78);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .nav-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-brand { display: flex; align-items: center; gap: 12px; }
+  .nav-brand svg { width: 28px; height: 28px; }
+  .nav-brand .word {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 19px;
+  }
+  .nav-links { display: flex; align-items: center; gap: 32px; }
+  .nav-links a {
+    color: var(--ink-dim);
+    font-size: 13px;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--ink); }
+  .nav-cta {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink);
+    border: 1px solid var(--rule);
+    padding: 8px 14px;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+  .nav-cta:hover { border-color: var(--molten); color: var(--molten-2); }
+
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* ─── HEADER ─── */
+  .blog-header {
+    padding: 160px 0 70px;
+    border-bottom: 1px solid var(--rule-soft);
+    position: relative;
+    overflow: hidden;
+  }
+  .blog-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 800px 400px at 30% 0%, rgba(255,122,24,0.04), transparent 70%);
+    pointer-events: none;
+  }
+  .blog-header-inner {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 60px;
+    align-items: end;
+    position: relative;
+  }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--ink-faint);
+    margin-bottom: 24px;
+  }
+  .eyebrow .dot {
+    width: 6px; height: 6px;
+    background: var(--molten);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--molten);
+  }
+  .blog-header h1 {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(48px, 6vw, 88px);
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+    margin-bottom: 18px;
+  }
+  .blog-header h1 em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--molten-2);
+  }
+  .blog-header .lede {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 19px;
+    line-height: 1.5;
+    color: var(--ink-dim);
+    max-width: 520px;
+  }
+
+  .filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding-bottom: 6px;
+  }
+  .filter-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-dim);
+    padding: 7px 12px;
+    border: 1px solid var(--rule);
+    border-radius: 99px;
+    background: var(--bg-2);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .filter-tag:hover { color: var(--ink); border-color: var(--ink-faint); }
+  .filter-tag.active {
+    color: var(--bg);
+    background: var(--molten-2);
+    border-color: var(--molten-2);
+  }
+
+  /* ─── FEATURED POST ─── */
+  .featured {
+    padding: 70px 0 60px;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .featured-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--molten);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .featured-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+  .featured-post {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 56px;
+    align-items: center;
+  }
+  .featured-visual {
+    aspect-ratio: 4 / 3;
+    background: linear-gradient(135deg, #1a1a1d 0%, #0c0c0d 100%);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .featured-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 30% 30%, rgba(255,122,24,0.15), transparent 50%),
+      linear-gradient(135deg, transparent 0%, rgba(255,180,84,0.05) 100%);
+  }
+  .featured-visual::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+  .featured-visual svg.hero-mark {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    color: var(--molten-2);
+    filter: drop-shadow(0 0 30px rgba(255,122,24,0.3));
+  }
+  .featured-visual .badge {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--molten);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    padding: 5px 10px;
+    background: rgba(12,12,13,0.7);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    backdrop-filter: blur(8px);
+  }
+  .featured-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 20px;
+  }
+  .featured-meta .cat { color: var(--molten); }
+  .featured-meta .sep { color: var(--rule); }
+  .featured-content h2 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(32px, 3.6vw, 48px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+  .featured-content h2 a:hover { color: var(--molten-2); transition: color 0.2s; }
+  .featured-content .excerpt {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 1.55;
+    color: var(--ink-dim);
+    margin-bottom: 28px;
+  }
+  .author-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule-soft);
+  }
+  .author-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--bg-3);
+    border: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--serif);
+    font-size: 14px;
+    color: var(--molten-2);
+    font-weight: 500;
+  }
+  .author-info {
+    flex: 1;
+  }
+  .author-info .name {
+    font-size: 13px;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+  .author-info .title {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+  .read-more {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--molten-2);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    transition: gap 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .read-more:hover { gap: 12px; }
+
+  /* ─── ARCHIVE ─── */
+  .archive {
+    padding: 80px 0 100px;
+  }
+  .archive-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 48px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .archive-header h3 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 32px;
+    letter-spacing: -0.02em;
+  }
+  .archive-header .count {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  .post-list {
+    display: flex;
+    flex-direction: column;
+  }
+  .post-row {
+    display: grid;
+    grid-template-columns: 110px 1fr 220px;
+    gap: 40px;
+    align-items: start;
+    padding: 32px 0;
+    border-bottom: 1px solid var(--rule-soft);
+    transition: padding 0.2s;
+    position: relative;
+  }
+  .post-row:hover {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .post-row:hover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--bg-2);
+    border-radius: 4px;
+    z-index: -1;
+  }
+  .post-row .date {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding-top: 6px;
+  }
+  .post-row .date .day {
+    color: var(--ink);
+    font-size: 22px;
+    font-family: var(--serif);
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: -0.01em;
+    display: block;
+    margin-bottom: 2px;
+  }
+  .post-row .body {
+    min-width: 0;
+  }
+  .post-row .meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 10px;
+  }
+  .post-row .meta .cat { color: var(--molten); }
+  .post-row .meta .sep { color: var(--rule); }
+  .post-row h4 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    margin-bottom: 10px;
+    color: var(--ink);
+  }
+  .post-row:hover h4 { color: var(--molten-2); transition: color 0.2s; }
+  .post-row .excerpt {
+    font-size: 14px;
+    color: var(--ink-dim);
+    line-height: 1.6;
+    max-width: 620px;
+  }
+  .post-row .author-mini {
+    text-align: right;
+    padding-top: 6px;
+  }
+  .post-row .author-mini .name {
+    font-size: 13px;
+    color: var(--ink);
+  }
+  .post-row .author-mini .role {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-top: 2px;
+  }
+  .post-row .read-time {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-top: 8px;
+  }
+
+  /* ─── SUBSCRIBE ─── */
+  .subscribe {
+    padding: 100px 0;
+    border-top: 1px solid var(--rule-soft);
+    text-align: center;
+    background: linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .subscribe::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 700px 300px at 50% 50%, rgba(255,122,24,0.05), transparent 70%);
+    pointer-events: none;
+  }
+  .subscribe h2 {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(36px, 4.5vw, 56px);
+    letter-spacing: -0.025em;
+    line-height: 1;
+    margin-bottom: 18px;
+    position: relative;
+  }
+  .subscribe h2 em { font-style: italic; color: var(--molten-2); font-weight: 400; }
+  .subscribe p {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 18px;
+    color: var(--ink-dim);
+    margin-bottom: 36px;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+  }
+  .sub-form {
+    display: inline-flex;
+    background: var(--bg-2);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 20px 50px -10px rgba(0,0,0,0.5);
+    transition: border-color 0.2s;
+  }
+  .sub-form:focus-within { border-color: var(--molten); }
+  .sub-form input {
+    background: transparent;
+    border: none;
+    padding: 14px 18px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 14px;
+    width: 320px;
+    outline: none;
+  }
+  .sub-form input::placeholder { color: var(--ink-faint); }
+  .sub-form button {
+    background: var(--ink);
+    color: var(--bg);
+    border: none;
+    padding: 0 22px;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .sub-form button:hover { background: var(--molten-2); }
+  .sub-meta {
+    margin-top: 20px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    position: relative;
+  }
+  .sub-meta a { color: var(--molten-2); text-decoration: underline; text-underline-offset: 3px; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    padding: 50px 0;
+    border-top: 1px solid var(--rule-soft);
+  }
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .footer-brand { display: flex; align-items: center; gap: 10px; }
+  .footer-brand svg { width: 22px; height: 22px; }
+
+  @media (max-width: 900px) {
+    .blog-header-inner { grid-template-columns: 1fr; gap: 40px; }
+    .featured-post { grid-template-columns: 1fr; gap: 40px; }
+    .featured-visual { aspect-ratio: 16/10; }
+    .post-row { grid-template-columns: 90px 1fr; }
+    .post-row .author-mini { display: none; }
+  }
+  @media (max-width: 640px) {
+    .nav-links a:not(.nav-cta) { display: none; }
+    .blog-header { padding: 120px 0 50px; }
+    .post-row { grid-template-columns: 1fr; gap: 12px; }
+    .post-row .date .day { font-size: 16px; display: inline; margin-right: 6px; }
+    .sub-form { flex-direction: column; width: 100%; max-width: 360px; }
+    .sub-form input { width: 100%; }
+    .sub-form button { padding: 14px; }
+    .footer-inner { flex-direction: column; gap: 12px; }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="cleat-logo" viewBox="0 0 200 200">
+      <g fill="currentColor">
+        <path d="M30 80 L70 80 L80 92 L120 92 L130 80 L170 80 L160 100 L40 100 Z"/>
+        <rect x="86" y="76" width="11" height="32"/>
+        <rect x="103" y="76" width="11" height="32"/>
+        <path d="M70 108 L82 108 L88 128 L72 128 Z"/>
+        <path d="M118 108 L130 108 L128 128 L112 128 Z"/>
+        <path d="M50 132 L150 132 L160 144 L40 144 Z"/>
+        <rect x="48" y="148" width="104" height="6"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- NAV -->
+<nav class="topnav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">
+      <svg><use href="#cleat-logo"/></svg>
+      <span class="word">Cleat</span>
+    </a>
+    <div class="nav-links">
+      <a href="why.html">Why Cleat</a>
+      <a href="docs.html">Docs</a>
+      <a href="blog.html" class="active">Blog</a>
+      <a href="changelog.html">Changelog</a>
+      <a href="#" class="nav-cta">↗ GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HEADER -->
+<header class="blog-header">
+  <div class="container">
+    <div class="blog-header-inner reveal">
+      <div>
+        <div class="eyebrow">
+          <span class="dot"></span>
+          The Cleat blog · notes from the forge
+        </div>
+        <h1>Field <em>notes.</em></h1>
+        <p class="lede">
+          Design decisions, release stories, and longer-form essays on building a language for auditable AI orchestration. Written by the people building it.
+        </p>
+      </div>
+      <div class="filters">
+        <span class="filter-tag active">All</span>
+        <span class="filter-tag">Design</span>
+        <span class="filter-tag">Releases</span>
+        <span class="filter-tag">Engineering</span>
+        <span class="filter-tag">Tutorials</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- FEATURED -->
+<section class="featured">
+  <div class="container">
+    <div class="featured-label reveal">Featured · April 2026</div>
+    <div class="featured-post reveal">
+      <div class="featured-visual">
+        <div class="badge">v0.1 launch</div>
+        <svg class="hero-mark"><use href="#cleat-logo"/></svg>
+      </div>
+      <div class="featured-content">
+        <div class="featured-meta">
+          <span class="cat">Announcement</span>
+          <span class="sep">·</span>
+          <span>April 17, 2026</span>
+          <span class="sep">·</span>
+          <span>9 min read</span>
+        </div>
+        <h2><a href="#">Introducing Cleat: a compiled language for backends that can prove what they did.</a></h2>
+        <p class="excerpt">
+          We're publishing the first alpha of Cleat, a statically typed orchestration language designed for the agentic era. Here's why we built a new language instead of another framework, what's in the box today, and where we're going from here.
+        </p>
+        <div class="author-row">
+          <div class="author-avatar">J</div>
+          <div class="author-info">
+            <div class="name">Jayden Carter</div>
+            <div class="title">Founder · DarkNautica</div>
+          </div>
+          <a href="#" class="read-more">Read essay →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ARCHIVE -->
+<section class="archive">
+  <div class="container">
+    <div class="archive-header reveal">
+      <h3>All posts</h3>
+      <span class="count">07 posts · sorted newest first</span>
+    </div>
+
+    <div class="post-list">
+
+      <article class="post-row reveal">
+        <div class="date">
+          <span class="day">11</span>
+          Apr · 2026
+        </div>
+        <div class="body">
+          <div class="meta">
+            <span class="cat">Design</span>
+            <span class="sep">·</span>
+            <span>Effect system</span>
+          </div>
+          <h4><a href="#">Why <code style="font-family:var(--mono);font-size:0.85em;color:var(--molten-2)">needs</code> is a keyword, not a decorator</a></h4>
+          <p class="excerpt">
+            Decorators give you the syntax of effect tracking without the enforcement. We made <code style="font-family:var(--mono);font-size:0.9em;color:var(--molten-2)">needs</code> part of the type system from day one. Here's what we tried first, what broke, and what convinced us to bake it into the grammar.
+          </p>
+        </div>
+        <div class="author-mini">
+          <div class="name">Jayden Carter</div>
+          <div class="role">Founder</div>
+          <div class="read-time">7 min read</div>
+        </div>
+      </article>
+
+      <article class="post-row reveal">
+        <div class="date">
+          <span class="day">28</span>
+          Mar · 2026
+        </div>
+        <div class="body">
+          <div class="meta">
+            <span class="cat">Engineering</span>
+            <span class="sep">·</span>
+            <span>Compiler</span>
+          </div>
+          <h4><a href="#">Building a Rustc-style diagnostic renderer in 600 lines of Go</a></h4>
+          <p class="excerpt">
+            Good error messages are a feature, not an afterthought. A walkthrough of how Cleat's diagnostics work — from token spans to the squiggly underlines — and why we copied Rust's approach instead of Go's.
+          </p>
+        </div>
+        <div class="author-mini">
+          <div class="name">Jayden Carter</div>
+          <div class="role">Founder</div>
+          <div class="read-time">12 min read</div>
+        </div>
+      </article>
+
+      <article class="post-row reveal">
+        <div class="date">
+          <span class="day">14</span>
+          Mar · 2026
+        </div>
+        <div class="body">
+          <div class="meta">
+            <span class="cat">Design</span>
+            <span class="sep">·</span>
+            <span>Provenance</span>
+          </div>
+          <h4><a href="#">Provenance is not a logging problem</a></h4>
+          <p class="excerpt">
+            Every AI orchestration framework eventually adds a "logs" tab. They are all insufficient for the same reasons. An argument for why cryptographically signed, append-only chains belong in the language — not bolted on as a SaaS add-on after the fact.
+          </p>
+        </div>
+        <div class="author-mini">
+          <div class="name">Jayden Carter</div>
+          <div class="role">Founder</div>
+          <div class="read-time">8 min read</div>
+        </div>
+      </article>
+
+      <article class="post-row reveal">
+        <div class="date">
+          <span class="day">02</span>
+          Mar · 2026
+        </div>
+        <div class="body">
+          <div class="meta">
+            <span class="cat">Tutorial</span>
+            <span class="sep">·</span>
+            <span>Getting started</span>
+          </div>
+          <h4><a href="#">Your first Cleat program: a PR analyzer in 40 lines</a></h4>
+          <p class="excerpt">
+            A guided walkthrough of building a real, useful tool with Cleat — from <code style="font-family:var(--mono);font-size:0.9em;color:var(--molten-2)">tool</code> declaration to mocked tests, with every line explained. No toy examples. No "imagine you have an LLM" handwaving.
+          </p>
+        </div>
+        <div class="author-mini">
+          <div class="name">Jayden Carter</div>
+          <div class="role">Founder</div>
+          <div class="read-time">15 min read</div>
+        </div>
+      </article>
+
+      <article class="post-row reveal">
+        <div class="date">
+          <span class="day">19</span>
+          Feb · 2026
+        </div>
+        <div class="body">
+          <div class="meta">
+            <span class="cat">Engineering</span>
+            <span class="sep">·</span>
+            <span>Type checker</span>
+          </div>
+          <h4><a href="#">Inferring effects across module boundaries</a></h4>
+          <p class="excerpt">
+            When function A calls function B which calls function C, who declares the effect? We picked one answer; the other answer is also defensible. Notes on the tradeoffs and why we landed where we did.
+          </p>
+        </div>
+        <div class="author-mini">
+          <div class="name">Jayden Carter</div>
+          <div class="role">Founder</div>
+          <div class="read-time">10 min read</div>
+        </div>
+      </article>
+
+      <article class="post-row reveal">
+        <div class="date">
+          <span class="day">05</span>
+          Feb · 2026
+        </div>
+        <div class="body">
+          <div class="meta">
+            <span class="cat">Design</span>
+            <span class="sep">·</span>
+            <span>State machines</span>
+          </div>
+          <h4><a href="#">What we stole from TLA+ for state reachability</a></h4>
+          <p class="excerpt">
+            The Cleat type checker rejects unreachable states and detects deadlocks at compile time. The trick is older than you think — TLA+ has been doing it for thirty years. A short essay on standing on giants.
+          </p>
+        </div>
+        <div class="author-mini">
+          <div class="name">Jayden Carter</div>
+          <div class="role">Founder</div>
+          <div class="read-time">6 min read</div>
+        </div>
+      </article>
+
+      <article class="post-row reveal">
+        <div class="date">
+          <span class="day">21</span>
+          Jan · 2026
+        </div>
+        <div class="body">
+          <div class="meta">
+            <span class="cat">Design</span>
+            <span class="sep">·</span>
+            <span>First principles</span>
+          </div>
+          <h4><a href="#">A new language? Really?</a></h4>
+          <p class="excerpt">
+            The first post. Why we didn't write another Python library, why we didn't fork an existing language, and what convinced us that orchestration deserves to be a first-class linguistic concern. The mission statement, before there was any code to back it up.
+          </p>
+        </div>
+        <div class="author-mini">
+          <div class="name">Jayden Carter</div>
+          <div class="role">Founder</div>
+          <div class="read-time">11 min read</div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- SUBSCRIBE -->
+<section class="subscribe">
+  <div class="container">
+    <div class="reveal">
+      <h2>Get posts in your <em>inbox.</em></h2>
+      <p>Roughly one essay a month. Design decisions, release notes, the occasional postmortem. No spam, no marketing.</p>
+      <form class="sub-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Subscribed ✓'; this.querySelector('button').style.background='var(--molten-2)';">
+        <input type="email" placeholder="you@domain.com" required />
+        <button type="submit">Subscribe</button>
+      </form>
+      <div class="sub-meta">Or grab the <a href="#">RSS feed ↗</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <svg><use href="#cleat-logo"/></svg>
+        <span>Cleat · v0.1.0-alpha</span>
+      </div>
+      <div>github.com/cleat-lang/cleat · MIT</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Filter tag toggle (visual only — wire to real filtering when posts come from a CMS)
+  document.querySelectorAll('.filter-tag').forEach(tag => {
+    tag.addEventListener('click', () => {
+      document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
+      tag.classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>

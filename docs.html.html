@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Introduction · Cleat Docs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #0c0c0d;
+    --bg-2:      #131315;
+    --bg-3:      #1a1a1d;
+    --ink:       #ededea;
+    --ink-dim:   #a7a7a1;
+    --ink-faint: #6a6a64;
+    --rule:      #2a2a2d;
+    --rule-soft: #1f1f22;
+    --molten:    #ff7a18;
+    --molten-2:  #ffb454;
+    --green:     #8db580;
+    --blue:      #7aa6c7;
+    --purple:    #b693c4;
+    --serif:     'Fraunces', 'Times New Roman', serif;
+    --mono:      'JetBrains Mono', ui-monospace, monospace;
+    --sans:      'Inter', system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Film grain */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' /%3E%3C/svg%3E");
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ─────────────── TOP NAV ─────────────── */
+  .topnav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    height: 60px;
+    background: rgba(12,12,13,0.82);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--rule-soft);
+    display: flex;
+    align-items: center;
+    padding: 0 32px;
+  }
+  .topnav-inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand { display: flex; align-items: center; gap: 11px; }
+  .brand svg { width: 26px; height: 26px; }
+  .brand .word {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 18px;
+    letter-spacing: -0.01em;
+  }
+  .brand .docs-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--molten);
+    padding: 3px 8px;
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    margin-left: 4px;
+  }
+  .topnav-links { display: flex; align-items: center; gap: 28px; }
+  .topnav-links a {
+    color: var(--ink-dim);
+    font-size: 13px;
+    transition: color 0.2s;
+  }
+  .topnav-links a.active { color: var(--ink); }
+  .topnav-links a:hover { color: var(--ink); }
+
+  .search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--bg-2);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 7px 12px;
+    color: var(--ink-faint);
+    font-family: var(--mono);
+    font-size: 12px;
+    min-width: 240px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  .search:hover { border-color: var(--ink-faint); }
+  .search .kbd {
+    margin-left: auto;
+    font-size: 10px;
+    padding: 2px 6px;
+    background: var(--bg-3);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+  }
+
+  /* ─────────────── LAYOUT ─────────────── */
+  .layout {
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr) 220px;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding-top: 60px;
+    min-height: 100vh;
+  }
+
+  /* ─────────────── SIDEBAR ─────────────── */
+  .sidebar {
+    position: sticky;
+    top: 60px;
+    height: calc(100vh - 60px);
+    overflow-y: auto;
+    padding: 40px 24px 40px 32px;
+    border-right: 1px solid var(--rule-soft);
+    font-size: 13.5px;
+  }
+  .sidebar::-webkit-scrollbar { width: 6px; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 3px; }
+
+  .side-section { margin-bottom: 28px; }
+  .side-section h5 {
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--ink-faint);
+    margin-bottom: 10px;
+    padding-left: 10px;
+    font-weight: 500;
+  }
+  .side-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 10px;
+    border-radius: 4px;
+    color: var(--ink-dim);
+    transition: all 0.15s;
+    position: relative;
+  }
+  .side-link:hover {
+    color: var(--ink);
+    background: var(--bg-2);
+  }
+  .side-link.active {
+    color: var(--ink);
+    background: var(--bg-2);
+  }
+  .side-link.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: var(--molten);
+    border-radius: 2px;
+  }
+  .side-link .chev { color: var(--ink-faint); font-size: 11px; }
+  .side-link .pill {
+    margin-left: auto;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--molten-2);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 1px 6px;
+    border: 1px solid rgba(255,180,84,0.3);
+    border-radius: 99px;
+  }
+
+  /* ─────────────── CONTENT ─────────────── */
+  .content {
+    padding: 56px 72px 120px;
+    max-width: 820px;
+    min-width: 0;
+  }
+
+  .breadcrumbs {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .breadcrumbs a:hover { color: var(--molten-2); }
+  .breadcrumbs .sep { color: var(--rule); }
+
+  h1 {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 56px;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 20px;
+  }
+  h1 em { font-style: italic; color: var(--molten-2); font-weight: 400; }
+
+  .subtitle {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 1.5;
+    color: var(--ink-dim);
+    margin-bottom: 40px;
+    max-width: 680px;
+  }
+
+  .subtitle strong { color: var(--ink); font-weight: 400; }
+
+  .content h2 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 30px;
+    letter-spacing: -0.02em;
+    margin-top: 64px;
+    margin-bottom: 16px;
+    padding-top: 20px;
+    border-top: 1px solid var(--rule-soft);
+  }
+  .content h2:first-of-type { border-top: none; padding-top: 0; }
+
+  .content h3 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 21px;
+    letter-spacing: -0.015em;
+    margin-top: 36px;
+    margin-bottom: 12px;
+  }
+
+  .content p {
+    margin-bottom: 18px;
+    color: var(--ink);
+    max-width: 720px;
+  }
+
+  .content p.muted { color: var(--ink-dim); }
+
+  .content ul, .content ol {
+    margin-bottom: 20px;
+    padding-left: 20px;
+    color: var(--ink-dim);
+  }
+  .content li {
+    margin-bottom: 8px;
+    line-height: 1.65;
+  }
+  .content li::marker { color: var(--molten); }
+  .content ul li { list-style: none; position: relative; padding-left: 22px; }
+  .content ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 12px;
+    width: 8px;
+    height: 1px;
+    background: var(--molten);
+  }
+
+  .content strong { color: var(--ink); font-weight: 500; }
+  .content em { color: var(--ink); font-style: italic; }
+
+  .content code {
+    font-family: var(--mono);
+    font-size: 13px;
+    background: var(--bg-2);
+    border: 1px solid var(--rule-soft);
+    padding: 1px 7px;
+    border-radius: 3px;
+    color: var(--molten-2);
+  }
+
+  /* Callouts */
+  .callout {
+    display: flex;
+    gap: 14px;
+    padding: 18px 22px;
+    background: var(--bg-2);
+    border: 1px solid var(--rule-soft);
+    border-left: 2px solid var(--molten);
+    border-radius: 4px;
+    margin: 24px 0 32px;
+  }
+  .callout .icon {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--molten);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 500;
+    flex-shrink: 0;
+    padding-top: 4px;
+    width: 52px;
+  }
+  .callout p { margin: 0; color: var(--ink-dim); font-size: 14px; }
+  .callout p + p { margin-top: 10px; }
+
+  /* Code blocks */
+  .code-block {
+    background: var(--bg-2);
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    margin: 20px 0 28px;
+    overflow: hidden;
+  }
+  .code-block-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--rule);
+    background: var(--bg-3);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .code-block-head .lang { color: var(--molten); }
+  .code-block-head .copy-btn {
+    background: none;
+    border: none;
+    color: var(--ink-faint);
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  .code-block-head .copy-btn:hover { color: var(--molten-2); }
+  .code-block pre {
+    padding: 18px 20px;
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.75;
+    overflow-x: auto;
+    color: var(--ink);
+  }
+  .code-block pre::-webkit-scrollbar { height: 6px; }
+  .code-block pre::-webkit-scrollbar-thumb { background: var(--rule); }
+
+  /* Syntax highlighting */
+  .kw  { color: var(--purple); }
+  .fn  { color: var(--blue); }
+  .str { color: var(--green); }
+  .typ { color: var(--molten-2); }
+  .nm  { color: var(--green); }
+  .cm  { color: var(--ink-faint); font-style: italic; }
+  .pun { color: var(--ink-dim); }
+  .prompt-sym { color: var(--molten); user-select: none; }
+
+  /* What's next cards */
+  .next-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 28px;
+  }
+  .next-card {
+    display: block;
+    padding: 22px;
+    background: var(--bg-2);
+    border: 1px solid var(--rule-soft);
+    border-radius: 5px;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .next-card:hover {
+    border-color: var(--molten);
+    background: var(--bg-3);
+  }
+  .next-card:hover .nc-arrow { transform: translateX(4px); color: var(--molten-2); }
+  .next-card .nc-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 6px;
+  }
+  .next-card .nc-title {
+    font-family: var(--serif);
+    font-size: 19px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .nc-arrow { color: var(--ink-faint); transition: all 0.2s; }
+  .next-card .nc-desc {
+    font-size: 13px;
+    color: var(--ink-dim);
+    line-height: 1.55;
+  }
+
+  /* Bottom page nav */
+  .page-nav {
+    margin-top: 80px;
+    padding-top: 32px;
+    border-top: 1px solid var(--rule-soft);
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .page-nav a {
+    flex: 1;
+    padding: 18px 22px;
+    border: 1px solid var(--rule-soft);
+    border-radius: 5px;
+    transition: all 0.2s;
+  }
+  .page-nav a:hover { border-color: var(--molten); background: var(--bg-2); }
+  .page-nav .dir {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 4px;
+  }
+  .page-nav .title {
+    font-family: var(--serif);
+    font-size: 17px;
+    color: var(--ink);
+  }
+  .page-nav .next { text-align: right; }
+
+  .edit-link {
+    margin-top: 32px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-faint);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.2s;
+  }
+  .edit-link:hover { color: var(--molten-2); }
+
+  /* ─────────────── TOC (RIGHT) ─────────────── */
+  .toc {
+    position: sticky;
+    top: 60px;
+    height: calc(100vh - 60px);
+    overflow-y: auto;
+    padding: 56px 32px 40px 24px;
+    border-left: 1px solid var(--rule-soft);
+    font-size: 12.5px;
+  }
+  .toc h6 {
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--ink-faint);
+    margin-bottom: 16px;
+    font-weight: 500;
+  }
+  .toc a {
+    display: block;
+    color: var(--ink-dim);
+    padding: 5px 0 5px 14px;
+    border-left: 1px solid var(--rule-soft);
+    margin-left: 0;
+    transition: all 0.15s;
+    line-height: 1.5;
+  }
+  .toc a:hover { color: var(--ink); border-left-color: var(--ink-faint); }
+  .toc a.active { color: var(--molten-2); border-left-color: var(--molten); }
+  .toc a.sub { padding-left: 26px; font-size: 12px; }
+
+  /* Responsive */
+  @media (max-width: 1200px) {
+    .layout { grid-template-columns: 260px minmax(0,1fr); }
+    .toc { display: none; }
+    .content { padding: 56px 48px 120px; }
+  }
+  @media (max-width: 860px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .content { padding: 40px 24px 80px; }
+    h1 { font-size: 40px; }
+    .search { min-width: 0; }
+    .topnav-links a:not(.search) { display: none; }
+    .next-cards { grid-template-columns: 1fr; }
+    .page-nav { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Logo symbol -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="cleat-logo" viewBox="0 0 200 200">
+      <g fill="currentColor">
+        <path d="M30 80 L70 80 L80 92 L120 92 L130 80 L170 80 L160 100 L40 100 Z"/>
+        <rect x="86" y="76" width="11" height="32"/>
+        <rect x="103" y="76" width="11" height="32"/>
+        <path d="M70 108 L82 108 L88 128 L72 128 Z"/>
+        <path d="M118 108 L130 108 L128 128 L112 128 Z"/>
+        <path d="M50 132 L150 132 L160 144 L40 144 Z"/>
+        <rect x="48" y="148" width="104" height="6"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ─────────────── TOP NAV ─────────────── -->
+<nav class="topnav">
+  <div class="topnav-inner">
+    <div class="brand">
+      <a href="index.html" style="display:flex;align-items:center;gap:11px">
+        <svg><use href="#cleat-logo"/></svg>
+        <span class="word">Cleat</span>
+      </a>
+      <span class="docs-tag">Docs</span>
+    </div>
+    <div class="topnav-links">
+      <div class="search">
+        <span>⌕</span>
+        <span>Search docs…</span>
+        <span class="kbd">⌘K</span>
+      </div>
+      <a href="#">Stdlib</a>
+      <a href="#">Examples</a>
+      <a href="#">Changelog</a>
+      <a href="#">GitHub ↗</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ─────────────── LAYOUT ─────────────── -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="side-section">
+      <h5>Getting Started</h5>
+      <a href="#" class="side-link active">Introduction</a>
+      <a href="#" class="side-link">Installation</a>
+      <a href="#" class="side-link">Your first program</a>
+      <a href="#" class="side-link">Editor setup</a>
+    </div>
+
+    <div class="side-section">
+      <h5>Language</h5>
+      <a href="#" class="side-link">Types &amp; variables</a>
+      <a href="#" class="side-link">Functions</a>
+      <a href="#" class="side-link">Pattern matching</a>
+      <a href="#" class="side-link">Error handling</a>
+      <a href="#" class="side-link">Pipes &amp; methods</a>
+      <a href="#" class="side-link">Modules &amp; imports</a>
+    </div>
+
+    <div class="side-section">
+      <h5>Primitives</h5>
+      <a href="#" class="side-link">Tools <span class="pill">core</span></a>
+      <a href="#" class="side-link">Streams <span class="pill">core</span></a>
+      <a href="#" class="side-link">State machines <span class="pill">core</span></a>
+      <a href="#" class="side-link">Provenance chains <span class="pill">core</span></a>
+    </div>
+
+    <div class="side-section">
+      <h5>Effect System</h5>
+      <a href="#" class="side-link">Declaring effects</a>
+      <a href="#" class="side-link">Mocking with <code style="font-size:11px">using</code></a>
+      <a href="#" class="side-link">Effect inference</a>
+    </div>
+
+    <div class="side-section">
+      <h5>Tooling</h5>
+      <a href="#" class="side-link">CLI reference</a>
+      <a href="#" class="side-link">Test runner</a>
+      <a href="#" class="side-link">Formatter</a>
+      <a href="#" class="side-link">Diagnostics</a>
+    </div>
+
+    <div class="side-section">
+      <h5>Reference</h5>
+      <a href="#" class="side-link">Grammar</a>
+      <a href="#" class="side-link">Standard library</a>
+      <a href="#" class="side-link">Compiler internals</a>
+    </div>
+  </aside>
+
+  <!-- CONTENT -->
+  <main class="content">
+    <div class="breadcrumbs">
+      <a href="#">Docs</a>
+      <span class="sep">/</span>
+      <a href="#">Getting Started</a>
+      <span class="sep">/</span>
+      <span style="color:var(--ink)">Introduction</span>
+    </div>
+
+    <h1>Welcome to <em>Cleat.</em></h1>
+    <p class="subtitle">
+      Cleat is a <strong>compiled, statically typed orchestration language</strong> for building auditable, stateful AI backends. It compiles to native binaries through Go, ships with a full toolchain, and treats <em>tools</em>, <em>streams</em>, <em>state machines</em>, and <em>provenance chains</em> as first-class primitives—not library abstractions bolted on top of a general-purpose language.
+    </p>
+
+    <h2 id="what">What is Cleat?</h2>
+    <p>
+      Most backends that coordinate AI systems are written in Python or TypeScript, with orchestration libraries stitched together over the top. The result is a familiar one: the language does not know about your tools, your state transitions, or what your functions are actually allowed to touch. Bugs hide in glue code. Effects leak across boundaries. Auditability is an afterthought.
+    </p>
+    <p>
+      Cleat takes a different approach. The compiler itself understands what a <code>tool</code> is, what a <code>stream</code> is, what a <code>state</code> transition is, and what side effects your code is permitted to perform. Programs that violate these rules <strong>do not compile.</strong>
+    </p>
+
+    <div class="callout">
+      <div class="icon">Tenet</div>
+      <div>
+        <p>If a guarantee matters at runtime, it should be enforced at compile time. Tests are good—types are better. The type system is the first line of defense against AI backends that do things they should not.</p>
+      </div>
+    </div>
+
+    <h2 id="philosophy">Design philosophy</h2>
+    <p>Cleat is opinionated in a few specific ways:</p>
+
+    <ul>
+      <li><strong>Effects are declared, not discovered.</strong> Every function states what it touches with <code>needs</code>. The compiler refuses to let a pure function silently reach for the network.</li>
+      <li><strong>Orchestration is syntax, not API.</strong> <code>tool</code>, <code>stream</code>, <code>state</code>, and <code>chain</code> are keywords. Timeouts, retries, buffers, and signing policies live in the language—not in decorators you can forget.</li>
+      <li><strong>Auditability is built in.</strong> Provenance chains are cryptographically signed, append-only, and part of the core language. You do not glue an audit log on later.</li>
+      <li><strong>Tests mock by substitution.</strong> <code>using</code> swaps a tool or effectful function for a typed replacement inside a test block. No mocking frameworks. No monkey-patching.</li>
+      <li><strong>Native binaries, no runtime.</strong> Cleat compiles to Go and produces a single binary. No interpreter to ship, no VM to tune.</li>
+    </ul>
+
+    <h2 id="taste">A taste</h2>
+    <p>Here is a complete, type-checked Cleat program that defines a tool, runs it, and includes a test that mocks the tool entirely:</p>
+
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="lang">analyze.cleat</span>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+<pre><span class="kw">import</span> <span class="str">"std/io"</span>
+<span class="kw">import</span> <span class="str">"std/json"</span>
+<span class="kw">import</span> <span class="str">"std/http"</span>
+
+<span class="kw">type</span> <span class="typ">Analysis</span> <span class="pun">=</span> <span class="kw">struct</span> <span class="pun">{</span>
+    files_changed<span class="pun">:</span> <span class="typ">int</span><span class="pun">,</span>
+    summary<span class="pun">:</span> <span class="typ">string</span><span class="pun">,</span>
+<span class="pun">}</span>
+
+<span class="kw">tool</span> <span class="fn">analyze</span><span class="pun">(</span>repo<span class="pun">:</span> <span class="typ">string</span><span class="pun">,</span> pr<span class="pun">:</span> <span class="typ">int</span><span class="pun">)</span>
+    <span class="pun">-></span> <span class="typ">Result</span><span class="pun">[</span><span class="typ">Analysis</span><span class="pun">,</span> <span class="typ">string</span><span class="pun">]</span>
+    <span class="kw">needs</span> <span class="pun">{</span> net <span class="pun">}</span>
+    <span class="cm">timeout: 30s</span>
+    <span class="cm">retry: 2</span>
+<span class="pun">{</span>
+    <span class="kw">let</span> url <span class="pun">=</span> <span class="str">"https://api.example.com/${repo}/pulls/${pr}"</span>
+    <span class="kw">let</span> resp <span class="pun">=</span> <span class="fn">http.get</span><span class="pun">(</span>url<span class="pun">)?</span>
+    <span class="kw">let</span> data<span class="pun">:</span> <span class="typ">Analysis</span> <span class="pun">=</span> <span class="fn">json.decode</span><span class="pun">(</span>resp.body<span class="pun">)?</span>
+    <span class="kw">return</span> <span class="fn">Ok</span><span class="pun">(</span>data<span class="pun">)</span>
+<span class="pun">}</span>
+
+<span class="kw">test</span> <span class="str">"analyze can be mocked"</span> <span class="pun">{</span>
+    <span class="kw">using</span> analyze <span class="pun">=</span> <span class="kw">fn</span><span class="pun">(</span>repo<span class="pun">,</span> pr<span class="pun">)</span> <span class="pun">{</span>
+        <span class="kw">return</span> <span class="fn">Ok</span><span class="pun">(</span><span class="typ">Analysis</span> <span class="pun">{</span> files_changed<span class="pun">:</span> <span class="nm">3</span><span class="pun">,</span> summary<span class="pun">:</span> <span class="str">"ok"</span> <span class="pun">})</span>
+    <span class="pun">}</span>
+    <span class="fn">assert</span><span class="pun">(</span><span class="fn">analyze</span><span class="pun">(</span><span class="str">"test/repo"</span><span class="pun">,</span> <span class="nm">1</span><span class="pun">).</span><span class="fn">IsOk</span><span class="pun">())</span>
+<span class="pun">}</span></pre>
+    </div>
+
+    <p class="muted">A few things to notice: the tool declares <code>needs { net }</code>, so the compiler knows it can hit the network. It has a timeout and a retry policy baked in. The <code>?</code> operator propagates errors. And the test swaps the real <code>analyze</code> for a typed mock with a single <code>using</code> clause.</p>
+
+    <h2 id="install">Install</h2>
+    <p>Cleat is distributed as source. Build the compiler with Go 1.22 or newer:</p>
+
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="lang">bash</span>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+<pre><span class="prompt-sym">$</span> git clone https<span class="pun">:</span>//github.com/cleat-lang/cleat
+<span class="prompt-sym">$</span> <span class="kw">cd</span> cleat
+<span class="prompt-sym">$</span> go build -o cleat ./cmd/cleat
+<span class="prompt-sym">$</span> ./cleat --version
+<span class="cm">cleat 0.1.0-alpha</span></pre>
+    </div>
+
+    <p>Drop the <code>cleat</code> binary somewhere on your <code>PATH</code> and you are ready to compile.</p>
+
+    <h2 id="first">Your first program</h2>
+    <p>Create a file called <code>hello.cleat</code>:</p>
+
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="lang">hello.cleat</span>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+<pre><span class="kw">import</span> <span class="str">"std/io"</span>
+
+<span class="kw">fn</span> <span class="fn">main</span><span class="pun">()</span> <span class="pun">-></span> <span class="typ">int</span> <span class="kw">needs</span> <span class="pun">{</span> io <span class="pun">}</span> <span class="pun">{</span>
+    io.<span class="fn">println</span><span class="pun">(</span><span class="str">"hello from cleat"</span><span class="pun">)</span>
+    <span class="kw">return</span> <span class="nm">0</span>
+<span class="pun">}</span></pre>
+    </div>
+
+    <p>Run it directly:</p>
+
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="lang">bash</span>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+<pre><span class="prompt-sym">$</span> cleat run hello.cleat
+<span class="cm">hello from cleat</span></pre>
+    </div>
+
+    <p>Or compile it to a native binary:</p>
+
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="lang">bash</span>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+<pre><span class="prompt-sym">$</span> cleat build hello.cleat
+<span class="prompt-sym">$</span> ./hello
+<span class="cm">hello from cleat</span></pre>
+    </div>
+
+    <div class="callout">
+      <div class="icon">Note</div>
+      <div>
+        <p>Notice that <code>main</code> declares <code>needs { io }</code>. If you remove that and try to call <code>io.println</code>, the compiler will stop you with a precise diagnostic pointing to the exact line.</p>
+      </div>
+    </div>
+
+    <h2 id="status">Project status</h2>
+    <p>Cleat is in <strong>alpha.</strong> The compiler, formatter, test runner, and standard library are implemented and tested. Real programs compile and run. The language is usable today for building auditable AI backends.</p>
+
+    <ul>
+      <li>626 tests across 9 internal packages</li>
+      <li>12 standard library packages</li>
+      <li>23 example programs</li>
+      <li>Built-in test runner, formatter, and Rustc-style diagnostics</li>
+    </ul>
+
+    <p class="muted">Syntax and semantics may still change before 1.0. Breaking changes will be called out clearly in the changelog.</p>
+
+    <h2 id="next">Where to next</h2>
+    <p>Pick a starting point based on what you came here for:</p>
+
+    <div class="next-cards">
+      <a href="#" class="next-card">
+        <div class="nc-label">→ Installation</div>
+        <div class="nc-title">Get it running <span class="nc-arrow">→</span></div>
+        <div class="nc-desc">Build the compiler, set up your PATH, and verify your install works end to end.</div>
+      </a>
+      <a href="#" class="next-card">
+        <div class="nc-label">→ First program</div>
+        <div class="nc-title">Write some code <span class="nc-arrow">→</span></div>
+        <div class="nc-desc">A guided walkthrough of the language starting from hello world and building up.</div>
+      </a>
+      <a href="#" class="next-card">
+        <div class="nc-label">→ Primitives</div>
+        <div class="nc-title">Tools &amp; streams <span class="nc-arrow">→</span></div>
+        <div class="nc-desc">Learn the four core primitives that make Cleat different from a general-purpose language.</div>
+      </a>
+      <a href="#" class="next-card">
+        <div class="nc-label">→ Reference</div>
+        <div class="nc-title">The full grammar <span class="nc-arrow">→</span></div>
+        <div class="nc-desc">Complete syntactic reference, every keyword, every operator, every rule.</div>
+      </a>
+    </div>
+
+    <!-- Bottom page nav -->
+    <nav class="page-nav">
+      <a href="#">
+        <div class="dir">← Home</div>
+        <div class="title">cleat-lang.dev</div>
+      </a>
+      <a href="#" class="next">
+        <div class="dir">Next →</div>
+        <div class="title">Installation</div>
+      </a>
+    </nav>
+
+    <a href="#" class="edit-link">
+      <span>✎</span>
+      Edit this page on GitHub
+    </a>
+  </main>
+
+  <!-- TOC -->
+  <aside class="toc">
+    <h6>On this page</h6>
+    <a href="#what" class="active">What is Cleat?</a>
+    <a href="#philosophy">Design philosophy</a>
+    <a href="#taste">A taste</a>
+    <a href="#install">Install</a>
+    <a href="#first">Your first program</a>
+    <a href="#status">Project status</a>
+    <a href="#next">Where to next</a>
+  </aside>
+</div>
+
+<script>
+  // TOC active highlighting on scroll
+  const tocLinks = document.querySelectorAll('.toc a');
+  const headings = Array.from(document.querySelectorAll('h2[id]'));
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        tocLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + id));
+      }
+    });
+  }, { rootMargin: '-80px 0px -70% 0px', threshold: 0 });
+  headings.forEach(h => observer.observe(h));
+
+  // Copy-to-clipboard for code blocks
+  function copyCode(btn) {
+    const pre = btn.closest('.code-block').querySelector('pre');
+    const text = pre.innerText;
+    navigator.clipboard.writeText(text);
+    const orig = btn.textContent;
+    btn.textContent = 'Copied';
+    btn.style.color = 'var(--molten-2)';
+    setTimeout(() => {
+      btn.textContent = orig;
+      btn.style.color = '';
+    }, 1400);
+  }
+
+  // Cmd+K focus (placeholder — in a real build wire to a search modal)
+  document.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      document.querySelector('.search').style.borderColor = 'var(--molten)';
+      setTimeout(() => { document.querySelector('.search').style.borderColor = ''; }, 800);
+    }
+  });
+</script>
+
+</body>
+</html>
