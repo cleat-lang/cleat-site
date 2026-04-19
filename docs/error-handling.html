@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Introduction · Cleat Docs</title>
+<title>Error handling · Cleat Docs</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -146,7 +146,7 @@
 <nav class="topnav">
   <div class="topnav-inner">
     <div class="brand">
-      <a href="index.html" style="display:flex;align-items:center;gap:11px">
+      <a href="../index.html" style="display:flex;align-items:center;gap:11px">
         <svg><use href="#cleat-logo"/></svg>
         <span class="word">Cleat</span>
       </a>
@@ -154,9 +154,9 @@
     </div>
     <div class="topnav-links">
       <div class="search"><span>⌕</span><span>Search docs…</span><span class="kbd">⌘K</span></div>
-      <a href="docs/stdlib.html">Stdlib</a>
-      <a href="examples.html">Examples</a>
-      <a href="changelog.html">Changelog</a>
+      <a href="stdlib.html">Stdlib</a>
+      <a href="../examples.html">Examples</a>
+      <a href="../changelog.html">Changelog</a>
       <a href="https://github.com/cleat-lang/cleat" target="_blank" rel="noopener">GitHub ↗</a>
     </div>
   </div>
@@ -167,111 +167,112 @@
   <aside class="sidebar">
     <div class="side-section">
       <h5>Getting Started</h5>
-      <a href="#" class="side-link active">Introduction</a>
-      <a href="docs/installation.html" class="side-link">Installation</a>
-      <a href="docs/first-program.html" class="side-link">Your first program</a>
-      <a href="docs/editor-setup.html" class="side-link">Editor setup</a>
+      <a href="../docs.html" class="side-link">Introduction</a>
+      <a href="installation.html" class="side-link">Installation</a>
+      <a href="first-program.html" class="side-link">Your first program</a>
+      <a href="editor-setup.html" class="side-link">Editor setup</a>
     </div>
     <div class="side-section">
       <h5>Language</h5>
-      <a href="docs/types.html" class="side-link">Types &amp; variables</a>
-      <a href="docs/functions.html" class="side-link">Functions</a>
-      <a href="docs/pattern-matching.html" class="side-link">Pattern matching</a>
-      <a href="docs/error-handling.html" class="side-link">Error handling</a>
-      <a href="docs/pipes.html" class="side-link">Pipes &amp; methods</a>
-      <a href="docs/modules.html" class="side-link">Modules &amp; imports</a>
+      <a href="types.html" class="side-link">Types &amp; variables</a>
+      <a href="functions.html" class="side-link">Functions</a>
+      <a href="pattern-matching.html" class="side-link">Pattern matching</a>
+      <a href="#" class="side-link active">Error handling</a>
+      <a href="pipes.html" class="side-link">Pipes &amp; methods</a>
+      <a href="modules.html" class="side-link">Modules &amp; imports</a>
     </div>
     <div class="side-section">
       <h5>Primitives</h5>
-      <a href="docs/agents.html" class="side-link">Agents <span class="pill">core</span></a>
-      <a href="docs/guards.html" class="side-link">Guards <span class="pill">core</span></a>
-      <a href="docs/tools.html" class="side-link">Tools <span class="pill">core</span></a>
-      <a href="docs/streams.html" class="side-link">Streams <span class="pill">core</span></a>
-      <a href="docs/state-machines.html" class="side-link">State machines <span class="pill">core</span></a>
-      <a href="docs/chains.html" class="side-link">Provenance chains <span class="pill">core</span></a>
-      <a href="docs/servers.html" class="side-link">HTTP servers <span class="pill">core</span></a>
-      <a href="docs/functions-primitive.html" class="side-link">Functions <span class="pill">core</span></a>
+      <a href="agents.html" class="side-link">Agents <span class="pill">core</span></a>
+      <a href="guards.html" class="side-link">Guards <span class="pill">core</span></a>
+      <a href="tools.html" class="side-link">Tools <span class="pill">core</span></a>
+      <a href="streams.html" class="side-link">Streams <span class="pill">core</span></a>
+      <a href="state-machines.html" class="side-link">State machines <span class="pill">core</span></a>
+      <a href="chains.html" class="side-link">Provenance chains <span class="pill">core</span></a>
+      <a href="servers.html" class="side-link">HTTP servers <span class="pill">core</span></a>
+      <a href="functions-primitive.html" class="side-link">Functions <span class="pill">core</span></a>
     </div>
     <div class="side-section">
       <h5>Effect System</h5>
-      <a href="docs/declaring-effects.html" class="side-link">Declaring effects</a>
-      <a href="docs/using.html" class="side-link">Mocking with <code style="font-size:11px">using</code></a>
-      <a href="docs/effect-inference.html" class="side-link">Effect inference</a>
+      <a href="declaring-effects.html" class="side-link">Declaring effects</a>
+      <a href="using.html" class="side-link">Mocking with <code style="font-size:11px">using</code></a>
+      <a href="effect-inference.html" class="side-link">Effect inference</a>
     </div>
     <div class="side-section">
       <h5>Tooling</h5>
-      <a href="docs/cli.html" class="side-link">CLI reference</a>
-      <a href="docs/test-runner.html" class="side-link">Test runner</a>
-      <a href="docs/formatter.html" class="side-link">Formatter</a>
-      <a href="docs/diagnostics.html" class="side-link">Diagnostics</a>
+      <a href="cli.html" class="side-link">CLI reference</a>
+      <a href="test-runner.html" class="side-link">Test runner</a>
+      <a href="formatter.html" class="side-link">Formatter</a>
+      <a href="diagnostics.html" class="side-link">Diagnostics</a>
     </div>
     <div class="side-section">
       <h5>Reference</h5>
-      <a href="docs/grammar.html" class="side-link">Grammar</a>
-      <a href="docs/stdlib.html" class="side-link">Standard library</a>
-      <a href="docs/compiler-internals.html" class="side-link">Compiler internals</a>
+      <a href="grammar.html" class="side-link">Grammar</a>
+      <a href="stdlib.html" class="side-link">Standard library</a>
+      <a href="compiler-internals.html" class="side-link">Compiler internals</a>
     </div>
   </aside>
 
   <main class="content">
     <div class="breadcrumbs">
-      <a href="docs.html">Docs</a>
+      <a href="../docs.html">Docs</a>
       <span class="sep">/</span>
-      <span style="color:var(--ink-dim)">Getting Started</span>
+      <span style="color:var(--ink-dim)">Language</span>
       <span class="sep">/</span>
-      <span style="color:var(--ink)">Introduction</span>
+      <span style="color:var(--ink)">Error handling</span>
     </div>
 
-    <h1 class="doc-title">Introduction</h1>
+    <h1 class="doc-title">Error handling</h1>
 
-<p>Cleat is a compiled, statically typed language for building auditable AI agent backends. It compiles to native binaries via Go — no interpreter, no runtime dependency, single-binary deploys.</p>
-<p><strong>What makes Cleat different:</strong></p>
-<ul><li><strong>8 compiler-enforced primitives</strong> — <code>agent</code>, <code>guard</code>, <code>tool</code>, <code>stream</code>, <code>state</code>, <code>chain</code>, <code>server</code>, and <code>fn</code> are language constructs, not library abstractions. The compiler validates their contracts at build time.</li><li><strong>Effect system</strong> — every side effect is declared with <code>needs</code>. A function without <code>needs</code> is pure. The compiler rejects programs that violate effect boundaries.</li><li><strong>Type-safe structured LLM output</strong> — call an LLM and get back a typed struct. The compiler extracts a JSON Schema at build time from your type definition.</li><li><strong>Automatic correlation IDs</strong> — every HTTP request, agent call, tool dispatch, and log message in a request chain shares a single trace ID.</li><li><strong>Built-in testing with mocks</strong> — <code>test</code> blocks and <code>using</code> overrides let you test agents and tools without API keys or network access.</li></ul>
-<h2 id="status">Status</h2>
-<p>Cleat is in alpha. The compiler, formatter, test runner, language server, and standard library are implemented. 826+ tests across 11 packages. The language is usable for building AI backends, but the API may change.</p>
-<h2 id="a-taste-of-cleat">A taste of Cleat</h2>
-<p>A code review agent that fetches a PR diff, analyzes it, and returns a typed review:</p>
-<div class="code-block"><div class="code-block-head"><span class="lang">cleat</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div><pre><span class="kw">import</span> <span class="str">&quot;std/io&quot;</span>
-<span class="kw">import</span> <span class="str">&quot;std/http&quot;</span>
-
-<span class="kw">type</span> <span class="typ">ReviewResult</span> = <span class="kw">struct</span> {
-    <span class="<span class="kw">fn</span>">@description</span>(<span class="str">&quot;Whether the code is safe to merge&quot;</span>)
-    approved: bool,
-    issues: []string,
-    summary: string,
-}
-
-<span class="kw">tool</span> fetch_diff(pr: int) -&gt; <span class="typ">Result</span>[string, string]
-    <span class="kw">needs</span> { net }
-    <span class="kw">timeout</span>: <span class="nm">10s</span>
-{
-    <span class="kw">let</span> url = <span class="str">&quot;https://api.github.com/repos/acme/app/pulls/${pr}&quot;</span>
-    <span class="kw">let</span> resp: http.<span class="typ">Response</span> = http.get(url)?
-    <span class="kw">return</span> <span class="kw"><span class="typ">Ok</span></span>(resp.body)
-}
-
-<span class="kw">agent</span> <span class="typ">Reviewer</span> {
-    model: <span class="str">&quot;claude-sonnet-4-20250514&quot;</span>
-    system: <span class="str">&quot;You are a code reviewer. Fetch the PR diff, then provide a structured review.&quot;</span>
-    <span class="kw">tool</span>: [fetch_diff]
-    max_turns: <span class="nm">10</span>
-    <span class="kw">needs</span> { llm, net }
-}
-
-<span class="kw">fn</span> main() -&gt; int <span class="kw">needs</span> { llm, net, io } {
-    <span class="kw">let</span> review: <span class="typ">ReviewResult</span> = <span class="typ">Reviewer</span>.run(<span class="str">&quot;Review PR #42&quot;</span>)?
-    io.println(<span class="str">&quot;Approved: ${review.approved}&quot;</span>)
-    io.println(<span class="str">&quot;Summary: ${review.summary}&quot;</span>)
-    <span class="kw">return</span> <span class="nm">0</span>
+<h2 id="the-result-type">The Result type</h2>
+<p><code>Result[T, E]</code> is Cleat's primary error handling mechanism. There are no exceptions.</p>
+<div class="code-block"><div class="code-block-head"><span class="lang">cleat</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div><pre><span class="kw">let</span> ok: <span class="typ">Result</span>[int, string] = <span class="kw"><span class="typ">Ok</span></span>(<span class="nm">42</span>)
+<span class="kw">let</span> err: <span class="typ">Result</span>[int, string] = <span class="kw"><span class="typ">Err</span></span>(<span class="str">&quot;not found&quot;</span>)</pre></div>
+<p>Functions that can fail return <code>Result</code>:</p>
+<div class="code-block"><div class="code-block-head"><span class="lang">cleat</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div><pre><span class="kw">fn</span> parse_config(path: string) -&gt; <span class="typ">Result</span>[<span class="typ">Config</span>, string] <span class="kw">needs</span> { fs } {
+    <span class="kw">let</span> text = fs.read(path)?
+    <span class="kw">let</span> config: <span class="typ">Config</span> = json.decode(text)?
+    <span class="kw">return</span> <span class="kw"><span class="typ">Ok</span></span>(config)
 }</pre></div>
-<p>The compiler guarantees:</p>
-<ul><li><code>Reviewer</code> must declare <code>needs { llm }</code> because it uses an LLM</li><li><code>Reviewer</code>'s <code>needs</code> must cover <code>fetch_diff</code>'s <code>needs { net }</code></li><li><code>ReviewResult</code> fields are all JSON-serializable (verified at compile time)</li><li><code>@description</code> annotations become JSON Schema <code>description</code> fields for the LLM</li></ul>
-<h2 id="next-steps">Next steps</h2>
-<ul><li><a href="docs/installation.html">Installation</a> — build the compiler</li><li><a href="docs/first-program.html">Your First Program</a> — create and run a Cleat program</li><li><a href="docs/editor-setup.html">Editor Setup</a> — VS Code extension with diagnostics, hover, and autocomplete</li></ul>
+<h2 id="the-operator">The ? operator</h2>
+<p><code>?</code> unwraps an <code>Ok</code> value. If the Result is <code>Err</code>, it returns immediately from the enclosing function with that error.</p>
+<div class="code-block"><div class="code-block-head"><span class="lang">cleat</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div><pre><span class="kw">fn</span> load_and_process() -&gt; <span class="typ">Result</span>[int, string] <span class="kw">needs</span> { fs } {
+    <span class="kw">let</span> text = fs.read(<span class="str">&quot;data.txt&quot;</span>)?    <span class="cm">// if Err, return Err immediately</span>
+    <span class="kw">let</span> lines = fs.read_lines(<span class="str">&quot;data.txt&quot;</span>)?  <span class="cm">// same — early return on error</span>
+    <span class="kw">return</span> <span class="kw"><span class="typ">Ok</span></span>(lines.len())
+}</pre></div>
+<p>The enclosing function <strong>must</strong> return <code>Result</code> to use <code>?</code>. The error type must be compatible.</p>
+<h2 id="combining-with-pattern-matching">Combining with pattern matching</h2>
+<p>For finer control, use <code>match</code>:</p>
+<div class="code-block"><div class="code-block-head"><span class="lang">cleat</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div><pre><span class="kw">let</span> data = <span class="kw">match</span> load_config() {
+    <span class="kw"><span class="typ">Ok</span></span>(config) =&gt; config.data,
+    <span class="kw"><span class="typ">Err</span></span>(e) =&gt; {
+        log.warn(<span class="str">&quot;config failed: ${e}, using defaults&quot;</span>)
+        default_data()
+    },
+}</pre></div>
+<h2 id="error-propagation-chains">Error propagation chains</h2>
+<p>Errors bubble up naturally through <code>?</code>:</p>
+<div class="code-block"><div class="code-block-head"><span class="lang">cleat</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div><pre><span class="kw">fn</span> fetch_and_decode(url: string) -&gt; <span class="typ">Result</span>[<span class="typ">Response</span>, string] <span class="kw">needs</span> { net } {
+    <span class="kw">let</span> resp: http.<span class="typ">Response</span> = http.get(url)?        <span class="cm">// network error → Err</span>
+    <span class="kw">let</span> data: <span class="typ">Response</span> = json.decode(resp.body)?     <span class="cm">// parse error → Err</span>
+    <span class="kw">return</span> <span class="kw"><span class="typ">Ok</span></span>(data)
+}
 
-<nav class="page-nav"><a href="docs/installation.html" class="pn-link pn-next"><div class="pn-dir">Next →</div><div class="pn-title">Installation</div></a></nav>
+<span class="kw">fn</span> process(url: string) -&gt; <span class="typ">Result</span>[int, string] <span class="kw">needs</span> { net } {
+    <span class="kw">let</span> response = fetch_and_decode(url)?  <span class="cm">// propagates either error</span>
+    <span class="kw">return</span> <span class="kw"><span class="typ">Ok</span></span>(response.count)
+}</pre></div>
+<h2 id="let-expr">let _ = expr?</h2>
+<p>Discard the success value while still propagating errors:</p>
+<div class="code-block"><div class="code-block-head"><span class="lang">cleat</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div><pre><span class="kw">fn</span> setup() -&gt; <span class="typ">Result</span>[int, string] <span class="kw">needs</span> { fs } {
+    <span class="kw">let</span> _ = fs.write(<span class="str">&quot;config.json&quot;</span>, default_config)?  <span class="cm">// propagate write errors</span>
+    <span class="kw">return</span> <span class="kw"><span class="typ">Ok</span></span>(<span class="nm">0</span>)
+}</pre></div>
 
-    <a href="https://github.com/cleat-lang/cleat-site/edit/main/docs.html" target="_blank" rel="noopener" class="edit-link">
+<nav class="page-nav"><a href="pattern-matching.html" class="pn-link pn-prev"><div class="pn-dir">← Previous</div><div class="pn-title">Pattern matching</div></a><a href="pipes.html" class="pn-link pn-next"><div class="pn-dir">Next →</div><div class="pn-title">Pipes &amp; methods</div></a></nav>
+
+    <a href="https://github.com/cleat-lang/cleat-site/edit/main/docs/error-handling.html" target="_blank" rel="noopener" class="edit-link">
       <span>✎</span>
       Edit this page on GitHub
     </a>
@@ -279,7 +280,7 @@
 
   <aside class="toc">
 <h6>On this page</h6>
-<div class="toc-group"><a href="#status" class="sub">Status</a><a href="#a-taste-of-cleat" class="sub">A taste of Cleat</a><a href="#next-steps" class="sub">Next steps</a></div>
+<div class="toc-group"><a href="#the-result-type" class="sub">The Result type</a><a href="#the-operator" class="sub">The ? operator</a><a href="#combining-with-pattern-matching" class="sub">Combining with pattern matching</a><a href="#error-propagation-chains" class="sub">Error propagation chains</a><a href="#let-expr" class="sub">let _ = expr?</a></div>
   </aside>
 </div>
 
